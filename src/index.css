@@ -731,3 +731,137 @@ lenguage_dropdown {
   border-left: 30px solid transparent;
   border-bottom: none;
 }
+
+.buttonDisable {
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border: 1px #da291c solid;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 12;
+  display: flex;
+}
+
+.buttonEnable {
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border: 1px #da291c solid;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 12;
+  color: #da291c;
+  display: flex;
+  cursor: pointer;
+}
+
+.buttonEnable:hover {
+  background: #da291c;
+  color: white !important;
+}
+
+.iconColor {
+  color: #da291c;
+}
+.buttonEvaluate {
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border: 1px #da291c solid;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 12;
+  background: #da291c;
+  color: white !important;
+  display: flex;
+  cursor: pointer;
+}
+
+input[type="checkbox"]:before {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid red !important;
+  border-radius: 2px;
+  cursor: pointer;
+}
+input[id="cb1"]:checked {
+  position: relative;
+  top: -4px;
+  left: 2px;
+  content: "\2714";
+  font-size: 14px;
+}
+#gas:hover {
+  border-style: solid;
+  border-color: #da291c !important;
+}
+#power:hover {
+  border-style: solid;
+  border-color: #da291c !important;
+}
+#mining:hover {
+  border-style: solid;
+  border-color: #da291c !important;
+}
+#transportation:hover {
+  border-style: solid;
+  border-color: #da291c !important;
+}
+#manufacturing:hover {
+  border-style: solid;
+  border-color: #da291c !important;
+}
+#other:hover {
+  border-style: solid;
+  border-color: #da291c !important;
+}
+
+.answer {
+  align-self: stretch;
+  padding-left: 24px;
+  padding-right: 2px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background: white;
+  justify-content: flex-start;
+  color: #0f0e0e;
+  align-items: center;
+  gap: 10;
+  display: inline-flex;
+  cursor: pointer;
+}
+.answer:hover {
+  background: #da291c;
+  color: white !important;
+}
+
+.answerselect {
+  align-self: stretch;
+  padding-left: 24px;
+  padding-right: 2px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background: #da291c;
+  justify-content: flex-start;
+  color: white;
+  align-items: center;
+  gap: 10;
+  display: inline-flex;
+  cursor: pointer;
+}
+.form-check-input[type="checkbox"] {
+  border-radius: 0.25em;
+  border-color: red;
+}
+.form-check-input:checked {
+  background-color: #da291c !important;
+  border-color: #da291c !important;
+}
+.modal-body {
+  margin-bottom: -1%;
+}

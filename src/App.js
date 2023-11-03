@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import logo from "./fortinet_logo.svg";
 import world from "./world.svg";
 import question from "./question.svg";
@@ -12,12 +14,52 @@ import buttonRight from "./assets/images/arrow-right.svg";
 import recommend from "./assets/images/recommend.svg";
 import evaluation from "./assets/images/evaluation.svg";
 import triangle from "./assets/images/triangle.svg";
+import Question1 from "./questions/Question1";
+import Question2 from "./questions/Question2";
+import modalImage from "./assets/images/modal.jpg";
+import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 //import image1 from "./image1.png";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
-
+import Question3 from "./questions/Question3";
+import Question4 from "./questions/Question4";
+import Question5 from "./questions/Question5";
+import Question6 from "./questions/Question6";
+import Question7 from "./questions/Question7";
+import Question8 from "./questions/Question8";
+import Question9 from "./questions/Question9";
+import Question10 from "./questions/Question10";
+import Question11 from "./questions/Question11";
+import Question0 from "./questions/Question0";
+import close from "./assets/images/x.svg";
+import call from "./assets/images/call.svg";
 function App() {
+  const [questionIndex, setQuestionIndex] = useState(0);
+  const [submit, setSubmit] = useState(false);
+
+  const nextQuestion = () => {
+    setQuestionIndex((previous) => (previous == 11 ? previous : previous + 1));
+  };
+  const previousQuestion = () => {
+    setQuestionIndex((previous) => (previous == 0 ? previous : previous - 1));
+  };
+
+  const evaluate = () => {
+    setSubmit(true);
+  };
+
+  const closeModal = () => {
+    document.getElementById("backdrop").style.display = "none";
+    document.getElementById("staticBackdrop").style.display = "none";
+    document.getElementById("staticBackdrop").classList.remove("show");
+  };
+
+  const openModal = () => {
+    document.getElementById("backdrop").style.display = "block";
+    document.getElementById("staticBackdrop").style.display = "block";
+    document.getElementById("staticBackdrop").classList.add("show");
+  };
   return (
     <div className="App">
       <section className="social_header_menu fixed-top bg-light overflow-visible">
@@ -420,56 +462,6 @@ function App() {
               examples of critical cases of companies of your same industry.
             </div>
           </div>
-          {/* <div
-            style={{
-              width: 709,
-              height: 132,
-              position: "absolute",
-              top: 900,
-              left: 180,
-              textAlign: "left",
-            }}
-          >
-            <div style={{ width: "100%" }}>
-              <span
-                style={{
-                  color: "#0F0E0E",
-                  fontSize: 36,
-                  fontFamily: "Inter",
-                  fontWeight: "500",
-                  lineHeight: 1,
-                  wordWrap: "break-word",
-                }}
-              >
-                To{" "}
-              </span>
-              <span
-                style={{
-                  color: "#DA291C",
-                  fontSize: 36,
-                  fontFamily: "Inter",
-                  fontWeight: "500",
-                  lineHeight: 1,
-                  wordWrap: "break-word",
-                }}
-              >
-                discover how secure your operating
-              </span>
-              <span
-                style={{
-                  color: "#0F0E0E",
-                  fontSize: 36,
-                  fontFamily: "Inter",
-                  fontWeight: "500",
-                  lineHeight: 1,
-                  wordWrap: "break-word",
-                }}
-              >
-                {" "}
-                environment is, follow these 3 steps and find out how Fortinet
-                can help.
-              </span>
-            </div> */}
         </div>
         <div
           style={{
@@ -522,443 +514,718 @@ function App() {
             >
               <div
                 style={{
-                  width: 1079,
-                  justifyContent: "space-between",
+                  width: "100%",
+                  justifyContent: "flex-start",
                   alignItems: "center",
-                  paddingLeft: 180,
+                  paddingLeft: questionIndex == 0 ? "8%" : "14%",
                   display: "inline-flex",
                 }}
               >
-                <div style={{ width: 712, textAlign: "left" }}>
-                  <span
+                {questionIndex == 0 && (
+                  <div style={{ width: "65%", textAlign: "left" }}>
+                    <span
+                      style={{
+                        color: "black",
+                        fontSize: 28,
+                        fontFamily: "Inter",
+                        fontWeight: "500",
+                        lineHeight: 1,
+                        wordWrap: "break-word",
+                      }}
+                    >
+                      Select the industry to{" "}
+                    </span>
+                    <span
+                      style={{
+                        color: "#DA291C",
+                        fontSize: 28,
+                        fontFamily: "Inter",
+                        fontWeight: "500",
+                        lineHeight: 1,
+                        wordWrap: "break-word",
+                      }}
+                    >
+                      continue evaluating
+                    </span>
+                    <span
+                      style={{
+                        color: "black",
+                        fontSize: 28,
+                        fontFamily: "Inter",
+                        fontWeight: "500",
+                        lineHeight: 1,
+                        wordWrap: "break-word",
+                      }}
+                    >
+                      {" "}
+                    </span>
+                  </div>
+                )}
+                {questionIndex != 0 && questionIndex != 11 && (
+                  <div style={{ width: "65%", textAlign: "left" }}>
+                    <span
+                      style={{
+                        color: "black",
+                        fontSize: 28,
+                        fontFamily: "Inter",
+                        fontWeight: "500",
+                        lineHeight: 1,
+                        wordWrap: "break-word",
+                      }}
+                    >
+                      Please answer all questions to get a{" "}
+                    </span>
+                    <span
+                      style={{
+                        color: "#DA291C",
+                        fontSize: 28,
+                        fontFamily: "Inter",
+                        fontWeight: "500",
+                        lineHeight: 1,
+                        wordWrap: "break-word",
+                      }}
+                    >
+                      personalized report
+                    </span>
+                    <span
+                      style={{
+                        color: "black",
+                        fontSize: 28,
+                        fontFamily: "Inter",
+                        fontWeight: "500",
+                        lineHeight: 1,
+                        wordWrap: "break-word",
+                      }}
+                    >
+                      {" "}
+                    </span>
+                  </div>
+                )}
+                {questionIndex == 11 && (
+                  <div style={{ width: "65%", textAlign: "left" }}>
+                    <span
+                      style={{
+                        color: "black",
+                        fontSize: 28,
+                        fontFamily: "Inter",
+                        fontWeight: "500",
+                        wordWrap: "break-word",
+                      }}
+                    >
+                      Fill in the form to{" "}
+                    </span>
+                    <span
+                      style={{
+                        color: "#DA291C",
+                        fontSize: 28,
+                        fontFamily: "Inter",
+                        fontWeight: "500",
+                        lineHeight: 44,
+                        wordWrap: "break-word",
+                      }}
+                    >
+                      finish evaluating
+                    </span>
+                  </div>
+                )}
+                {questionIndex != 0 && (
+                  <div
                     style={{
-                      color: "black",
-                      fontSize: 28,
-                      fontFamily: "Inter",
-                      fontWeight: "500",
-                      lineHeight: 1,
-                      wordWrap: "break-word",
+                      background: "white",
+                      justifyContent: "flex-start",
+                      alignItems: "flex-start",
+                      paddingLeft: "15%",
+                      gap: 16,
+                      display: "flex",
                     }}
                   >
-                    Please answer all questions to get a{" "}
-                  </span>
-                  <span
-                    style={{
-                      color: "#DA291C",
-                      fontSize: 28,
-                      fontFamily: "Inter",
-                      fontWeight: "500",
-                      lineHeight: 1,
-                      wordWrap: "break-word",
-                    }}
-                  >
-                    personalized report
-                  </span>
-                  <span
-                    style={{
-                      color: "black",
-                      fontSize: 28,
-                      fontFamily: "Inter",
-                      fontWeight: "500",
-                      lineHeight: 1,
-                      wordWrap: "break-word",
-                    }}
-                  >
-                    {" "}
-                  </span>
-                </div>
+                    <div
+                      style={{
+                        color: "#DA291C",
+                        fontSize: 20,
+                        fontFamily: "Inter",
+                        fontWeight: "500",
+                        lineHeight: 1,
+                        wordWrap: "break-word",
+                      }}
+                    >
+                      {questionIndex}/11
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {questionIndex != 0 && questionIndex != 11 && (
+              <div
+                style={{
+                  alignSelf: "stretch",
+                  height: 8,
+                  paddingRight: 0,
+                  //justifyContent: "flex-start",
+                  //alignItems: "center",
+                  //display: "inline-flex",
+                }}
+              >
                 <div
                   style={{
-                    background: "white",
-                    justifyContent: "flex-start",
-                    alignItems: "flex-start",
-                    gap: 16,
-                    display: "flex",
+                    width: 131,
+                    height: 8,
+                    background:
+                      "linear-gradient(270deg, #DA291C 0%, rgba(218, 41, 28, 0) 100%)",
+                    borderTopLeftRadius: 10,
+                    borderTopRightRadius: 10,
+                  }}
+                />
+              </div>
+            )}
+            {
+              questionIndex == 11 && (
+                <div
+                  style={{
+                    alignSelf: "stretch",
+                    height: 8,
+                    paddingRight: 0,
+                    //justifyContent: "flex-start",
+                    //alignItems: "center",
+                    //display: "inline-flex",
                   }}
                 >
                   <div
                     style={{
-                      color: "#DA291C",
-                      fontSize: 20,
-                      fontFamily: "Inter",
-                      fontWeight: "500",
-                      lineHeight: 1,
-                      wordWrap: "break-word",
+                      width: "100%",
+                      height: "100%",
+                      background:
+                        "linear-gradient(270deg, #DA291C 0%, rgba(218, 41, 28, 0) 100%)",
+                      borderTopLeftRadius: 10,
+                      borderTopRightRadius: 10,
                     }}
-                  >
-                    1/11
-                  </div>
+                  />
                 </div>
-              </div>
-            </div>
-            {/* <div
-              style={{
-                alignSelf: "stretch",
-                height: 8,
-                paddingRight: 1308,
-                justifyContent: "flex-start",
-                alignItems: "center",
-                display: "inline-flex",
-              }}
-            >
-              <div
-                style={{
-                  width: 131,
-                  height: 8,
-                  background:
-                    "linear-gradient(270deg, #DA291C 0%, rgba(218, 41, 28, 0) 100%)",
-                  borderTopLeftRadius: 10,
-                  borderTopRightRadius: 10,
-                }}
-              />
-            </div> */}
+              )
+              // No text styles in this selection
+            }
           </div>
-          <div
-            style={{
-              alignSelf: "stretch",
-              height: 8,
-              paddingRight: 0,
-              //justifyContent: "flex-start",
-              //alignItems: "center",
-              //display: "inline-flex",
-            }}
-          >
-            <div
-              style={{
-                width: 131,
-                height: 8,
-                background:
-                  "linear-gradient(270deg, #DA291C 0%, rgba(218, 41, 28, 0) 100%)",
-                borderTopLeftRadius: 10,
-                borderTopRightRadius: 10,
-              }}
-            />
-          </div>
+
           <div
             style={{
               width: "100%",
               height: "100%",
-              paddingLeft: 180,
-              paddingRight: 180,
+              paddingLeft:
+                questionIndex == 0 ? "8%" : questionIndex == 11 ? 100 : "14%",
+              paddingRight:
+                questionIndex == 0 ? 0 : questionIndex == 11 ? 100 : "14%",
               flexDirection: "column",
               justifyContent: "center",
-              alignItems: "center",
+              //alignItems: "center",
               gap: 10,
               display: "inline-flex",
               textAlign: "left",
               background: "#F0F0F0",
             }}
           >
-            <div
-              style={{
-                alignSelf: "stretch",
-                height: 436,
-                flexDirection: "column",
-                justifyContent: "flex-start",
-                alignItems: "flex-start",
-                gap: 32,
-                display: "flex",
-              }}
-            >
+            {questionIndex == 0 && <Question0 />}
+            {questionIndex == 1 && <Question1 />}
+            {questionIndex == 2 && <Question2 />}
+            {questionIndex == 3 && <Question3 />}
+            {questionIndex == 4 && <Question4 />}
+            {questionIndex == 5 && <Question5 />}
+            {questionIndex == 6 && <Question6 />}
+            {questionIndex == 7 && <Question7 />}
+            {questionIndex == 8 && <Question8 />}
+            {questionIndex == 9 && <Question9 />}
+            {questionIndex == 10 && <Question10 />}
+            {questionIndex == 11 && <Question11 />}
+            {questionIndex == 11 && (
               <div
                 style={{
-                  alignSelf: "stretch",
-                  color: "#0F0E0E",
-                  fontSize: 24,
-                  fontFamily: "Inter",
-                  fontWeight: "500",
-                  lineHeight: 1,
-                  wordWrap: "break-word",
-                  marginTop: 30,
-                }}
-              >
-                What segmentation level do you have implemented in your OT
-                network?
-              </div>
-              <div
-                style={{
-                  alignSelf: "stretch",
-                  height: 368,
+                  width: "100%",
+                  height: "100%",
+                  // paddingLeft: 180,
+                  //paddingRight: 180,
                   flexDirection: "column",
-                  justifyContent: "flex-start",
-                  alignItems: "flex-start",
-                  gap: 16,
-                  display: "flex",
-                }}
-              >
-                <div
-                  style={{
-                    alignSelf: "stretch",
-                    paddingLeft: 24,
-                    paddingRight: 24,
-                    paddingTop: 12,
-                    paddingBottom: 12,
-                    background: "white",
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                    gap: 10,
-                    display: "inline-flex",
-                  }}
-                >
-                  <div
-                    style={{
-                      flex: "1 1 0",
-                      color: "#0F0E0E",
-                      fontSize: 16,
-                      fontFamily: "Inter",
-                      fontWeight: "400",
-                      lineHeight: 1,
-                      wordWrap: "break-word",
-                    }}
-                  >
-                    IT and OT share the same physical and logical network.
-                  </div>
-                </div>
-                <div
-                  style={{
-                    alignSelf: "stretch",
-                    paddingLeft: 24,
-                    paddingRight: 24,
-                    paddingTop: 12,
-                    paddingBottom: 12,
-                    background: "white",
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                    gap: 10,
-                    display: "inline-flex",
-                  }}
-                >
-                  <div
-                    style={{
-                      flex: "1 1 0",
-                      color: "#0F0E0E",
-                      fontSize: 16,
-                      fontFamily: "Inter",
-                      fontWeight: "400",
-                      lineHeight: 1,
-                      wordWrap: "break-word",
-                    }}
-                  >
-                    Segmentation using VLANs and L3, but same physical
-                    equipment.
-                  </div>
-                </div>
-                <div
-                  style={{
-                    alignSelf: "stretch",
-                    paddingLeft: 24,
-                    paddingRight: 24,
-                    paddingTop: 12,
-                    paddingBottom: 12,
-                    background: "white",
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                    gap: 10,
-                    display: "inline-flex",
-                  }}
-                >
-                  <div
-                    style={{
-                      flex: "1 1 0",
-                      color: "#0F0E0E",
-                      fontSize: 16,
-                      fontFamily: "Inter",
-                      fontWeight: "400",
-                      lineHeight: 1,
-                      wordWrap: "break-word",
-                    }}
-                  >
-                    There is a firewall between IT and OT networks.
-                  </div>
-                </div>
-                <div
-                  style={{
-                    alignSelf: "stretch",
-                    paddingLeft: 24,
-                    paddingRight: 24,
-                    paddingTop: 12,
-                    paddingBottom: 12,
-                    background: "#DA291C",
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                    gap: 10,
-                    display: "inline-flex",
-                  }}
-                >
-                  <div
-                    style={{
-                      flex: "1 1 0",
-                      color: "white",
-                      fontSize: 16,
-                      fontFamily: "Inter",
-                      fontWeight: "400",
-                      lineHeight: 1,
-                      wordWrap: "break-word",
-                    }}
-                  >
-                    We use firewalls in the OT network boundary and inside the
-                    OT network, also implementing a DMZ.
-                  </div>
-                </div>
-                <div
-                  style={{
-                    alignSelf: "stretch",
-                    paddingLeft: 24,
-                    paddingRight: 24,
-                    paddingTop: 12,
-                    paddingBottom: 12,
-                    background: "white",
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                    gap: 10,
-                    display: "inline-flex",
-                  }}
-                >
-                  <div
-                    style={{
-                      flex: "1 1 0",
-                      color: "#0F0E0E",
-                      fontSize: 16,
-                      fontFamily: "Inter",
-                      fontWeight: "400",
-                      lineHeight: 1,
-                      wordWrap: "break-word",
-                    }}
-                  >
-                    The OT network is fully segmented, with Network Access
-                    Control technology, and have policies based on OT protocols
-                    and applications
-                  </div>
-                </div>
-                <div
-                  style={{
-                    alignSelf: "stretch",
-                    paddingLeft: 24,
-                    paddingRight: 24,
-                    paddingTop: 12,
-                    paddingBottom: 12,
-                    background: "white",
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                    gap: 10,
-                    display: "inline-flex",
-                  }}
-                >
-                  <div
-                    style={{
-                      flex: "1 1 0",
-                      color: "#0F0E0E",
-                      fontSize: 16,
-                      fontFamily: "Inter",
-                      fontWeight: "400",
-                      lineHeight: 1,
-                      wordWrap: "break-word",
-                    }}
-                  >
-                    We use micro segmentation in the OT network, extending the
-                    firewall capability to the access layer.
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              style={{
-                width: "100%",
-                height: "100%",
-                // paddingLeft: 180,
-                //paddingRight: 180,
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "flex-end",
-                marginBottom: 20,
-                gap: 10,
-                display: "inline-flex",
-              }}
-            >
-              <div
-                style={{
-                  justifyContent: "flex-start",
-                  alignItems: "flex-start",
-                  gap: 32,
+                  justifyContent: "center",
+                  //ss alignItems: "flex-end",
+                  marginBottom: 20,
+                  gap: 10,
                   display: "inline-flex",
                 }}
               >
                 <div
                   style={{
-                    paddingLeft: 24,
-                    paddingRight: 24,
-                    paddingTop: 12,
-                    paddingBottom: 12,
-                    border: "1px #DA291C solid",
                     justifyContent: "flex-start",
                     alignItems: "flex-start",
-                    gap: 12,
-                    display: "flex",
+                    gap: 32,
+                    display: "inline-flex",
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    // id="cb1"
+                    // style={{ color: "red", marginTop: 6 }}
+                  ></input>
+
+                  <div
+                    style={{
+                      width: "100%",
+                      color: "#0F0E0E",
+                      fontSize: 16,
+                      fontFamily: "Inter",
+                      fontWeight: "300",
+                      wordWrap: "break-word",
+                    }}
+                  >
+                    By clicking on the EVALUATE button, I accept that Fortinet
+                    can send me by email extended information regarding the
+                    cybersecurity maturity level of my company's and industry's
+                    OT environment.
+                  </div>
+
+                  <button
+                    className="buttonEvaluate"
+                    onClick={(e) => openModal()}
+                    // data-bs-toggle="modal"
+                    // data-bs-target="#staticBackdrop"
+                  >
+                    <div
+                      style={{
+                        justifyContent: "flex-start",
+                        alignItems: "center",
+                        gap: 8,
+                        display: "flex",
+                      }}
+                    >
+                      <div
+                        style={{
+                          background: "#da291c",
+                          color: "white",
+                          fontSize: 16,
+                          fontFamily: "Inter",
+                          fontWeight: "600",
+                          lineHeight: 1,
+                          wordWrap: "break-word",
+                        }}
+                      >
+                        Evaluate
+                      </div>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            )}
+            {questionIndex == 0 && (
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  // paddingLeft: 180,
+                  paddingRight: "6%",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "flex-end",
+                  marginBottom: 20,
+                  gap: 10,
+                  display: "inline-flex",
+                }}
+              >
+                <div
+                  style={{
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start",
+                    gap: 32,
+                    display: "inline-flex",
+                  }}
+                >
+                  <button
+                    className="buttonEvaluate"
+                    onClick={(e) => nextQuestion()}
+                  >
+                    <div
+                      style={{
+                        justifyContent: "flex-start",
+                        alignItems: "center",
+                        gap: 8,
+                        display: "flex",
+                      }}
+                    >
+                      <div
+                        style={{
+                          background: "#da291c",
+                          color: "white",
+                          fontSize: 16,
+                          fontFamily: "Inter",
+                          fontWeight: "600",
+                          lineHeight: 1,
+                          wordWrap: "break-word",
+                        }}
+                      >
+                        Evaluate
+                      </div>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            )}
+            {questionIndex != 0 && questionIndex != 11 && (
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  // paddingLeft: 180,
+                  //paddingRight: 180,
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "flex-end",
+                  marginBottom: 20,
+                  gap: 10,
+                  display: "inline-flex",
+                }}
+              >
+                <div
+                  style={{
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start",
+                    gap: 32,
+                    display: "inline-flex",
                   }}
                 >
                   <div
-                    style={{
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                      gap: 8,
-                      display: "flex",
-                    }}
+                    className={
+                      questionIndex == 0 ? "buttonDisable" : "buttonEnable"
+                    }
+                    onClick={(e) => previousQuestion()}
                   >
-                    <img src={buttonLeft} />
                     <div
                       style={{
-                        color: "#DA291C",
-                        fontSize: 16,
-                        fontFamily: "Inter",
-                        fontWeight: "600",
-                        lineHeight: 1,
-                        wordWrap: "break-word",
+                        justifyContent: "flex-start",
+                        alignItems: "center",
+                        gap: 8,
+                        display: "flex",
                       }}
                     >
-                      Previous
+                      {/* <img src={buttonLeft} /> */}
+                      <BsArrowLeft />
+                      <div
+                        style={{
+                          //color: "#DA291C",
+                          fontSize: 16,
+                          fontFamily: "Inter",
+                          fontWeight: "600",
+                          lineHeight: 1,
+                          wordWrap: "break-word",
+                        }}
+                      >
+                        Previous
+                      </div>
+                    </div>
+                  </div>
+                  <div className="buttonEnable" onClick={(e) => nextQuestion()}>
+                    <div
+                      style={{
+                        justifyContent: "flex-start",
+                        alignItems: "center",
+                        gap: 8,
+                        display: "flex",
+                      }}
+                    >
+                      <div
+                        style={{
+                          // color: "#DA291C",
+                          fontSize: 16,
+                          fontFamily: "Inter",
+                          fontWeight: "600",
+                          lineHeight: 1,
+                          wordWrap: "break-word",
+                        }}
+                      >
+                        Next
+                      </div>
+
+                      <BsArrowRight />
                     </div>
                   </div>
                 </div>
-                <div
-                  style={{
-                    paddingLeft: 24,
-                    paddingRight: 24,
-                    paddingTop: 12,
-                    paddingBottom: 12,
-                    background: "#DA291C",
-                    justifyContent: "flex-start",
-                    alignItems: "flex-start",
-                    gap: 12,
-                    display: "flex",
-                  }}
-                >
-                  <div
-                    style={{
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                      gap: 8,
-                      display: "flex",
-                    }}
-                  >
-                    <div
-                      style={{
-                        color: "white",
-                        fontSize: 16,
-                        fontFamily: "Inter",
-                        fontWeight: "600",
-                        lineHeight: 1,
-                        wordWrap: "break-word",
-                      }}
-                    >
-                      Next
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div
+          class="modal fade"
+          id="staticBackdrop"
+          data-bs-backdrop="static"
+          data-bs-keyboard="false"
+          tabindex="-1"
+          aria-labelledby="staticBackdropLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+              <div class="modal-body">
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div
+                        style={{
+                          width: "100%",
+                          //height: 400,
+                          position: "relative",
+                        }}
+                      >
+                        <div
+                          style={{
+                            // alignSelf: "stretch",
+                            color: "#DA291C",
+                            fontSize: 20,
+                            fontFamily: "Inter",
+                            fontWeight: "700",
+                            textTransform: "uppercase",
+                            wordWrap: "break-word",
+                            marginTop: 20,
+                            textAlign: "left",
+                          }}
+                        >
+                          {submit ? (
+                            <>
+                              Congratulations! <br />
+                              Your report will be sent to your corporate email
+                              soon
+                            </>
+                          ) : (
+                            "Let yourself be advised by our specialists"
+                          )}
+                        </div>
+                        <div
+                          style={{
+                            width: "100%",
+                            marginTop: 30,
+                            textAlign: "left",
+                          }}
+                        >
+                          <span
+                            style={{
+                              color: "#0F0E0E",
+                              fontSize: 36,
+                              fontFamily: "Inter",
+                              fontWeight: "500",
+                              textAlign: "left",
+                              lineHeight: 1,
+                              wordWrap: "break-word",
+                            }}
+                          >
+                            Remember that this report can also be personalized
+                            in a{" "}
+                          </span>
+                          <span
+                            style={{
+                              color: "#DA291C",
+                              fontSize: 36,
+                              fontFamily: "Inter",
+                              fontWeight: "500",
+                              textAlign: "left",
+                              wordWrap: "break-word",
+                              lineHeight: 1,
+                            }}
+                          >
+                            virtual session at no cost
+                          </span>
+                          <span
+                            style={{
+                              color: "#0F0E0E",
+                              fontSize: 36,
+                              fontFamily: "Inter",
+                              fontWeight: "500",
+                              textAlign: "left",
+                              lineHeight: 1,
+                              wordWrap: "break-word",
+                            }}
+                          >
+                            {" "}
+                            with a Fortinet expert
+                          </span>
+                        </div>
+                        {!submit && (
+                          <>
+                            <div
+                              style={{
+                                width: "100%",
+                                color: "#0F0E0E",
+                                fontSize: 20,
+                                fontFamily: "Inter",
+                                fontWeight: "400",
+                                textAlign: "left",
+                                wordWrap: "break-word",
+                                marginTop: 20,
+                              }}
+                            >
+                              Your report will be sent to your corporate email
+                            </div>
+
+                            <div
+                              style={{
+                                width: "100%",
+                                height: "13%",
+                                paddingLeft: 24,
+                                paddingRight: 24,
+                                paddingTop: 12,
+                                paddingBottom: 12,
+                                background: "#F3F3F3",
+                                flexDirection: "column",
+                                justifyContent: "flex-start",
+                                alignItems: "flex-start",
+                                gap: 12,
+                                display: "inline-flex",
+                                marginTop: 20,
+                              }}
+                            >
+                              <div
+                                style={{
+                                  justifyContent: "flex-start",
+                                  alignItems: "center",
+                                  gap: 8,
+                                  display: "inline-flex",
+                                }}
+                              >
+                                <div
+                                  style={{
+                                    color: "#0F0E0E",
+                                    fontSize: 16,
+                                    fontFamily: "Inter",
+                                    fontWeight: "400",
+                                    lineHeight: 1,
+                                    wordWrap: "break-word",
+                                  }}
+                                >
+                                  Company Email
+                                </div>
+                              </div>
+                            </div>
+                          </>
+                        )}
+                        <div
+                          style={{
+                            paddingLeft: 24,
+                            paddingRight: 24,
+                            paddingTop: 12,
+                            paddingBottom: 12,
+                            background: "#DA291C",
+                            marginTop: submit ? 100 : 20,
+                            width: 120,
+                            cursor: "pointer",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            gap: 12,
+                            display: "flex",
+                          }}
+                          onClick={() => setSubmit(true)}
+                        >
+                          <div
+                            style={{
+                              justifyContent: "flex-start",
+                              alignItems: "center",
+                              gap: 8,
+                              display: "inline-flex",
+                            }}
+                          >
+                            {submit ? (
+                              <div
+                                style={{
+                                  color: "white",
+                                  fontSize: 16,
+                                  fontFamily: "Inter",
+                                  fontWeight: "600",
+                                  lineHeight: 1,
+                                  wordWrap: "break-word",
+                                  flexDirection: "row",
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                }}
+                              >
+                                Call us <img src={call} />
+                              </div>
+                            ) : (
+                              <div
+                                style={{
+                                  color: "white",
+                                  fontSize: 16,
+                                  fontFamily: "Inter",
+                                  fontWeight: "600",
+                                  lineHeight: 1,
+                                  wordWrap: "break-word",
+                                }}
+                              >
+                                Confirm
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <img src={buttonRight}></img>
+                    <div class="col-md-6">
+                      <div
+                        style={{
+                          width: "100%",
+                          height: 450,
+                          position: "relative",
+                        }}
+                      >
+                        <img
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            background:
+                              "linear-gradient(0deg, #D9D9D9 0%, #D9D9D9 100%)",
+                            borderTopRightRadius: 300,
+                          }}
+                          src={modalImage}
+                        />
+                        <div
+                          style={{
+                            width: 40,
+                            height: 40,
+                            padding: 2,
+                            right: 3,
+                            position: "absolute",
+                            background: "white",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            display: "inline-flex",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => closeModal()}
+                        >
+                          <div
+                            style={{
+                              width: 36,
+                              height: 36,
+                              position: "relative",
+                              flexDirection: "column",
+                              justifyContent: "flex-start",
+                              alignItems: "flex-start",
+                              display: "flex",
+                            }}
+                          >
+                            <img
+                              src={close}
+                              style={{ width: 36, height: 36 }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <div
+          class="modal-backdrop fade show"
+          id="backdrop"
+          style={{ display: "none" }}
+        ></div>
         <div
           style={{
             width: "100%",
