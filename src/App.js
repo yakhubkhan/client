@@ -3,7 +3,6 @@ import { useState } from "react";
 import logo from "./fortinet_logo.svg";
 import world from "./world.svg";
 import question from "./question.svg";
-//import evaluation from "./evaluation.svg";
 import recommendation from "./recommendation.svg";
 import arrowLeft from "./assets/images/teenyicons_arrow-left-solid.svg";
 import arrowRight from "./assets/images/teenyicons_arrow-right-solid.svg";
@@ -36,6 +35,7 @@ import close from "./assets/images/x.svg";
 import call from "./assets/images/call.svg";
 function App() {
   const [questionIndex, setQuestionIndex] = useState(0);
+  const [imageIndex, setImageIndex] = useState(1);
   const [submit, setSubmit] = useState(false);
 
   const nextQuestion = () => {
@@ -43,6 +43,13 @@ function App() {
   };
   const previousQuestion = () => {
     setQuestionIndex((previous) => (previous == 0 ? previous : previous - 1));
+  };
+
+  const nextImage = () => {
+    setImageIndex((previous) => (previous == 6 ? previous : previous + 1));
+  };
+  const previousImage = () => {
+    setImageIndex((previous) => (previous == 1 ? previous : previous - 1));
   };
 
   const evaluate = () => {
@@ -142,63 +149,75 @@ function App() {
               background: "#0F0E0E",
             }}
           >
-            <img src={image1} className="bg" width="100%" height="667" />
-            <div
-              style={{
-                width: 56,
-                height: 56,
-                left: "2%",
-                top: "40%",
-                position: "absolute",
-                //background: "#F3F3F3",
-              }}
-            >
+            <img
+              src={imageIndex == 1 ? image1 : imageIndex == 2 ? image2 : image1}
+              className="bg"
+              width="100%"
+              height="667"
+            />
+            {imageIndex != 1 && (
               <div
                 style={{
-                  width: "100%",
-                  height: "100%",
-                  background: "rgba(255, 255, 255, 0.25)",
-                  borderRadius: 9999,
-                  backdropFilter: "blur(10px)",
-                  alignItems: "center",
-                  display: "flex",
-                  justifyContent: "center",
+                  width: 56,
+                  height: 56,
+                  left: "2%",
+                  top: "40%",
+                  position: "absolute",
+                  //background: "#F3F3F3",
                 }}
+                onClick={() => previousImage()}
               >
-                <img src={arrowLeft} />
+                <div
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    background: "rgba(255, 255, 255, 0.25)",
+                    borderRadius: 9999,
+                    backdropFilter: "blur(10px)",
+                    alignItems: "center",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  <img src={arrowLeft} />
+                </div>
               </div>
-            </div>
-            <div
-              style={{
-                width: 56,
-                height: 56,
-                right: "2%",
-                top: "40%",
-                position: "absolute",
-                //background: "#F3F3F3",
-              }}
-            >
+            )}
+            {imageIndex != 6 && (
               <div
                 style={{
-                  width: "100%",
-                  height: "100%",
-                  background: "rgba(255, 255, 255, 0.25)",
-                  borderRadius: 9999,
-                  backdropFilter: "blur(10px)",
-                  alignItems: "center",
-                  display: "flex",
-                  justifyContent: "center",
+                  width: 56,
+                  height: 56,
+                  right: "2%",
+                  top: "40%",
+                  position: "absolute",
+                  //background: "#F3F3F3",
                 }}
+                onClick={() => nextImage()}
               >
-                <img src={arrowRight} />
+                <div
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    background: "rgba(255, 255, 255, 0.25)",
+                    borderRadius: 9999,
+                    backdropFilter: "blur(10px)",
+                    alignItems: "center",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  <img src={arrowRight} />
+                </div>
               </div>
-            </div>
+            )}
             <div
               style={{
-                width: 953,
+                width: "80%",
                 height: 306,
-                left: "13%",
+                left: "11%",
                 top: "25%",
+                right: "13%",
                 position: "absolute",
                 flexDirection: "column",
                 justifyContent: "flex-start",
@@ -283,7 +302,7 @@ function App() {
                   </div>
                 </div>
               </div>
-              <div
+              {/* <div
                 style={{
                   paddingLeft: 24,
                   paddingRight: 24,
@@ -318,42 +337,382 @@ function App() {
                     Complete Questionnaire
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
             <div
               style={{
                 position: "absolute",
-                top: "95%",
-                left: "50%",
+                top: "60%",
+                left: "11%",
                 flexDirection: "row",
                 display: "flex",
               }}
             >
-              <div className="selectedImg" />
-              <div className="unSelectedImg" />
-              <div className="unSelectedImg" />
-              <div className="unSelectedImg" />
-              <div className="unSelectedImg" />
-              <div className="unSelectedImg" />
+              <div
+                className={imageIndex == 1 ? "selectedImg" : "unSelectedImg"}
+              />
+              <div
+                className={imageIndex == 2 ? "selectedImg" : "unSelectedImg"}
+              />
+              <div
+                className={imageIndex == 3 ? "selectedImg" : "unSelectedImg"}
+              />
+              <div
+                className={imageIndex == 4 ? "selectedImg" : "unSelectedImg"}
+              />
+              <div
+                className={imageIndex == 5 ? "selectedImg" : "unSelectedImg"}
+              />
+              <div
+                className={imageIndex == 6 ? "selectedImg" : "unSelectedImg"}
+              />
             </div>
           </div>
         </div>
         <div
           style={{
-            width: "100%",
-            height: 300,
-            paddingTop: 10,
+            position: "absolute",
+            top: "98%",
+            left: "11%",
+            width: "76%",
+            height: "75%",
+          }}
+        >
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              padding: 64,
+              background: "rgba(255, 255, 255, 0.60)",
+              boxShadow: "0px 10px 50px rgba(85, 85, 85, 0.04)",
+              borderRadius: 30,
+              backdropFilter: "blur(100px)",
+              flexDirection: "column",
+              //justifyContent: "center",
+              alignItems: "flex-start",
+              gap: 36,
+              display: "inline-flex",
+            }}
+          >
+            <div>
+              <span
+                style={{
+                  color: "#0F0E0E",
+                  fontSize: 28,
+                  fontFamily: "Inter",
+                  fontWeight: "500",
+                  lineHeight: 1,
+                  wordWrap: "break-word",
+                }}
+              >
+                Fill in the form to{" "}
+              </span>
+              <span
+                style={{
+                  color: "#DA291C",
+                  fontSize: 28,
+                  fontFamily: "Inter",
+                  fontWeight: "500",
+                  lineHeight: 1,
+                  wordWrap: "break-word",
+                }}
+              >
+                continue evaluating
+              </span>
+            </div>
+            <div
+              style={{
+                alignSelf: "stretch",
+                justifyContent: "flex-start",
+                alignItems: "flex-start",
+                gap: 32,
+                display: "inline-flex",
+              }}
+            >
+              <div
+                style={{
+                  flex: "1 1 0",
+                  flexDirection: "column",
+                  justifyContent: "flex-start",
+                  alignItems: "flex-start",
+                  gap: 36,
+                  display: "inline-flex",
+                }}
+              >
+                <div
+                  style={{
+                    alignSelf: "stretch",
+                    height: 48,
+                    // paddingLeft: 24,
+                    paddingRight: 24,
+                    paddingTop: 12,
+                    // paddingBottom: 12,
+                    borderBottom: "1px #A1A1A1 solid",
+                    flexDirection: "column",
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start",
+                    gap: 12,
+                    display: "flex",
+                  }}
+                >
+                  <input
+                    type="text"
+                    placeholder="First name"
+                    aria-label="Disabled input example"
+                  ></input>
+                </div>
+                <div
+                  style={{
+                    alignSelf: "stretch",
+                    height: 48,
+                    //paddingLeft: 24,
+                    paddingRight: 24,
+                    paddingTop: 12,
+                    // paddingBottom: 12,
+                    borderBottom: "1px #A1A1A1 solid",
+                    flexDirection: "column",
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start",
+                    gap: 12,
+                    display: "flex",
+                  }}
+                >
+                  <input
+                    type="text"
+                    placeholder="Last name"
+                    aria-label="Disabled input example"
+                  ></input>
+                </div>
+                <div
+                  style={{
+                    alignSelf: "stretch",
+                    height: 48,
+                    //paddingLeft: 24,
+                    paddingRight: 24,
+                    paddingTop: 12,
+                    // paddingBottom: 12,
+                    borderBottom: "1px #A1A1A1 solid",
+                    flexDirection: "column",
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start",
+                    gap: 12,
+                    display: "flex",
+                  }}
+                >
+                  <input
+                    type="text"
+                    placeholder="Company"
+                    aria-label="Disabled input example"
+                  ></input>
+                  {/* <div
+                    style={{
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                      gap: 8,
+                      display: "inline-flex",
+                    }}
+                  >
+                    <div
+                      style={{
+                        color: "#0F0E0E",
+                        fontSize: 16,
+                        fontFamily: "Inter",
+                        fontWeight: "300",
+                        lineHeight: 1,
+                        wordWrap: "break-word",
+                      }}
+                    >
+                      Company
+                    </div>
+                  </div> */}
+                </div>
+              </div>
+              <div
+                style={{
+                  flex: "1 1 0",
+                  flexDirection: "column",
+                  justifyContent: "flex-start",
+                  alignItems: "flex-end",
+                  gap: 36,
+                  display: "inline-flex",
+                }}
+              >
+                <div
+                  style={{
+                    alignSelf: "stretch",
+                    height: 48,
+                    //paddingLeft: 24,
+                    paddingRight: 24,
+                    paddingTop: 12,
+                    paddingBottom: 12,
+                    borderBottom: "1px #A1A1A1 solid",
+                    flexDirection: "column",
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start",
+                    gap: 12,
+                    display: "flex",
+                  }}
+                >
+                  <input
+                    type="text"
+                    placeholder="Job title"
+                    aria-label="Disabled input example"
+                  ></input>
+                </div>
+                <div
+                  style={{
+                    alignSelf: "stretch",
+                    height: 48,
+                    //paddingLeft: 24,
+                    paddingRight: 24,
+                    paddingTop: 12,
+                    paddingBottom: 12,
+                    borderBottom: "1px #A1A1A1 solid",
+                    flexDirection: "column",
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start",
+                    gap: 12,
+                    display: "flex",
+                  }}
+                >
+                  <input
+                    type="text"
+                    placeholder="Phone"
+                    aria-label="Disabled input example"
+                  ></input>
+                </div>
+                <div
+                  style={{
+                    alignSelf: "stretch",
+                    height: 48,
+                    //paddingLeft: 24,
+                    paddingRight: 24,
+                    paddingTop: 12,
+                    paddingBottom: 12,
+                    borderBottom: "1px #A1A1A1 solid",
+                    flexDirection: "column",
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start",
+                    gap: 12,
+                    display: "flex",
+                  }}
+                >
+                  <select placeholder="Country">
+                    <option className="selectText" value="" disabled selected>
+                      Country
+                    </option>
+                    <option className="selectText" value="India">
+                      India
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div
+              style={{
+                alignSelf: "stretch",
+                justifyContent: "flex-start",
+                alignItems: "flex-start",
+                gap: 32,
+                display: "inline-flex",
+              }}
+            >
+              <div
+                style={{
+                  flex: "1 1 0",
+                  height: 48,
+                  justifyContent: "flex-start",
+                  alignItems: "flex-start",
+                  gap: 16,
+                  display: "flex",
+                }}
+              >
+                {/* <div
+                  style={{
+                    width: 20,
+                    height: 20,
+                    border: "1.50px #DA291C solid",
+                  }}
+                /> */}
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  // id="cb1"
+                  // style={{ color: "red", marginTop: 6 }}
+                ></input>
+                <div
+                  style={{
+                    flex: "1 1 0",
+                    color: "#0F0E0E",
+                    fontSize: 16,
+                    fontFamily: "Inter",
+                    fontWeight: "300",
+                    lineHeight: 1,
+                    wordWrap: "break-word",
+                    textAlign: "left",
+                  }}
+                >
+                  By clicking on the EVALUATE button, I accept that Fortinet can
+                  send me by email extended information regarding the
+                  cybersecurity maturity level of my company's and industry's OT
+                  environment.
+                </div>
+              </div>
+              <div
+                style={{
+                  paddingLeft: 24,
+                  paddingRight: 24,
+                  paddingTop: 12,
+                  paddingBottom: 12,
+                  background: "#DA291C",
+                  flexDirection: "column",
+                  justifyContent: "flex-start",
+                  alignItems: "flex-start",
+                  gap: 12,
+                  display: "inline-flex",
+                }}
+              >
+                <div
+                  style={{
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    gap: 8,
+                    display: "inline-flex",
+                  }}
+                >
+                  <div
+                    style={{
+                      color: "white",
+                      fontSize: 16,
+                      fontFamily: "Inter",
+                      fontWeight: "600",
+                      lineHeight: 1,
+                      wordWrap: "break-word",
+                    }}
+                  >
+                    Evaluate
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          style={{
+            width: "80%",
+            height: 500,
+            paddingTop: 300,
             paddingBottom: 10,
-            paddingLeft: 80,
+            //paddingLeft: 80,
+            left: "11%",
             paddingRight: 80,
-            justifyContent: "center",
-            alignItems: "center",
-            //alignItems: "ce",
+            //justifyContent: "center",
+            //alignItems: "center",
             gap: 32,
             display: "inline-flex",
           }}
         >
-          <div style={{ flex: 1, textAlign: "left" }}>
+          <div style={{ flex: 1, textAlign: "left", marginTop: 30 }}>
             <span
               style={{
                 color: "#DA291C",
@@ -364,7 +723,7 @@ function App() {
                 wordWrap: "break-word",
               }}
             >
-              Protecting and guaranteeing
+              Protecting and guaranteeing{" "}
             </span>
             <span
               style={{
@@ -432,6 +791,7 @@ function App() {
               flex: 1,
               color: "#0F0E0E",
               textAlign: "left",
+              marginTop: 30,
               fontSize: 16,
               fontFamily: "Inter",
               fontWeight: "300",

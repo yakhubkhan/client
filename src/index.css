@@ -865,3 +865,62 @@ input[id="cb1"]:checked {
 .modal-body {
   margin-bottom: -1%;
 }
+
+.form-control {
+  border-color: transparent !important;
+  background-color: transparent !important;
+  &:focus {
+    border-color: transparent !important;
+    background-color: transparent !important;
+  }
+}
+.form-control:focus {
+  border-color: transparent !important;
+}
+
+form-control-focus {
+  border-color: transparent !important;
+  background-color: transparent !important;
+}
+
+input[type="text"] {
+  width: 100%;
+
+  box-sizing: border-box;
+  background-color: transparent;
+  border-color: transparent;
+  padding-left: 24px;
+}
+
+input[type="text"]:focus {
+  outline: none;
+}
+
+::placeholder {
+  color: #0f0e0e;
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 300;
+  line-height: 1;
+  word-wrap: break-word;
+}
+select {
+  width: 100%;
+
+  box-sizing: border-box;
+  background-color: transparent;
+  border-color: transparent;
+  padding-left: 24px;
+}
+
+select:focus {
+  outline: none;
+}
+.selectText {
+  color: #0f0e0e;
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 300;
+  line-height: 1;
+  word-wrap: break-word;
+}
