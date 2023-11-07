@@ -1,4 +1,13 @@
 {
     "home": "Did you know that an intruder can take control of your equipment and machinery and stop its operation?",
-    "page2": "Page 2"
+    "page2": "Page 2",
+    "question":"Questionnaire",
+    "Evaluation":"Evaluation",
+    "Recommendation":"Recommendation",
+    "questiontext":"Answer 10 simple multiple-choice questions.",
+    "EvaluationText":"Fortinet will provide you with a report based on your answers showing your operating system's cybersecurity maturity level.",
+    "RecommendationText":"The report will be sent automatically to your corporate email, and you can also request that it be interpreted in a personalized way and at no cost by one of our experts.",
+    "accept":"By clicking on the EVALUATE button, I accept that Fortinet can send me by email extended information regarding the cybersecurity maturity level of my company's and industry's OT environment."
+    
+
   }
