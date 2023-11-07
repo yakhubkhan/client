@@ -1,4 +1,10 @@
 {
     "home": "¿Sabía usted que un intruso puede apoderarse del control de sus equipos y maquinaria y detener su operación?",
-    "page2": "Página 2"
+    "question":"CUESTIONARIO",
+    "Evaluation":"EVALUACIÓN",
+    "Recommendation":"RECOMENDACIONES",
+    "questiontext":"Conteste 10 preguntas sencillas de respuestas múltiple.",
+    "EvaluationText":"Fortinet le entregará un informe en base a sus respuestas mostrando el nivel de madurez en ciberseguridad de su sistema operativo.",
+    "RecommendationText":"El informe será enviado automáticamente a su correo electrónico corporativo. Además puede solicitar que sea interpretado de forma personalizada y gratuita con uno de nuestros expertos.",
+    "accept":"*Al hacer clic en REALIZAR EVALUACIÓN, acepto que Fortinet pueda enviarme al correo electrónico información ampliada respecto al nivel de madurez en ciberseguridad del entorno de OT de mi compañía e industria."
   }
