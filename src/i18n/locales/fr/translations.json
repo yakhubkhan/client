@@ -1,4 +1,10 @@
 {
     "home": "Saviez-vous qu'un intrus peut prendre le contrôle de vos équipements et machines et en arrêter le fonctionnement?",
-    "page2": "Page 2"
+    "question":"QUESTIONNAIRE",
+    "Evaluation":"ÉVALUATION",
+    "Recommendation":"RECOMMANDATIONS",
+    "questiontext":"Répondez à 10 questions simples à choix multiples. ​",
+    "EvaluationText":"Fortinet vous fournira un rapport basé sur vos réponses indiquant le niveau de maturité en matière de cybersécurité de votre système d'exploitation.",
+    "RecommendationText":"Le rapport sera envoyé automatiquement à votre adresse de courriel professionnelle, et vous pouvez également demander qu'il soit interprété de manière personnalisée et gratuitement par l'un de nos experts.",
+    "accept":"* En cliquant sur le bouton OBTENIR L'ÉVALUATION, j’accepte que Fortinet m’envoie par courriel des renseignements détaillés concernant le niveau de maturité en matière de cybersécurité de l’environnement OT de mon entreprise et de mon secteur d’activité."
   }
