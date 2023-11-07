@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 import logo from "./fortinet_logo.svg";
 import world from "./world.svg";
@@ -33,10 +33,31 @@ import Question11 from "./questions/Question11";
 import Question0 from "./questions/Question0";
 import close from "./assets/images/x.svg";
 import call from "./assets/images/call.svg";
+import { useTranslation } from "react-i18next";
 function App() {
+  const { t, i18n } = useTranslation();
+
+  // function changeLanguage(e) {
+  //   i18n.changeLanguage(e.target.value);
+  // }
+
+  const changeLanguage = (val, lang) => {
+    i18n.changeLanguage(val);
+    setSelectedlang(lang);
+  };
+  const aboutSection = useRef(null);
+  const [selectedLang, setSelectedlang] = useState("English");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [imageIndex, setImageIndex] = useState(1);
   const [submit, setSubmit] = useState(false);
+  const [formInput, setFormInput] = useState({
+    firstName: "",
+    lastName: "",
+    company: "",
+    jobTitle: "",
+    phone: "",
+    country: "",
+  });
 
   const nextQuestion = () => {
     setQuestionIndex((previous) => (previous == 11 ? previous : previous + 1));
@@ -67,6 +88,25 @@ function App() {
     document.getElementById("staticBackdrop").style.display = "block";
     document.getElementById("staticBackdrop").classList.add("show");
   };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormInput((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleScroll = (e) => {
+    console.log(document.documentElement.scrollHeigh);
+    e.preventDefault();
+    //const main = this.main.current;
+    window.scrollTo({
+      top: aboutSection.current.offsetTop - 50,
+      left: 0,
+      behavior: "smooth",
+    });
+  };
   return (
     <div className="App">
       <section className="social_header_menu fixed-top bg-light overflow-visible">
@@ -86,7 +126,7 @@ function App() {
               <div className="p-0 py-md-2">
                 <span className="navbar-text ms-auto col text-end">
                   {" "}
-                  OT Cybersecurity Maturity <span>Level</span>{" "}
+                  OT Cybersecurity Maturity <span>Level</span>
                 </span>
               </div>
               <div className="dropdown">
@@ -98,7 +138,19 @@ function App() {
                   aria-expanded="false"
                 >
                   <span className="w-100">
-                    <img src={world} width="20" class="img-fluid" alt="" />
+                    <img src={world} width="20" className="img-fluid" alt="" />
+                  </span>
+                  <span
+                    style={{
+                      color: "#0F0E0E",
+                      fontSize: 16,
+                      fontFamily: "Inter",
+                      fontWeight: "400",
+
+                      wordWrap: "break-word",
+                    }}
+                  >
+                    {selectedLang}
                   </span>
                 </button>
                 <ul
@@ -106,26 +158,54 @@ function App() {
                   data-bs-popper="none"
                 >
                   <li>
-                    {" "}
-                    <a className="dropdown-item  active" href="/en/home" id="1">
+                    <a
+                      className={
+                        selectedLang == "English"
+                          ? "dropdown-item active"
+                          : "dropdown-item"
+                      }
+                      onClick={() => changeLanguage("en", "English")}
+                      id="1"
+                    >
                       English
                     </a>
                   </li>
                   <li>
-                    {" "}
-                    <a className="dropdown-item " href="/es/home" id="2">
+                    <a
+                      className={
+                        selectedLang == "Spanish"
+                          ? "dropdown-item active"
+                          : "dropdown-item"
+                      }
+                      onClick={() => changeLanguage("es", "Spanish")}
+                      id="2"
+                    >
                       Spanish
                     </a>
                   </li>
                   <li>
-                    {" "}
-                    <a className="dropdown-item " href="/pt/home" id="3">
+                    <a
+                      className={
+                        selectedLang == "Portuguese"
+                          ? "dropdown-item active"
+                          : "dropdown-item"
+                      }
+                      onClick={() => changeLanguage("pt", "Portuguese")}
+                      id="3"
+                    >
                       Portuguese
                     </a>
                   </li>
                   <li>
-                    {" "}
-                    <a className="dropdown-item " href="/fr/home" id="4">
+                    <a
+                      className={
+                        selectedLang == "French"
+                          ? "dropdown-item active"
+                          : "dropdown-item"
+                      }
+                      onClick={() => changeLanguage("fr", "French")}
+                      id="4"
+                    >
                       French
                     </a>
                   </li>
@@ -163,6 +243,7 @@ function App() {
                   left: "2%",
                   top: "40%",
                   position: "absolute",
+                  cursor: "pointer",
                   //background: "#F3F3F3",
                 }}
                 onClick={() => previousImage()}
@@ -191,6 +272,7 @@ function App() {
                   right: "2%",
                   top: "40%",
                   position: "absolute",
+                  cursor: "pointer",
                   //background: "#F3F3F3",
                 }}
                 onClick={() => nextImage()}
@@ -238,8 +320,7 @@ function App() {
                   wordWrap: "break-word",
                 }}
               >
-                Did you know that an intruder can take control of your equipment
-                and machinery and stop its operation?
+                {t("home")}
               </div>
               <div
                 style={{
@@ -457,6 +538,10 @@ function App() {
                         type="text"
                         placeholder="First name"
                         aria-label="Disabled input example"
+                        name="firstName"
+                        value={formInput.firstName}
+                        onChange={(e) => handleChange(e)}
+                        style={{ backgroundColor: "transparent" }}
                       ></input>
                     </div>
                     <div
@@ -478,6 +563,10 @@ function App() {
                       <input
                         type="text"
                         placeholder="Last name"
+                        name="lastName"
+                        value={formInput.lastName}
+                        onChange={(e) => handleChange(e)}
+                        style={{ backgroundColor: "transparent" }}
                         aria-label="Disabled input example"
                       ></input>
                     </div>
@@ -500,6 +589,10 @@ function App() {
                       <input
                         type="text"
                         placeholder="Company"
+                        name="company"
+                        value={formInput.company}
+                        onChange={(e) => handleChange(e)}
+                        style={{ backgroundColor: "transparent" }}
                         aria-label="Disabled input example"
                       ></input>
                       {/* <div
@@ -554,7 +647,10 @@ function App() {
                       <input
                         type="text"
                         placeholder="Job title"
-                        aria-label="Disabled input example"
+                        name="jobTitle"
+                        value={formInput.jobTitle}
+                        onChange={(e) => handleChange(e)}
+                        style={{ backgroundColor: "transparent" }}
                       ></input>
                     </div>
                     <div
@@ -576,7 +672,10 @@ function App() {
                       <input
                         type="text"
                         placeholder="Phone"
-                        aria-label="Disabled input example"
+                        name="phone"
+                        value={formInput.phone}
+                        onChange={(e) => handleChange(e)}
+                        style={{ backgroundColor: "transparent" }}
                       ></input>
                     </div>
                     <div
@@ -595,13 +694,14 @@ function App() {
                         display: "flex",
                       }}
                     >
-                      <select placeholder="Country">
-                        <option
-                          className="selectText"
-                          value=""
-                          disabled
-                          selected
-                        >
+                      <select
+                        placeholder="Country"
+                        name="country"
+                        value={formInput.country}
+                        onChange={(e) => handleChange(e)}
+                        style={{ backgroundColor: "transparent" }}
+                      >
+                        <option className="selectText" value="" disabled>
                           Country
                         </option>
                         <option className="selectText" value="India">
@@ -639,7 +739,7 @@ function App() {
                 /> */}
                     <input
                       type="checkbox"
-                      class="form-check-input"
+                      className="form-check-input"
                       // id="cb1"
                       // style={{ color: "red", marginTop: 6 }}
                     ></input>
@@ -673,7 +773,9 @@ function App() {
                       alignItems: "flex-start",
                       gap: 12,
                       display: "inline-flex",
+                      cursor: "pointer",
                     }}
+                    onClick={(e) => handleScroll(e)}
                   >
                     <div
                       style={{
@@ -851,6 +953,7 @@ function App() {
             background: "white",
             top: 50,
           }}
+          ref={aboutSection}
         >
           <div
             style={{
@@ -883,7 +986,7 @@ function App() {
                   width: "100%",
                   justifyContent: "flex-start",
                   alignItems: "center",
-                  paddingLeft: questionIndex == 0 ? "8%" : "14%",
+                  paddingLeft: questionIndex == 0 ? "11%" : "11%",
                   display: "inline-flex",
                 }}
               >
@@ -928,7 +1031,7 @@ function App() {
                   </div>
                 )}
                 {questionIndex != 0 && questionIndex != 11 && (
-                  <div style={{ width: "65%", textAlign: "left" }}>
+                  <div style={{ width: "85%", textAlign: "left" }}>
                     <span
                       style={{
                         color: "black",
@@ -968,7 +1071,7 @@ function App() {
                   </div>
                 )}
                 {questionIndex == 11 && (
-                  <div style={{ width: "65%", textAlign: "left" }}>
+                  <div style={{ width: "85%", textAlign: "left" }}>
                     <span
                       style={{
                         color: "black",
@@ -986,7 +1089,7 @@ function App() {
                         fontSize: 28,
                         fontFamily: "Inter",
                         fontWeight: "500",
-                        lineHeight: 44,
+                        lineHeight: 1,
                         wordWrap: "break-word",
                       }}
                     >
@@ -1000,7 +1103,7 @@ function App() {
                       background: "white",
                       justifyContent: "flex-start",
                       alignItems: "flex-start",
-                      paddingLeft: "15%",
+                      //paddingLeft: "20%",
                       gap: 16,
                       display: "flex",
                     }}
@@ -1013,6 +1116,7 @@ function App() {
                         fontWeight: "500",
                         lineHeight: 1,
                         wordWrap: "break-word",
+                        textAlign: "left",
                       }}
                     >
                       {questionIndex}/11
@@ -1078,9 +1182,17 @@ function App() {
               width: "100%",
               height: "100%",
               paddingLeft:
-                questionIndex == 0 ? "8%" : questionIndex == 11 ? 100 : "14%",
+                questionIndex == 0
+                  ? "11%"
+                  : questionIndex == 11
+                  ? "11%"
+                  : "11%",
               paddingRight:
-                questionIndex == 0 ? 0 : questionIndex == 11 ? 100 : "14%",
+                questionIndex == 0
+                  ? "11%"
+                  : questionIndex == 11
+                  ? "11%"
+                  : "11%",
               flexDirection: "column",
               justifyContent: "center",
               //alignItems: "center",
@@ -1107,8 +1219,8 @@ function App() {
                 style={{
                   width: "100%",
                   height: "100%",
-                  // paddingLeft: 180,
-                  //paddingRight: 180,
+                  //paddingLeft: "11%",
+                  //paddingRight: "11%",
                   flexDirection: "column",
                   justifyContent: "center",
                   //ss alignItems: "flex-end",
@@ -1121,13 +1233,13 @@ function App() {
                   style={{
                     justifyContent: "flex-start",
                     alignItems: "flex-start",
-                    gap: 32,
+                    gap: 16,
                     display: "inline-flex",
                   }}
                 >
                   <input
                     type="checkbox"
-                    class="form-check-input"
+                    className="form-check-input"
                     // id="cb1"
                     // style={{ color: "red", marginTop: 6 }}
                   ></input>
@@ -1140,6 +1252,7 @@ function App() {
                       fontFamily: "Inter",
                       fontWeight: "300",
                       wordWrap: "break-word",
+                      textAlign: "left",
                     }}
                   >
                     By clicking on the EVALUATE button, I accept that Fortinet
@@ -1186,8 +1299,8 @@ function App() {
                   width: "100%",
                   height: "100%",
                   // paddingLeft: 180,
-                  paddingRight: "6%",
-                  flexDirection: "column",
+                  paddingRight: "0%",
+                  flexDirection: "column-reverse",
                   justifyContent: "center",
                   alignItems: "flex-end",
                   marginBottom: 20,
@@ -1318,20 +1431,20 @@ function App() {
         </div>
 
         <div
-          class="modal fade"
+          className="modal fade"
           id="staticBackdrop"
           data-bs-backdrop="static"
           data-bs-keyboard="false"
-          tabindex="-1"
+          tabIndex="-1"
           aria-labelledby="staticBackdropLabel"
           aria-hidden="true"
         >
-          <div class="modal-dialog modal-dialog-centered modal-xl">
-            <div class="modal-content">
-              <div class="modal-body">
-                <div class="container-fluid">
-                  <div class="row">
-                    <div class="col-md-6">
+          <div className="modal-dialog modal-dialog-centered modal-xl">
+            <div className="modal-content">
+              <div className="modal-body">
+                <div className="container-fluid">
+                  <div className="row">
+                    <div className="col-md-6">
                       <div
                         style={{
                           width: "100%",
@@ -1529,7 +1642,7 @@ function App() {
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-6">
+                    <div className="col-md-6">
                       <div
                         style={{
                           width: "100%",
@@ -1588,7 +1701,7 @@ function App() {
           </div>
         </div>
         <div
-          class="modal-backdrop fade show"
+          className="modal-backdrop fade show"
           id="backdrop"
           style={{ display: "none" }}
         ></div>
@@ -1598,8 +1711,8 @@ function App() {
             height: "100%",
             paddingTop: 80,
             paddingBottom: 80,
-            paddingLeft: 180,
-            paddingRight: 179,
+            paddingLeft: "11%",
+            paddingRight: "11%",
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "flex-start",
@@ -1807,7 +1920,7 @@ function App() {
           style={{
             width: "100%",
             height: 88,
-            paddingLeft: 180,
+            paddingLeft: "11%",
             //paddingRight: 876,
             background: "#0F0E0E",
             justifyContent: "flex-start",
