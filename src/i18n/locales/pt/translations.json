@@ -1,4 +1,10 @@
 {
     "home": "Você sabia que um intruso pode assumir o controle do seu equipamento e dispositivos e interromper as suas operações?",
-    "page2": "Page 2"
+    "question":"QUESTIONÁRIO",
+    "Evaluation":"AVALIAÇÃO",
+    "Recommendation":"RECOMENDAÇÕES",
+    "questiontext":"Responda 10 perguntas simples de escolha múltipla.​",
+    "EvaluationText":"A Fortinet vai fornecer um relatório baseado nas suas respostas, mostrando o nível de maturidade em cibersegurança dos seus sistemas de operação.",
+    "RecommendationText":"O relatório será automaticamente enviado para o seu e-mail corporativo e também poderá ser solicitada uma interpretação personalizada e gratuita com um dos nossos especialistas.",
+    "accept":"* Ao clicar em REALIZAR AVALIAÇÃO, aceito que a Fortinet possa me enviar por email informação completa sobre o nível de maturidade em cibersegurança do ambiente de OT da minha empresa e mercado."
   }
