@@ -33,6 +33,7 @@ import Question11 from "./questions/Question11";
 import Question0 from "./questions/Question0";
 import close from "./assets/images/x.svg";
 import call from "./assets/images/call.svg";
+import TextField from "@mui/material/TextField";
 import { useTranslation } from "react-i18next";
 function App() {
   const { t, i18n } = useTranslation();
@@ -47,6 +48,7 @@ function App() {
   };
   const aboutSection = useRef(null);
   const [selectedLang, setSelectedlang] = useState("English");
+  const [accept, setAccept] = useState(false);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [imageIndex, setImageIndex] = useState(1);
   const [submit, setSubmit] = useState(false);
@@ -58,6 +60,13 @@ function App() {
     phone: "",
     country: "",
   });
+
+  const [isEmptyFirstName, setIsEmptyFirstName] = useState(false);
+  const [isEmptyLastName, setIsEmptyLastName] = useState(false);
+  const [isEmptyCompany, setIsEmptyCompany] = useState(false);
+  const [isEmptyJobTitle, setIsEmptyJobTitle] = useState(false);
+  const [isEmptyPhone, setIsEmptyPhone] = useState(false);
+  const [isEmptyCountry, setIsEmptyCountry] = useState(false);
 
   const nextQuestion = () => {
     setQuestionIndex((previous) => (previous == 11 ? previous : previous + 1));
@@ -91,13 +100,67 @@ function App() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormInput((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    if (name === "phone") {
+      if (/^[0-9]{0,17}$/.test(value)) {
+        setFormInput((prevState) => ({
+          ...prevState,
+          [name]: value,
+        }));
+      }
+    } else {
+      setFormInput((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
+    if (name === "firstName" && value) {
+      setIsEmptyFirstName(false);
+    }
+    if (name === "lastName" && value) {
+      setIsEmptyLastName(false);
+    }
+    if (name === "company" && value) {
+      setIsEmptyCompany(false);
+    }
+    if (name === "jobTitle" && value) {
+      setIsEmptyJobTitle(false);
+    }
+    if (name === "phone" && value) {
+      setIsEmptyPhone(false);
+    }
+    if (name === "country" && value) {
+      setIsEmptyCountry(false);
+    }
   };
 
   const handleScroll = (e) => {
+    const inputFielidValue = { ...formInput };
+    let errorFlag = false;
+    if (!inputFielidValue.firstName) {
+      setIsEmptyFirstName(true);
+      errorFlag = true;
+    }
+    if (!inputFielidValue.last) {
+      setIsEmptyLastName(true);
+      errorFlag = true;
+    }
+    if (!inputFielidValue.company) {
+      setIsEmptyCompany(true);
+      errorFlag = true;
+    }
+    if (!inputFielidValue.jobTitle) {
+      setIsEmptyJobTitle(true);
+    }
+    if (!inputFielidValue.phone) {
+      setIsEmptyPhone(true);
+      errorFlag = true;
+    }
+    if (!inputFielidValue.country) {
+      setIsEmptyCountry(true);
+      errorFlag = true;
+    }
+
+    if (errorFlag) return;
     console.log(document.documentElement.scrollHeigh);
     e.preventDefault();
     //const main = this.main.current;
@@ -508,114 +571,64 @@ function App() {
                     display: "inline-flex",
                   }}
                 >
+                  {/* <form class="row g-3 fullWidth requires-validation"> */}
                   <div
                     style={{
                       flex: "1 1 0",
                       flexDirection: "column",
                       justifyContent: "flex-start",
                       alignItems: "flex-start",
-                      gap: 36,
+                      gap: 32,
                       display: "inline-flex",
                     }}
                   >
-                    <div
-                      style={{
-                        alignSelf: "stretch",
-                        height: 48,
-                        // paddingLeft: 24,
-                        paddingRight: 24,
-                        paddingTop: 12,
-                        // paddingBottom: 12,
-                        borderBottom: "1px #A1A1A1 solid",
-                        flexDirection: "column",
-                        justifyContent: "flex-start",
-                        alignItems: "flex-start",
-                        gap: 12,
-                        display: "flex",
-                      }}
-                    >
+                    <div class="form-floating ">
                       <input
                         type="text"
-                        placeholder="First name"
-                        aria-label="Disabled input example"
+                        class={
+                          isEmptyFirstName
+                            ? "form-control required form-control-required"
+                            : "form-control form-control-not-required"
+                        }
+                        placeholder={t("firstName")}
                         name="firstName"
                         value={formInput.firstName}
                         onChange={(e) => handleChange(e)}
-                        style={{ backgroundColor: "transparent" }}
-                      ></input>
+                      />
+                      <label for="floatingInputInvalid">{t("firstName")}</label>
                     </div>
-                    <div
-                      style={{
-                        alignSelf: "stretch",
-                        height: 48,
-                        //paddingLeft: 24,
-                        paddingRight: 24,
-                        paddingTop: 12,
-                        // paddingBottom: 12,
-                        borderBottom: "1px #A1A1A1 solid",
-                        flexDirection: "column",
-                        justifyContent: "flex-start",
-                        alignItems: "flex-start",
-                        gap: 12,
-                        display: "flex",
-                      }}
-                    >
+                    <div class="form-floating">
                       <input
                         type="text"
-                        placeholder="Last name"
+                        class={
+                          isEmptyLastName
+                            ? "form-control required form-control-required"
+                            : "form-control form-control-not-required"
+                        }
+                        id="floatingInputInvalid"
+                        placeholder={t("lastName")}
                         name="lastName"
                         value={formInput.lastName}
                         onChange={(e) => handleChange(e)}
-                        style={{ backgroundColor: "transparent" }}
-                        aria-label="Disabled input example"
-                      ></input>
+                      />
+                      <p id="errorPhone" className="errorText"></p>
+                      <label for="floatingPassword">{t("lastName")}</label>
                     </div>
-                    <div
-                      style={{
-                        alignSelf: "stretch",
-                        height: 48,
-                        //paddingLeft: 24,
-                        paddingRight: 24,
-                        paddingTop: 12,
-                        // paddingBottom: 12,
-                        borderBottom: "1px #A1A1A1 solid",
-                        flexDirection: "column",
-                        justifyContent: "flex-start",
-                        alignItems: "flex-start",
-                        gap: 12,
-                        display: "flex",
-                      }}
-                    >
+                    <div class="form-floating">
                       <input
                         type="text"
-                        placeholder="Company"
+                        class={
+                          isEmptyCompany
+                            ? "form-control required form-control-required"
+                            : "form-control form-control-not-required"
+                        }
+                        id="floatingPassword"
+                        placeholder={t("company")}
                         name="company"
                         value={formInput.company}
                         onChange={(e) => handleChange(e)}
-                        style={{ backgroundColor: "transparent" }}
-                        aria-label="Disabled input example"
-                      ></input>
-                      {/* <div
-                    style={{
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                      gap: 8,
-                      display: "inline-flex",
-                    }}
-                  >
-                    <div
-                      style={{
-                        color: "#0F0E0E",
-                        fontSize: 16,
-                        fontFamily: "Inter",
-                        fontWeight: "300",
-                        lineHeight: 1,
-                        wordWrap: "break-word",
-                      }}
-                    >
-                      Company
-                    </div>
-                  </div> */}
+                      />
+                      <label for="floatingPassword">{t("company")}</label>
                     </div>
                   </div>
                   <div
@@ -624,92 +637,74 @@ function App() {
                       flexDirection: "column",
                       justifyContent: "flex-start",
                       alignItems: "flex-end",
-                      gap: 36,
+                      gap: 32,
                       display: "inline-flex",
                     }}
                   >
-                    <div
-                      style={{
-                        alignSelf: "stretch",
-                        height: 48,
-                        //paddingLeft: 24,
-                        paddingRight: 24,
-                        paddingTop: 12,
-                        paddingBottom: 12,
-                        borderBottom: "1px #A1A1A1 solid",
-                        flexDirection: "column",
-                        justifyContent: "flex-start",
-                        alignItems: "flex-start",
-                        gap: 12,
-                        display: "flex",
-                      }}
-                    >
+                    <div class="form-floating">
                       <input
                         type="text"
-                        placeholder="Job title"
+                        class={
+                          isEmptyJobTitle
+                            ? "form-control required form-control-required"
+                            : "form-control form-control-not-required"
+                        }
+                        id="floatingPassword"
+                        placeholder={t("jobTitle")}
                         name="jobTitle"
                         value={formInput.jobTitle}
                         onChange={(e) => handleChange(e)}
-                        style={{ backgroundColor: "transparent" }}
-                      ></input>
+                      />
+                      <label for="floatingPassword">{t("jobTitle")}</label>
                     </div>
-                    <div
-                      style={{
-                        alignSelf: "stretch",
-                        height: 48,
-                        //paddingLeft: 24,
-                        paddingRight: 24,
-                        paddingTop: 12,
-                        paddingBottom: 12,
-                        borderBottom: "1px #A1A1A1 solid",
-                        flexDirection: "column",
-                        justifyContent: "flex-start",
-                        alignItems: "flex-start",
-                        gap: 12,
-                        display: "flex",
-                      }}
-                    >
+                    <div class="form-floating">
                       <input
                         type="text"
-                        placeholder="Phone"
+                        class={
+                          isEmptyPhone
+                            ? "form-control required form-control-required"
+                            : "form-control form-control-not-required"
+                        }
+                        id="floatingPassword"
+                        placeholder={t("phone")}
                         name="phone"
                         value={formInput.phone}
                         onChange={(e) => handleChange(e)}
-                        style={{ backgroundColor: "transparent" }}
-                      ></input>
+                      />
+                      <p id="errorPhone" className="errorText">
+                        {isEmptyPhone ? t("phoneError") : ""}
+                      </p>
+                      <label for="floatingPassword">{t("phone")}</label>
                     </div>
                     <div
-                      style={{
-                        alignSelf: "stretch",
-                        height: 48,
-                        //paddingLeft: 24,
-                        paddingRight: 24,
-                        paddingTop: 12,
-                        paddingBottom: 12,
-                        borderBottom: "1px #A1A1A1 solid",
-                        flexDirection: "column",
-                        justifyContent: "flex-start",
-                        alignItems: "flex-start",
-                        gap: 12,
-                        display: "flex",
-                      }}
+                      class={
+                        isEmptyCountry
+                          ? "form-floating requiredSelect"
+                          : "form-floating"
+                      }
                     >
                       <select
-                        placeholder="Country"
+                        class={
+                          isEmptyCountry
+                            ? "form-select form-control-required"
+                            : "form-select form-control-not-required"
+                        }
+                        id="floatingSelect"
+                        aria-label="Floating label select example"
                         name="country"
                         value={formInput.country}
                         onChange={(e) => handleChange(e)}
-                        style={{ backgroundColor: "transparent" }}
                       >
-                        <option className="selectText" value="" disabled>
-                          Country
-                        </option>
-                        <option className="selectText" value="India">
-                          India
-                        </option>
+                        <option selected>{t("selectCountry")}</option>
+                        <option value="1">India</option>
+                        <option value="2">France</option>
+                        <option value="3">Germany</option>
                       </select>
+                      <label for="floatingSelect">{t("country")}</label>
                     </div>
                   </div>
+
+                  {/* </form> */}
                 </div>
                 <div
                   style={{
@@ -740,6 +735,7 @@ function App() {
                     <input
                       type="checkbox"
                       className="form-check-input"
+                      onChange={() => setAccept(!accept)}
                       // id="cb1"
                       // style={{ color: "red", marginTop: 6 }}
                     ></input>
@@ -755,26 +751,25 @@ function App() {
                         textAlign: "left",
                       }}
                     >
-                      By clicking on the EVALUATE button, I accept that Fortinet
-                      can send me by email extended information regarding the
-                      cybersecurity maturity level of my company's and
-                      industry's OT environment.
+                      {t("accept")}
                     </div>
                   </div>
-                  <div
+                  <button
                     style={{
                       paddingLeft: 24,
                       paddingRight: 24,
                       paddingTop: 12,
                       paddingBottom: 12,
-                      background: "#DA291C",
+                      background: !accept ? "grey" : "#DA291C",
                       flexDirection: "column",
                       justifyContent: "flex-start",
                       alignItems: "flex-start",
                       gap: 12,
                       display: "inline-flex",
-                      cursor: "pointer",
+                      cursor: !accept ? "auto" : "pointer",
+                      borderColor: !accept ? "grey" : "#DA291C",
                     }}
+                    disabled={!accept}
                     onClick={(e) => handleScroll(e)}
                   >
                     <div
@@ -795,10 +790,10 @@ function App() {
                           wordWrap: "break-word",
                         }}
                       >
-                        Evaluate
+                        {t("buttonName")}
                       </div>
                     </div>
-                  </div>
+                  </button>
                 </div>
               </div>
             </div>
@@ -1786,7 +1781,7 @@ function App() {
                     wordWrap: "break-word",
                   }}
                 >
-                  Questionnaire
+                  {t("question")}
                 </div>
                 <div
                   style={{
@@ -1800,7 +1795,7 @@ function App() {
                     wordWrap: "break-word",
                   }}
                 >
-                  Answer 10 simple multiple-choice questions.
+                  {t("questiontext")}
                 </div>
               </div>
               <div style={{ width: "15%" }}>
@@ -1833,7 +1828,7 @@ function App() {
                     wordWrap: "break-word",
                   }}
                 >
-                  Evaluation
+                  {t("Evaluation")}
                 </div>
                 <div
                   style={{
@@ -1847,8 +1842,7 @@ function App() {
                     wordWrap: "break-word",
                   }}
                 >
-                  Fortinet will provide you with a report based on your answers
-                  showing your operating system's cybersecurity maturity level.
+                  {t("EvaluationText")}
                 </div>
               </div>
               <div style={{ width: "15%" }}>
@@ -1891,7 +1885,7 @@ function App() {
                     wordWrap: "break-word",
                   }}
                 >
-                  Recommendation
+                  {t("Recommendation")}
                 </div>
                 <div
                   style={{
@@ -1905,9 +1899,7 @@ function App() {
                     wordWrap: "break-word",
                   }}
                 >
-                  The report will be sent automatically to your corporate email,
-                  and you can also request that it be interpreted in a
-                  personalized way and at no cost by one of our experts.
+                  {t("RecommendationText")}
                 </div>
               </div>
               <div style={{ width: "15%" }}>
