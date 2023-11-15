@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 
-import logo from "./fortinet_logo.svg";
+import logo from "./Fortinet logo.svg";
 import world from "./world.svg";
 import question from "./question.svg";
 import recommendation from "./recommendation.svg";
@@ -35,6 +35,9 @@ import close from "./assets/images/x.svg";
 import call from "./assets/images/call.svg";
 import TextField from "@mui/material/TextField";
 import { useTranslation } from "react-i18next";
+import { Country } from "./country";
+import report from "./assets/images/report.png";
+import reportImage from "./assets/images/reportImage.svg";
 function App() {
   const { t, i18n } = useTranslation();
 
@@ -67,12 +70,36 @@ function App() {
   const [isEmptyJobTitle, setIsEmptyJobTitle] = useState(false);
   const [isEmptyPhone, setIsEmptyPhone] = useState(false);
   const [isEmptyCountry, setIsEmptyCountry] = useState(false);
-
+  const [questionLevel, setQuestionLevel] = useState(10);
+  const [enableEvaulate, setEnableEvaulate] = useState(false);
+  const [companyEmail, setCompanyEmail] = useState("");
+  const [enableComfirm, setEnableConfirm] = useState(false);
+  const [questionList, setQuestionList] = useState([
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+  ]);
   const nextQuestion = () => {
-    setQuestionIndex((previous) => (previous == 11 ? previous : previous + 1));
+    setQuestionIndex((previous) => (previous == 10 ? previous : previous + 1));
+    setQuestionLevel((previous) => previous + 8);
+    if (questionIndex == 10) {
+      openModal();
+      setQuestionLevel((previous) => 100);
+    }
   };
   const previousQuestion = () => {
     setQuestionIndex((previous) => (previous == 0 ? previous : previous - 1));
+    if (questionIndex != 0) {
+      setQuestionLevel((previous) => previous - 8);
+    }
   };
 
   const nextImage = () => {
@@ -90,6 +117,7 @@ function App() {
     document.getElementById("backdrop").style.display = "none";
     document.getElementById("staticBackdrop").style.display = "none";
     document.getElementById("staticBackdrop").classList.remove("show");
+    setQuestionIndex((previous) => previous + 1);
   };
 
   const openModal = () => {
@@ -140,7 +168,7 @@ function App() {
       setIsEmptyFirstName(true);
       errorFlag = true;
     }
-    if (!inputFielidValue.last) {
+    if (!inputFielidValue.lastName) {
       setIsEmptyLastName(true);
       errorFlag = true;
     }
@@ -161,7 +189,7 @@ function App() {
     }
 
     if (errorFlag) return;
-    console.log(document.documentElement.scrollHeigh);
+
     e.preventDefault();
     //const main = this.main.current;
     window.scrollTo({
@@ -169,7 +197,22 @@ function App() {
       left: 0,
       behavior: "smooth",
     });
+    setEnableEvaulate(true);
   };
+
+  const onEmailChange = (e) => {
+    setCompanyEmail(e.target.value);
+    if (
+      e.target.value.match(
+        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      )
+    ) {
+      setEnableConfirm(true);
+    } else {
+      setEnableConfirm(false);
+    }
+  };
+
   return (
     <div className="App">
       <section className="social_header_menu fixed-top bg-light overflow-visible">
@@ -696,9 +739,9 @@ function App() {
                         onChange={(e) => handleChange(e)}
                       >
                         <option selected>{t("selectCountry")}</option>
-                        <option value="1">India</option>
-                        <option value="2">France</option>
-                        <option value="3">Germany</option>
+                        {Country.map((item) => (
+                          <option value={item.name}>{item.name}</option>
+                        ))}
                       </select>
                       <label for="floatingSelect">{t("country")}</label>
                     </div>
@@ -1076,9 +1119,9 @@ function App() {
                         wordWrap: "break-word",
                       }}
                     >
-                      Fill in the form to{" "}
+                      Finishing
                     </span>
-                    <span
+                    {/* <span
                       style={{
                         color: "#DA291C",
                         fontSize: 28,
@@ -1089,10 +1132,10 @@ function App() {
                       }}
                     >
                       finish evaluating
-                    </span>
+                    </span> */}
                   </div>
                 )}
-                {questionIndex != 0 && (
+                {questionIndex != 0 && questionIndex != 11 && (
                   <div
                     style={{
                       background: "white",
@@ -1114,7 +1157,7 @@ function App() {
                         textAlign: "left",
                       }}
                     >
-                      {questionIndex}/11
+                      {questionIndex}/10
                     </div>
                   </div>
                 )}
@@ -1134,7 +1177,7 @@ function App() {
               >
                 <div
                   style={{
-                    width: 131,
+                    width: questionLevel + "%",
                     height: 8,
                     background:
                       "linear-gradient(270deg, #DA291C 0%, rgba(218, 41, 28, 0) 100%)",
@@ -1197,19 +1240,167 @@ function App() {
               background: "#F0F0F0",
             }}
           >
-            {questionIndex == 0 && <Question0 />}
-            {questionIndex == 1 && <Question1 />}
-            {questionIndex == 2 && <Question2 />}
-            {questionIndex == 3 && <Question3 />}
-            {questionIndex == 4 && <Question4 />}
-            {questionIndex == 5 && <Question5 />}
-            {questionIndex == 6 && <Question6 />}
-            {questionIndex == 7 && <Question7 />}
-            {questionIndex == 8 && <Question8 />}
-            {questionIndex == 9 && <Question9 />}
-            {questionIndex == 10 && <Question10 />}
-            {questionIndex == 11 && <Question11 />}
+            {questionIndex == 0 && (
+              <Question0
+                questionList={questionList}
+                setQuestionList={setQuestionList}
+              />
+            )}
+            {questionIndex == 1 && (
+              <Question1
+                questionList={questionList}
+                setQuestionList={setQuestionList}
+              />
+            )}
+            {questionIndex == 2 && (
+              <Question2
+                questionList={questionList}
+                setQuestionList={setQuestionList}
+              />
+            )}
+            {questionIndex == 3 && (
+              <Question3
+                questionList={questionList}
+                setQuestionList={setQuestionList}
+              />
+            )}
+            {questionIndex == 4 && (
+              <Question4
+                questionList={questionList}
+                setQuestionList={setQuestionList}
+              />
+            )}
+            {questionIndex == 5 && (
+              <Question5
+                questionList={questionList}
+                setQuestionList={setQuestionList}
+              />
+            )}
+            {questionIndex == 6 && (
+              <Question6
+                questionList={questionList}
+                setQuestionList={setQuestionList}
+              />
+            )}
+            {questionIndex == 7 && (
+              <Question7
+                questionList={questionList}
+                setQuestionList={setQuestionList}
+              />
+            )}
+            {questionIndex == 8 && (
+              <Question8
+                questionList={questionList}
+                setQuestionList={setQuestionList}
+              />
+            )}
+            {questionIndex == 9 && (
+              <Question9
+                questionList={questionList}
+                setQuestionList={setQuestionList}
+              />
+            )}
+            {questionIndex == 10 && (
+              <Question10
+                questionList={questionList}
+                setQuestionList={setQuestionList}
+              />
+            )}
             {questionIndex == 11 && (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginTop: 30,
+                  marginBottom: 30,
+                }}
+              >
+                <img src={report} width="159" height="348" />
+                <div style={{ width: 508, height: 348, background: "white" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "8px",
+                        background:
+                          "linear-gradient(270deg, #DA291C 0%, rgba(218, 41, 28, 0) 100%)",
+                      }}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      height: "60%",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        flexDirection: "row",
+                      }}
+                    >
+                      <img src={reportImage} />
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      height: "50px",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div
+                      style={{
+                        color: "#DA291C",
+                        fontSize: 24,
+                        fontFamily: "Inter",
+                        fontWeight: "500",
+                        lineHeight: 2,
+                        wordWrap: "break-word",
+                      }}
+                    >
+                      Generating Report
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      height: 0,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div
+                      style={{
+                        color: "#0F0E0E",
+                        fontSize: 16,
+                        fontFamily: "Inter",
+                        fontWeight: "400",
+                        lineHeight: 1,
+                        wordWrap: "break-word",
+                      }}
+                    >
+                      An expanded report will be sent to your e-mail address.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            {/* {questionIndex == 11 && (
               <div
                 style={{
                   width: "100%",
@@ -1287,7 +1478,7 @@ function App() {
                   </button>
                 </div>
               </div>
-            )}
+            )} */}
             {questionIndex == 0 && (
               <div
                 style={{
@@ -1311,33 +1502,35 @@ function App() {
                     display: "inline-flex",
                   }}
                 >
-                  <button
-                    className="buttonEvaluate"
-                    onClick={(e) => nextQuestion()}
-                  >
-                    <div
-                      style={{
-                        justifyContent: "flex-start",
-                        alignItems: "center",
-                        gap: 8,
-                        display: "flex",
-                      }}
+                  {enableEvaulate && questionList[0] && (
+                    <button
+                      className="buttonEvaluate"
+                      onClick={(e) => nextQuestion()}
                     >
                       <div
                         style={{
-                          background: "#da291c",
-                          color: "white",
-                          fontSize: 16,
-                          fontFamily: "Inter",
-                          fontWeight: "600",
-                          lineHeight: 1,
-                          wordWrap: "break-word",
+                          justifyContent: "flex-start",
+                          alignItems: "center",
+                          gap: 8,
+                          display: "flex",
                         }}
                       >
-                        Evaluate
+                        <div
+                          style={{
+                            background: "#da291c",
+                            color: "white",
+                            fontSize: 16,
+                            fontFamily: "Inter",
+                            fontWeight: "600",
+                            lineHeight: 1,
+                            wordWrap: "break-word",
+                          }}
+                        >
+                          Evaluate
+                        </div>
                       </div>
-                    </div>
-                  </button>
+                    </button>
+                  )}
                 </div>
               </div>
             )}
@@ -1394,7 +1587,20 @@ function App() {
                       </div>
                     </div>
                   </div>
-                  <div className="buttonEnable" onClick={(e) => nextQuestion()}>
+                  <div
+                    className={
+                      !questionList[questionIndex]
+                        ? "buttonDisable"
+                        : "buttonEnable"
+                    }
+                    // style={{
+                    //   background: !questionList[questionIndex] ? "grey" : "#DA291C",
+                    //   cursor: !questionList[questionIndex] ? "auto" : "pointer",
+                    //   borderColor: !questionList[questionIndex] ? "grey" : "#DA291C",
+                    // }}
+                    disabled={!questionList[questionIndex]}
+                    onClick={(e) => nextQuestion()}
+                  >
                     <div
                       style={{
                         justifyContent: "flex-start",
@@ -1561,29 +1767,38 @@ function App() {
                                   display: "inline-flex",
                                 }}
                               >
-                                <div
+                                <input
                                   style={{
                                     color: "#0F0E0E",
                                     fontSize: 16,
                                     fontFamily: "Inter",
                                     fontWeight: "400",
                                     lineHeight: 1,
+                                    background: "#F3F3F3",
                                     wordWrap: "break-word",
+                                    borderColor: "#F3F3F3",
+                                    paddingLeft: 5,
+                                    width: "100%",
+                                    height: "30px",
+                                    border: "none",
+                                    padding: 0,
                                   }}
-                                >
-                                  Company Email
-                                </div>
+                                  type="email"
+                                  placeholder="Company Email"
+                                  value={companyEmail}
+                                  onChange={(e) => onEmailChange(e)}
+                                />
                               </div>
                             </div>
                           </>
                         )}
-                        <div
+                        <button
                           style={{
                             paddingLeft: 24,
                             paddingRight: 24,
                             paddingTop: 12,
                             paddingBottom: 12,
-                            background: "#DA291C",
+
                             marginTop: submit ? 100 : 20,
                             width: 120,
                             cursor: "pointer",
@@ -1591,8 +1806,12 @@ function App() {
                             alignItems: "center",
                             gap: 12,
                             display: "flex",
+                            background: !enableComfirm ? "grey" : "#DA291C",
+                            cursor: !enableComfirm ? "auto" : "pointer",
+                            borderColor: !enableComfirm ? "grey" : "#DA291C",
                           }}
-                          onClick={() => setSubmit(true)}
+                          disabled={!enableComfirm}
+                          onClick={() => closeModal(true)}
                         >
                           <div
                             style={{
@@ -1634,7 +1853,7 @@ function App() {
                               </div>
                             )}
                           </div>
-                        </div>
+                        </button>
                       </div>
                     </div>
                     <div className="col-md-6">
