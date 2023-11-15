@@ -1,12 +1,21 @@
 import { useState } from "react";
 
 export default function Question4(props) {
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(
+    props.questionList[4] ? props.questionList[4] : 0
+  );
+
+  // const selectedIndustry = props.questionList[0];
+  // if (selectedIndustry) {
+  //   setIndex(selectedIndustry);
+  // }
 
   const onClickSelect = (number) => {
     setIndex(number);
+    let tempQuestion = [...props.questionList];
+    tempQuestion[4] = number;
+    props.setQuestionList(tempQuestion);
   };
-
   return (
     <div
       style={{
@@ -19,18 +28,7 @@ export default function Question4(props) {
         display: "flex",
       }}
     >
-      <div
-        style={{
-          alignSelf: "stretch",
-          color: "#0F0E0E",
-          fontSize: 24,
-          fontFamily: "Inter",
-          fontWeight: "500",
-          lineHeight: 1,
-          wordWrap: "break-word",
-          marginTop: 30,
-        }}
-      >
+      <div className="questionPadding">
         How is your protection against advanced threats?
       </div>
       <div

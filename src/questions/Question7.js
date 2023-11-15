@@ -1,10 +1,20 @@
 import { useState } from "react";
 
 export default function Question7(props) {
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(
+    props.questionList[7] ? props.questionList[7] : 0
+  );
+
+  // const selectedIndustry = props.questionList[0];
+  // if (selectedIndustry) {
+  //   setIndex(selectedIndustry);
+  // }
 
   const onClickSelect = (number) => {
     setIndex(number);
+    let tempQuestion = [...props.questionList];
+    tempQuestion[7] = number;
+    props.setQuestionList(tempQuestion);
   };
   return (
     <div
@@ -18,18 +28,7 @@ export default function Question7(props) {
         display: "flex",
       }}
     >
-      <div
-        style={{
-          alignSelf: "stretch",
-          color: "#0F0E0E",
-          fontSize: 24,
-          fontFamily: "Inter",
-          fontWeight: "500",
-          lineHeight: 1,
-          wordWrap: "break-word",
-          marginTop: 30,
-        }}
-      >
+      <div className="questionPadding">
         What is your level of visibility of the assets in the OT network?
       </div>
       <div

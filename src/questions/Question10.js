@@ -1,10 +1,20 @@
 import { useState } from "react";
 
 export default function Question10(props) {
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(
+    props.questionList[10] ? props.questionList[10] : 0
+  );
+
+  // const selectedIndustry = props.questionList[0];
+  // if (selectedIndustry) {
+  //   setIndex(selectedIndustry);
+  // }
 
   const onClickSelect = (number) => {
     setIndex(number);
+    let tempQuestion = [...props.questionList];
+    tempQuestion[10] = number;
+    props.setQuestionList(tempQuestion);
   };
   return (
     <div
@@ -18,18 +28,7 @@ export default function Question10(props) {
         display: "flex",
       }}
     >
-      <div
-        style={{
-          alignSelf: "stretch",
-          color: "#0F0E0E",
-          fontSize: 24,
-          fontFamily: "Inter",
-          fontWeight: "500",
-          lineHeight: 1,
-          wordWrap: "break-word",
-          marginTop: 30,
-        }}
-      >
+      <div className="questionPadding">
         How do you evaluate the cybersecurity risk in OT environments?
       </div>
       <div
