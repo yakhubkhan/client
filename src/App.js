@@ -1,4 +1,5 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import axios from "axios";
 
 import logo from "./Fortinet logo.svg";
 import world from "./world.svg";
@@ -33,21 +34,45 @@ import Question11 from "./questions/Question11";
 import Question0 from "./questions/Question0";
 import close from "./assets/images/x.svg";
 import call from "./assets/images/call.svg";
-import TextField from "@mui/material/TextField";
+//import TextField from "@mui/material/TextField";
 import { useTranslation } from "react-i18next";
-import { Country } from "./country";
+import useDeviceDetect from "./useDeviceDetect";
+import dot from "./assets/images/dot.png";
 import report from "./assets/images/report.png";
 import reportImage from "./assets/images/reportImage.svg";
+import useScreenSize from "./useScreenSize";
+import { Country } from "./country";
 function App() {
+  //function useDeviceDetect() {
+
+  const [isMobileView, setIsMobileView] = useState(false);
+
   const { t, i18n } = useTranslation();
+  const screenSize = useScreenSize();
 
-  // function changeLanguage(e) {
-  //   i18n.changeLanguage(e.target.value);
-  // }
+  useEffect(() => {
+    if (screenSize.width < 460) {
+      setIsMobileView(true);
+    } else {
+      setIsMobileView(false);
+    }
+  }, [screenSize.width]);
 
+  useEffect(() => {
+    console.log();
+    //if (aboutSection.current.offsetTop > 0)
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
+  const isTouchDevice = useDeviceDetect();
   const changeLanguage = (val, lang) => {
     i18n.changeLanguage(val);
     setSelectedlang(lang);
+    console.log(i18n.language);
   };
   const aboutSection = useRef(null);
   const [selectedLang, setSelectedlang] = useState("English");
@@ -55,6 +80,8 @@ function App() {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [imageIndex, setImageIndex] = useState(1);
   const [submit, setSubmit] = useState(false);
+  const [submitButton, setSubmitButton] = useState(false);
+  const [industry, setIndustry] = useState("");
   const [formInput, setFormInput] = useState({
     firstName: "",
     lastName: "",
@@ -87,6 +114,7 @@ function App() {
     "",
     "",
   ]);
+
   const nextQuestion = () => {
     setQuestionIndex((previous) => (previous == 10 ? previous : previous + 1));
     setQuestionLevel((previous) => previous + 8);
@@ -117,7 +145,34 @@ function App() {
     document.getElementById("backdrop").style.display = "none";
     document.getElementById("staticBackdrop").style.display = "none";
     document.getElementById("staticBackdrop").classList.remove("show");
-    setQuestionIndex((previous) => previous + 1);
+
+    let total = 0;
+    for (let i = 1; i < questionList.length; i++) {
+      total = total + parseInt(questionList[i]);
+    }
+    let avg = total / 10;
+
+    let obj = {
+      first_name: formInput.firstName,
+      last_name: formInput.lastName,
+      company: formInput.company,
+      job_title: formInput.jobTitle,
+      phone: formInput.phone,
+      country: formInput.country,
+      industry: industry,
+      maturity_level: avg,
+      vertical: i18n.language,
+      email: companyEmail,
+    };
+
+    axios.post("/savedinfo", obj).then(
+      (response) => {
+        setQuestionIndex((previous) => previous + 1);
+      },
+      (error) => {
+        setQuestionIndex((previous) => previous + 1);
+      }
+    );
   };
 
   const openModal = () => {
@@ -191,13 +246,12 @@ function App() {
     if (errorFlag) return;
 
     e.preventDefault();
-    //const main = this.main.current;
+    setEnableEvaulate(true);
     window.scrollTo({
       top: aboutSection.current.offsetTop - 50,
       left: 0,
       behavior: "smooth",
     });
-    setEnableEvaulate(true);
   };
 
   const onEmailChange = (e) => {
@@ -212,29 +266,22 @@ function App() {
       setEnableConfirm(false);
     }
   };
-
   return (
     <div className="App">
-      <section className="social_header_menu fixed-top bg-light overflow-visible">
+      <div className="social_header_menu fixed-top bg-light overflow-visible">
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
-          <div className="container-fluid">
-            <div className="d-flex flex-column flex-sm-row align-items-center w-100 ms-5 me-5">
-              <div className="p-0 pb-md-2 flex-grow-1 text-start">
-                <a className="navbar-brand me-auto col p-0" href="#page-top">
-                  <img
-                    src={logo}
-                    alt=""
-                    width="190"
-                    className="img-fluid text-end"
-                  />
-                </a>
-              </div>
-              <div className="p-0 py-md-2">
-                <span className="navbar-text ms-auto col text-end">
-                  {" "}
-                  OT Cybersecurity Maturity <span>Level</span>
-                </span>
-              </div>
+          {/* <div className="container-fluid"> */}
+          <div className="grid_items_header">
+            <div className="grid_item_header divide">
+              {/* <a className="navbar-brand" href="#page-top"> */}
+              <img src={logo} alt="" width="190" />
+              {/* </a> */}
+              <span className="navbar-text">
+                {" "}
+                OT Cybersecurity Maturity <span>Level</span>
+              </span>
+            </div>
+            <div className="grid_item_header paddingLeftCountry">
               <div className="dropdown">
                 <button
                   className="btn dropdown-toggle"
@@ -252,15 +299,17 @@ function App() {
                       fontSize: 16,
                       fontFamily: "Inter",
                       fontWeight: "400",
-
                       wordWrap: "break-word",
+                      width: "80px",
+                      display: "inline-block",
+                      paddingLeft: "7px",
                     }}
                   >
                     {selectedLang}
                   </span>
                 </button>
                 <ul
-                  className="dropdown-menu dropdown-menu-lg-end"
+                  className="dropdown-menu dropdown-menu-lg-center"
                   data-bs-popper="none"
                 >
                   <li>
@@ -320,9 +369,8 @@ function App() {
             </div>
           </div>
         </nav>
-      </section>
-      <section className="main_banner">
-        {/* <div className="bg"> */}
+      </div>
+      <div className="main_banner">
         <div style={{ width: "100%", height: "100%", position: "relative" }}>
           <div
             style={{
@@ -330,8 +378,6 @@ function App() {
               height: "100%",
               left: 0,
               top: 0,
-              // position: "absolute",
-              //opacity: 0.7,
               background: "#0F0E0E",
             }}
           >
@@ -341,7 +387,14 @@ function App() {
               width="100%"
               height="667"
             />
-            {imageIndex != 1 && (
+            <div className="animationOne"></div>
+            <div className="animationTwo"></div>
+            <div className="animationThree"></div>
+            <div className="animationFour"></div>
+            <div className="animationFive"></div>
+            <div className="animationSix"></div>
+            <div className="animationSeven"></div>
+            {!isMobileView && imageIndex != 1 && (
               <div
                 style={{
                   width: 56,
@@ -350,7 +403,6 @@ function App() {
                   top: "40%",
                   position: "absolute",
                   cursor: "pointer",
-                  //background: "#F3F3F3",
                 }}
                 onClick={() => previousImage()}
               >
@@ -399,45 +451,9 @@ function App() {
                 </div>
               </div>
             )}
-            <div
-              style={{
-                width: "80%",
-                height: 306,
-                left: "11%",
-                top: "25%",
-                right: "13%",
-                position: "absolute",
-                flexDirection: "column",
-                justifyContent: "flex-start",
-                alignItems: "flex-start",
-                gap: 32,
-                display: "inline-flex",
-              }}
-            >
-              <div
-                style={{
-                  width: 953,
-                  color: "white",
-                  fontSize: 48,
-                  fontFamily: "Inter",
-                  fontWeight: "600",
-                  lineHeight: 1,
-                  textAlign: "left",
-                  wordWrap: "break-word",
-                }}
-              >
-                {t("home")}
-              </div>
-              <div
-                style={{
-                  width: 496,
-                  justifyContent: "flex-start",
-                  alignItems: "flex-end",
-                  textAlign: "left",
-                  gap: 32,
-                  display: "inline-flex",
-                }}
-              >
+            <div className="homeText">
+              <div className="homeTextTwo">{t("home")}</div>
+              <div className="homeTextThird">
                 <div
                   style={{
                     flex: "1 1 0",
@@ -448,93 +464,20 @@ function App() {
                     display: "inline-flex",
                   }}
                 >
-                  <div style={{ width: 622 }}>
-                    <span
-                      style={{
-                        color: "#2CCCD3",
-                        fontSize: 32,
-                        fontFamily: "Plus Jakarta Sans",
-                        fontWeight: "700",
-                        lineHeight: 1,
-                        wordWrap: "break-word",
-                      }}
-                    >
-                      61%{" "}
-                    </span>
-                    <span
-                      style={{
-                        color: "white",
-                        fontSize: 32,
-                        fontFamily: "Plus Jakarta Sans",
-                        fontWeight: "700",
-                        lineHeight: 1,
-                        wordWrap: "break-word",
-                      }}
-                    >
+                  <div className="hometextthirdwidth">
+                    <span className="homeTextThirdText">61% </span>
+                    <span className="homeTextThirdTextWhite">
                       of intrusions
                     </span>
-                    <span
-                      style={{
-                        color: "#2CCCD3",
-                        fontSize: 32,
-                        fontFamily: "Plus Jakarta Sans",
-                        fontWeight: "700",
-                        lineHeight: 1,
-                        wordWrap: "break-word",
-                      }}
-                    >
+                    <span className="homeTextThirdText">
                       {" "}
                       affected OT systems.
                     </span>
                   </div>
                 </div>
               </div>
-              {/* <div
-                style={{
-                  paddingLeft: 24,
-                  paddingRight: 24,
-                  paddingTop: 12,
-                  paddingBottom: 12,
-                  background: "#DA291C",
-                  flexDirection: "column",
-                  justifyContent: "flex-start",
-                  alignItems: "flex-start",
-                  gap: 12,
-                  display: "flex",
-                }}
-              >
-                <div
-                  style={{
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                    gap: 8,
-                    display: "inline-flex",
-                  }}
-                >
-                  <div
-                    style={{
-                      color: "white",
-                      fontSize: 16,
-                      fontFamily: "Plus Jakarta Sans",
-                      fontWeight: "600",
-                      lineHeight: 1,
-                      wordWrap: "break-word",
-                    }}
-                  >
-                    Complete Questionnaire
-                  </div>
-                </div>
-              </div> */}
             </div>
-            <div
-              style={{
-                position: "absolute",
-                top: "60%",
-                left: "11%",
-                flexDirection: "row",
-                display: "flex",
-              }}
-            >
+            <div className="homeImage">
               <div
                 className={imageIndex == 1 ? "selectedImg" : "unSelectedImg"}
               />
@@ -554,81 +497,22 @@ function App() {
                 className={imageIndex == 6 ? "selectedImg" : "unSelectedImg"}
               />
             </div>
-            <div
-              style={{
-                position: "absolute",
-                top: "70%",
-                left: "10%",
-                width: "76%",
-                height: "75%",
-              }}
-            >
-              <div
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  padding: 64,
-                  background: "rgba(255, 255, 255, 0.60)",
-                  boxShadow: "0px 10px 50px rgba(85, 85, 85, 0.04)",
-                  borderRadius: 30,
-                  backdropFilter: "blur(100px)",
-                  flexDirection: "column",
-                  //justifyContent: "center",
-                  alignItems: "flex-start",
-                  gap: 36,
-                  display: "inline-flex",
-                }}
-              >
-                <div>
-                  <span
-                    style={{
-                      color: "#0F0E0E",
-                      fontSize: 28,
-                      fontFamily: "Inter",
-                      fontWeight: "500",
-                      lineHeight: 1,
-                      wordWrap: "break-word",
-                    }}
-                  >
+            <div className="floatingForm">
+              <div className="floatingFromOne">
+                <div className="paddingTextOne">
+                  <span className="floatingFromOneText">
                     Fill in the form to{" "}
                   </span>
-                  <span
-                    style={{
-                      color: "#DA291C",
-                      fontSize: 28,
-                      fontFamily: "Inter",
-                      fontWeight: "500",
-                      lineHeight: 1,
-                      wordWrap: "break-word",
-                    }}
-                  >
+                  <span className="floatingFromOneTextRed">
                     continue evaluating
                   </span>
                 </div>
-                <div
-                  style={{
-                    alignSelf: "stretch",
-                    justifyContent: "flex-start",
-                    alignItems: "flex-start",
-                    gap: 32,
-                    display: "inline-flex",
-                  }}
-                >
-                  {/* <form class="row g-3 fullWidth requires-validation"> */}
-                  <div
-                    style={{
-                      flex: "1 1 0",
-                      flexDirection: "column",
-                      justifyContent: "flex-start",
-                      alignItems: "flex-start",
-                      gap: 32,
-                      display: "inline-flex",
-                    }}
-                  >
-                    <div class="form-floating ">
+                <div className="grid_items_form_one">
+                  <div className="grid_item_form_one">
+                    <div className="form-floating">
                       <input
                         type="text"
-                        class={
+                        className={
                           isEmptyFirstName
                             ? "form-control required form-control-required"
                             : "form-control form-control-not-required"
@@ -640,10 +524,30 @@ function App() {
                       />
                       <label for="floatingInputInvalid">{t("firstName")}</label>
                     </div>
-                    <div class="form-floating">
+                  </div>
+                  <div className="grid_item_form_one">
+                    <div className="form-floating">
                       <input
                         type="text"
-                        class={
+                        className={
+                          isEmptyJobTitle
+                            ? "form-control required form-control-required"
+                            : "form-control form-control-not-required"
+                        }
+                        id="floatingPassword"
+                        placeholder={t("jobTitle")}
+                        name="jobTitle"
+                        value={formInput.jobTitle}
+                        onChange={(e) => handleChange(e)}
+                      />
+                      <label for="floatingPassword">{t("jobTitle")}</label>
+                    </div>
+                  </div>
+                  <div className="grid_item_form_one">
+                    <div className="form-floating">
+                      <input
+                        type="text"
+                        className={
                           isEmptyLastName
                             ? "form-control required form-control-required"
                             : "form-control form-control-not-required"
@@ -657,53 +561,12 @@ function App() {
                       <p id="errorPhone" className="errorText"></p>
                       <label for="floatingPassword">{t("lastName")}</label>
                     </div>
-                    <div class="form-floating">
-                      <input
-                        type="text"
-                        class={
-                          isEmptyCompany
-                            ? "form-control required form-control-required"
-                            : "form-control form-control-not-required"
-                        }
-                        id="floatingPassword"
-                        placeholder={t("company")}
-                        name="company"
-                        value={formInput.company}
-                        onChange={(e) => handleChange(e)}
-                      />
-                      <label for="floatingPassword">{t("company")}</label>
-                    </div>
                   </div>
-                  <div
-                    style={{
-                      flex: "1 1 0",
-                      flexDirection: "column",
-                      justifyContent: "flex-start",
-                      alignItems: "flex-end",
-                      gap: 32,
-                      display: "inline-flex",
-                    }}
-                  >
-                    <div class="form-floating">
+                  <div className="grid_item_form_one">
+                    <div className="form-floating">
                       <input
                         type="text"
-                        class={
-                          isEmptyJobTitle
-                            ? "form-control required form-control-required"
-                            : "form-control form-control-not-required"
-                        }
-                        id="floatingPassword"
-                        placeholder={t("jobTitle")}
-                        name="jobTitle"
-                        value={formInput.jobTitle}
-                        onChange={(e) => handleChange(e)}
-                      />
-                      <label for="floatingPassword">{t("jobTitle")}</label>
-                    </div>
-                    <div class="form-floating">
-                      <input
-                        type="text"
-                        class={
+                        className={
                           isEmptyPhone
                             ? "form-control required form-control-required"
                             : "form-control form-control-not-required"
@@ -719,15 +582,35 @@ function App() {
                       </p>
                       <label for="floatingPassword">{t("phone")}</label>
                     </div>
+                  </div>
+                  <div className="grid_item_form_one">
+                    <div className="form-floating">
+                      <input
+                        type="text"
+                        className={
+                          isEmptyCompany
+                            ? "form-control required form-control-required"
+                            : "form-control form-control-not-required"
+                        }
+                        id="floatingPassword"
+                        placeholder={t("company")}
+                        name="company"
+                        value={formInput.company}
+                        onChange={(e) => handleChange(e)}
+                      />
+                      <label for="floatingPassword">{t("company")}</label>
+                    </div>
+                  </div>
+                  <div className="grid_item_form_one">
                     <div
-                      class={
+                      className={
                         isEmptyCountry
                           ? "form-floating requiredSelect"
                           : "form-floating"
                       }
                     >
                       <select
-                        class={
+                        className={
                           isEmptyCountry
                             ? "form-select form-control-required"
                             : "form-select form-control-not-required"
@@ -746,35 +629,9 @@ function App() {
                       <label for="floatingSelect">{t("country")}</label>
                     </div>
                   </div>
-
-                  {/* </form> */}
                 </div>
-                <div
-                  style={{
-                    alignSelf: "stretch",
-                    justifyContent: "flex-start",
-                    alignItems: "flex-start",
-                    gap: 32,
-                    display: "inline-flex",
-                  }}
-                >
-                  <div
-                    style={{
-                      flex: "1 1 0",
-                      height: 48,
-                      justifyContent: "flex-start",
-                      alignItems: "flex-start",
-                      gap: 16,
-                      display: "flex",
-                    }}
-                  >
-                    {/* <div
-                  style={{
-                    width: 20,
-                    height: 20,
-                    border: "1.50px #DA291C solid",
-                  }}
-                /> */}
+                <div className="grid_items_button_form_floating">
+                  <div className="grid_item_button_form">
                     <input
                       type="checkbox"
                       className="form-check-input"
@@ -788,6 +645,7 @@ function App() {
                         color: "#0F0E0E",
                         fontSize: 16,
                         fontFamily: "Inter",
+                        paddingLeft: "10px",
                         fontWeight: "300",
                         lineHeight: 1,
                         wordWrap: "break-word",
@@ -797,398 +655,231 @@ function App() {
                       {t("accept")}
                     </div>
                   </div>
-                  <button
-                    style={{
-                      paddingLeft: 24,
-                      paddingRight: 24,
-                      paddingTop: 12,
-                      paddingBottom: 12,
-                      background: !accept ? "grey" : "#DA291C",
-                      flexDirection: "column",
-                      justifyContent: "flex-start",
-                      alignItems: "flex-start",
-                      gap: 12,
-                      display: "inline-flex",
-                      cursor: !accept ? "auto" : "pointer",
-                      borderColor: !accept ? "grey" : "#DA291C",
-                    }}
-                    disabled={!accept}
-                    onClick={(e) => handleScroll(e)}
-                  >
-                    <div
+                  <div className="grid_item_button_form">
+                    <button
+                      className="floatingFormButton"
                       style={{
-                        justifyContent: "flex-start",
-                        alignItems: "center",
-                        gap: 8,
-                        display: "inline-flex",
+                        background: !accept ? "grey" : "#DA291C",
+                        cursor: !accept ? "auto" : "pointer",
+                        borderColor: !accept ? "grey" : "#DA291C",
                       }}
+                      disabled={!accept}
+                      onClick={(e) => handleScroll(e)}
                     >
                       <div
                         style={{
-                          color: "white",
-                          fontSize: 16,
-                          fontFamily: "Inter",
-                          fontWeight: "600",
-                          lineHeight: 1,
-                          wordWrap: "break-word",
+                          justifyContent: "flex-start",
+                          alignItems: "center",
+                          gap: 8,
+                          display: "inline-flex",
                         }}
                       >
-                        {t("buttonName")}
+                        <div
+                          style={{
+                            color: "white",
+                            fontSize: 16,
+                            fontFamily: "Inter",
+                            fontWeight: "600",
+                            lineHeight: 1,
+                            wordWrap: "break-word",
+                          }}
+                        >
+                          {t("buttonName")}
+                        </div>
                       </div>
-                    </div>
-                  </button>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <div className="belowFloatingForm">
+          <div className="grid_items_button_form_floating_below">
+            <div className="textGrid">
+              <span className="formBelowTextRed">
+                Protecting and guaranteeing{" "}
+              </span>
+              <span className="formBelowText">your operation's security </span>
+              <span className="formBelowTextRed">is becoming&nbsp;</span>
+              <span className="formBelowText">increasingly&nbsp;</span>
+              <span className="formBelowTextRed">urgent&nbsp;</span>
+              <span className="formBelowText">.</span>
+            </div>
 
-        <div
-          style={{
-            width: "80%",
-            height: 500,
-            paddingTop: 300,
-            paddingBottom: 10,
-            //paddingLeft: 80,
-            left: "11%",
-            paddingRight: 80,
-            //justifyContent: "center",
-            //alignItems: "center",
-            gap: 32,
-            display: "inline-flex",
-          }}
-        >
-          <div style={{ flex: 1, textAlign: "left", marginTop: 30 }}>
-            <span
-              style={{
-                color: "#DA291C",
-                fontSize: 36,
-                fontFamily: "Inter",
-                fontWeight: "500",
-                lineHeight: 1,
-                wordWrap: "break-word",
-              }}
-            >
-              Protecting and guaranteeing{" "}
-            </span>
-            <span
-              style={{
-                color: "#0F0E0E",
-                fontSize: 36,
-                fontFamily: "Inter",
-                fontWeight: "500",
-                lineHeight: 1,
-                wordWrap: "break-word",
-              }}
-            >
-              your operation's security{" "}
-            </span>
-            <span
-              style={{
-                color: "#DA291C",
-                fontSize: 36,
-                fontFamily: "Inter",
-                fontWeight: "500",
-                lineHeight: 1,
-                wordWrap: "break-word",
-              }}
-            >
-              is becoming
-            </span>
-            <span
-              style={{
-                color: "#0F0E0E",
-                fontSize: 36,
-                fontFamily: "Inter",
-                fontWeight: "500",
-                lineHeight: 1,
-                wordWrap: "break-word",
-              }}
-            >
-              increasingly{" "}
-            </span>
-            <span
-              style={{
-                color: "#DA291C",
-                fontSize: 36,
-                fontFamily: "Inter",
-                fontWeight: "500",
-                lineHeight: 1,
-                wordWrap: "break-word",
-              }}
-            >
-              urgent
-            </span>
-            <span
-              style={{
-                color: "#0F0E0E",
-                fontSize: 36,
-                fontFamily: "Inter",
-                fontWeight: "500",
-                lineHeight: 1,
-                wordWrap: "break-word",
-              }}
-            >
-              .
-            </span>
-          </div>
-          <div
-            style={{
-              flex: 1,
-              color: "#0F0E0E",
-              textAlign: "left",
-              marginTop: 30,
-              fontSize: 16,
-              fontFamily: "Inter",
-              fontWeight: "300",
-              lineHeight: 1,
-              wordWrap: "break-word",
-            }}
-          >
-            By completing a brief survey of the state of maturity of your OT
-            network, we will give you a personalized report of the level at
-            which you are. Besides, we will tell you how you can protect
-            yourself from the growing cyber threats and you will be able to
-            request a free reading of the results in a virtual session with a
-            Fortinet expert.
-            <div
-              style={{
-                width: "100%",
-                color: "#0F0E0E",
-                fontSize: 16,
-                paddingTop: 20,
-                fontFamily: "Inter",
-                fontWeight: "300",
-                lineHeight: 1,
-                wordWrap: "break-word",
-              }}
-            >
-              You will receive your evaluation, risks and recommendations
-              according to the level you are at and you will be able to see
-              examples of critical cases of companies of your same industry.
+            <div className="grid_item_button_form_floating_below">
+              <div className="textGridTwo">
+                By completing a brief survey of the state of maturity of your OT
+                network, we will give you a personalized report of the level at
+                which you are. Besides, we will tell you how you can protect
+                yourself from the growing cyber threats and you will be able to
+                request a free reading of the results in a virtual session with
+                a Fortinet expert.
+                <div
+                  style={{
+                    width: "100%",
+                    color: "#0F0E0E",
+                    fontSize: 16,
+                    paddingTop: 20,
+                    fontFamily: "Inter",
+                    fontWeight: "300",
+                    lineHeight: 1,
+                    wordWrap: "break-word",
+                  }}
+                >
+                  You will receive your evaluation, risks and recommendations
+                  according to the level you are at and you will be able to see
+                  examples of critical cases of companies of your same industry.
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div
-          style={{
-            width: "100%",
-            height: "100%",
-            left: 0,
-            top: 0,
-            // position: "absolute",
-            //opacity: 0.7,
-            background:
-              "linear-gradient(0deg, rgba(15, 14, 14, 0.20) 0%, rgba(15, 14, 14, 0.20) 100%)",
-          }}
-        >
-          <img src={image2} className="bg1" width="100%" height="500" />
+      </div>
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          left: 0,
+          top: 0,
+          marginTop: "40px",
+          position: "relative",
+          background:
+            "linear-gradient(0deg, rgba(15, 14, 14, 0.20) 0%, rgba(15, 14, 14, 0.20) 100%)",
+        }}
+      >
+        <img src={image2} className="bg1" width="100%" height="658" />
+        <div style={{ position: "absolute", left: "50%", top: "20%" }}>
+          <img src={dot} width="50%" height="50%" />
         </div>
-        <div
-          style={{
-            width: "100%",
-            height: "100%",
-            position: "relative",
-            background: "white",
-            top: 50,
-          }}
-          ref={aboutSection}
-        >
-          <div
-            style={{
-              width: "100%",
-              height: "100%",
-              background: "white",
-              borderTop: "1px rgba(218, 41, 28, 0.20) solid",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: 4,
-              display: "inline-flex",
-            }}
-          >
+        <div className="animationEight" />
+        <div className="animationNine" />
+        <div className="animationTen"></div>
+        <div className="animationEleven" />
+        <div className="animationTweleve" />
+        <div className="animationThirteen" />
+        <div className="animationFourteen" />
+      </div>
+
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          position: "relative",
+          background: "white",
+          top: 50,
+        }}
+        ref={aboutSection}
+      >
+        {enableEvaulate && (
+          <>
             <div
               style={{
-                alignSelf: "stretch",
-                height: 76,
-                paddingTop: 16,
-                paddingBottom: 16,
+                width: "100%",
+                height: "100%",
+                background: "white",
+                borderTop: "1px rgba(218, 41, 28, 0.20) solid",
                 flexDirection: "column",
                 justifyContent: "center",
-                alignItems: "flex-start",
-                gap: 10,
+                alignItems: "center",
+                gap: 4,
                 display: "inline-flex",
               }}
             >
               <div
                 style={{
-                  width: "100%",
-                  justifyContent: "flex-start",
-                  alignItems: "center",
-                  paddingLeft: questionIndex == 0 ? "11%" : "11%",
+                  alignSelf: "stretch",
+                  height: 76,
+                  paddingTop: 16,
+                  paddingBottom: 16,
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "flex-start",
+                  gap: 10,
                   display: "inline-flex",
                 }}
               >
-                {questionIndex == 0 && (
-                  <div style={{ width: "65%", textAlign: "left" }}>
-                    <span
-                      style={{
-                        color: "black",
-                        fontSize: 28,
-                        fontFamily: "Inter",
-                        fontWeight: "500",
-                        lineHeight: 1,
-                        wordWrap: "break-word",
-                      }}
-                    >
-                      Select the industry to{" "}
-                    </span>
-                    <span
-                      style={{
-                        color: "#DA291C",
-                        fontSize: 28,
-                        fontFamily: "Inter",
-                        fontWeight: "500",
-                        lineHeight: 1,
-                        wordWrap: "break-word",
-                      }}
-                    >
-                      continue evaluating
-                    </span>
-                    <span
-                      style={{
-                        color: "black",
-                        fontSize: 28,
-                        fontFamily: "Inter",
-                        fontWeight: "500",
-                        lineHeight: 1,
-                        wordWrap: "break-word",
-                      }}
-                    >
-                      {" "}
-                    </span>
-                  </div>
-                )}
-                {questionIndex != 0 && questionIndex != 11 && (
-                  <div style={{ width: "85%", textAlign: "left" }}>
-                    <span
-                      style={{
-                        color: "black",
-                        fontSize: 28,
-                        fontFamily: "Inter",
-                        fontWeight: "500",
-                        lineHeight: 1,
-                        wordWrap: "break-word",
-                      }}
-                    >
-                      Please answer all questions to get a{" "}
-                    </span>
-                    <span
-                      style={{
-                        color: "#DA291C",
-                        fontSize: 28,
-                        fontFamily: "Inter",
-                        fontWeight: "500",
-                        lineHeight: 1,
-                        wordWrap: "break-word",
-                      }}
-                    >
-                      personalized report
-                    </span>
-                    <span
-                      style={{
-                        color: "black",
-                        fontSize: 28,
-                        fontFamily: "Inter",
-                        fontWeight: "500",
-                        lineHeight: 1,
-                        wordWrap: "break-word",
-                      }}
-                    >
-                      {" "}
-                    </span>
-                  </div>
-                )}
-                {questionIndex == 11 && (
-                  <div style={{ width: "85%", textAlign: "left" }}>
-                    <span
-                      style={{
-                        color: "black",
-                        fontSize: 28,
-                        fontFamily: "Inter",
-                        fontWeight: "500",
-                        wordWrap: "break-word",
-                      }}
-                    >
-                      Finishing
-                    </span>
-                    {/* <span
-                      style={{
-                        color: "#DA291C",
-                        fontSize: 28,
-                        fontFamily: "Inter",
-                        fontWeight: "500",
-                        lineHeight: 1,
-                        wordWrap: "break-word",
-                      }}
-                    >
-                      finish evaluating
-                    </span> */}
-                  </div>
-                )}
-                {questionIndex != 0 && questionIndex != 11 && (
-                  <div
-                    style={{
-                      background: "white",
-                      justifyContent: "flex-start",
-                      alignItems: "flex-start",
-                      //paddingLeft: "20%",
-                      gap: 16,
-                      display: "flex",
-                    }}
-                  >
+                <div className="questionLeft">
+                  {questionIndex == 0 && (
+                    <div className="questionWidth">
+                      <span className="questionSectionOne">
+                        Select the industry to{" "}
+                      </span>
+                      <span className="questionSectionOneRed">
+                        continue evaluating
+                      </span>
+                    </div>
+                  )}
+                  {questionIndex != 0 && questionIndex != 11 && (
+                    <div className="questionLeftNextPage">
+                      <span className="questionSectionOne">
+                        Please answer all questions to get a{" "}
+                      </span>
+                      <span className="questionSectionOneRed">
+                        personalized report
+                      </span>
+                    </div>
+                  )}
+                  {/* {questionIndex == 11 && (
+                <div className="questionLeftNextPage">
+                  <span className="questionSectionOne">
+                    Fill in the form to{" "}
+                  </span>
+                  <span className="questionSectionOneRed">
+                    finish evaluating
+                  </span>
+                </div>
+              )} */}
+                  {questionIndex == 11 && (
+                    <div className="questionLeftNextPage">
+                      <span className="questionSectionOne">Finishing</span>
+                      {/* <span className="questionSectionOneRed">
+                    finish evaluating
+                  </span> */}
+                    </div>
+                  )}
+                  {questionIndex != 0 && questionIndex != 11 && (
                     <div
                       style={{
-                        color: "#DA291C",
-                        fontSize: 20,
-                        fontFamily: "Inter",
-                        fontWeight: "500",
-                        lineHeight: 1,
-                        wordWrap: "break-word",
-                        textAlign: "left",
+                        background: "white",
+                        justifyContent: "flex-start",
+                        alignItems: "flex-start",
+                        //paddingLeft: "20%",
+                        gap: 16,
+                        display: "flex",
                       }}
                     >
-                      {questionIndex}/10
+                      <div className="paging">{questionIndex}/10</div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
-            </div>
-
-            {questionIndex != 0 && questionIndex != 11 && (
-              <div
-                style={{
-                  alignSelf: "stretch",
-                  height: 8,
-                  paddingRight: 0,
-                  //justifyContent: "flex-start",
-                  //alignItems: "center",
-                  //display: "inline-flex",
-                }}
-              >
+              {questionIndex != 0 && questionIndex != 10 && (
                 <div
                   style={{
-                    width: questionLevel + "%",
+                    alignSelf: "stretch",
                     height: 8,
-                    background:
-                      "linear-gradient(270deg, #DA291C 0%, rgba(218, 41, 28, 0) 100%)",
-                    borderTopLeftRadius: 10,
-                    borderTopRightRadius: 10,
+                    paddingRight: 0,
+                    //justifyContent: "flex-start",
+                    //alignItems: "center",
+                    //display: "inline-flex",
                   }}
-                />
-              </div>
-            )}
+                >
+                  <div
+                    style={{
+                      width: questionLevel + "%",
+                      height: 8,
+                      background:
+                        "linear-gradient(270deg, #DA291C 0%, rgba(218, 41, 28, 0) 100%)",
+                      borderTopLeftRadius: 10,
+                      borderTopRightRadius: 10,
+                    }}
+                  />
+                </div>
+              )}
+            </div>
             {
-              questionIndex == 11 && (
+              questionIndex == 10 && (
                 <div
                   style={{
                     alignSelf: "stretch",
@@ -1213,299 +904,443 @@ function App() {
               )
               // No text styles in this selection
             }
-          </div>
 
-          <div
-            style={{
-              width: "100%",
-              height: "100%",
-              paddingLeft:
-                questionIndex == 0
-                  ? "11%"
-                  : questionIndex == 11
-                  ? "11%"
-                  : "11%",
-              paddingRight:
-                questionIndex == 0
-                  ? "11%"
-                  : questionIndex == 11
-                  ? "11%"
-                  : "11%",
-              flexDirection: "column",
-              justifyContent: "center",
-              //alignItems: "center",
-              gap: 10,
-              display: "inline-flex",
-              textAlign: "left",
-              background: "#F0F0F0",
-            }}
-          >
-            {questionIndex == 0 && (
-              <Question0
-                questionList={questionList}
-                setQuestionList={setQuestionList}
-              />
-            )}
-            {questionIndex == 1 && (
-              <Question1
-                questionList={questionList}
-                setQuestionList={setQuestionList}
-              />
-            )}
-            {questionIndex == 2 && (
-              <Question2
-                questionList={questionList}
-                setQuestionList={setQuestionList}
-              />
-            )}
-            {questionIndex == 3 && (
-              <Question3
-                questionList={questionList}
-                setQuestionList={setQuestionList}
-              />
-            )}
-            {questionIndex == 4 && (
-              <Question4
-                questionList={questionList}
-                setQuestionList={setQuestionList}
-              />
-            )}
-            {questionIndex == 5 && (
-              <Question5
-                questionList={questionList}
-                setQuestionList={setQuestionList}
-              />
-            )}
-            {questionIndex == 6 && (
-              <Question6
-                questionList={questionList}
-                setQuestionList={setQuestionList}
-              />
-            )}
-            {questionIndex == 7 && (
-              <Question7
-                questionList={questionList}
-                setQuestionList={setQuestionList}
-              />
-            )}
-            {questionIndex == 8 && (
-              <Question8
-                questionList={questionList}
-                setQuestionList={setQuestionList}
-              />
-            )}
-            {questionIndex == 9 && (
-              <Question9
-                questionList={questionList}
-                setQuestionList={setQuestionList}
-              />
-            )}
-            {questionIndex == 10 && (
-              <Question10
-                questionList={questionList}
-                setQuestionList={setQuestionList}
-              />
-            )}
-            {questionIndex == 11 && (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginTop: 30,
-                  marginBottom: 30,
-                }}
-              >
-                <img src={report} width="159" height="348" />
-                <div style={{ width: 508, height: 348, background: "white" }}>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "8px",
-                        background:
-                          "linear-gradient(270deg, #DA291C 0%, rgba(218, 41, 28, 0) 100%)",
-                      }}
-                    />
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      height: "60%",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        flexDirection: "row",
-                      }}
-                    >
-                      <img src={reportImage} />
-                    </div>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      height: "50px",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <div
-                      style={{
-                        color: "#DA291C",
-                        fontSize: 24,
-                        fontFamily: "Inter",
-                        fontWeight: "500",
-                        lineHeight: 2,
-                        wordWrap: "break-word",
-                      }}
-                    >
-                      Generating Report
-                    </div>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      height: 0,
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <div
-                      style={{
-                        color: "#0F0E0E",
-                        fontSize: 16,
-                        fontFamily: "Inter",
-                        fontWeight: "400",
-                        lineHeight: 1,
-                        wordWrap: "break-word",
-                      }}
-                    >
-                      An expanded report will be sent to your e-mail address.
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-            {/* {questionIndex == 11 && (
-              <div
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  //paddingLeft: "11%",
-                  //paddingRight: "11%",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  //ss alignItems: "flex-end",
-                  marginBottom: 20,
-                  gap: 10,
-                  display: "inline-flex",
-                }}
-              >
+            <div className="selectIndustry">
+              {questionIndex == 0 && (
+                <Question0
+                  questionList={questionList}
+                  setQuestionList={setQuestionList}
+                  setIndustry={setIndustry}
+                />
+              )}
+              {questionIndex == 1 && (
+                <Question1
+                  questionList={questionList}
+                  setQuestionList={setQuestionList}
+                />
+              )}
+              {questionIndex == 2 && (
+                <Question2
+                  questionList={questionList}
+                  setQuestionList={setQuestionList}
+                />
+              )}
+              {questionIndex == 3 && (
+                <Question3
+                  questionList={questionList}
+                  setQuestionList={setQuestionList}
+                />
+              )}
+              {questionIndex == 4 && (
+                <Question4
+                  questionList={questionList}
+                  setQuestionList={setQuestionList}
+                />
+              )}
+              {questionIndex == 5 && (
+                <Question5
+                  questionList={questionList}
+                  setQuestionList={setQuestionList}
+                />
+              )}
+              {questionIndex == 6 && (
+                <Question6
+                  questionList={questionList}
+                  setQuestionList={setQuestionList}
+                />
+              )}
+              {questionIndex == 7 && (
+                <Question7
+                  questionList={questionList}
+                  setQuestionList={setQuestionList}
+                />
+              )}
+              {questionIndex == 8 && (
+                <Question8
+                  questionList={questionList}
+                  setQuestionList={setQuestionList}
+                />
+              )}
+              {questionIndex == 9 && (
+                <Question9
+                  questionList={questionList}
+                  setQuestionList={setQuestionList}
+                />
+              )}
+              {questionIndex == 10 && (
+                <Question10
+                  questionList={questionList}
+                  setQuestionList={setQuestionList}
+                />
+              )}
+              {questionIndex == 11 && !isMobileView && (
                 <div
                   style={{
-                    justifyContent: "flex-start",
-                    alignItems: "flex-start",
-                    gap: 16,
-                    display: "inline-flex",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
                 >
-                  <input
-                    type="checkbox"
-                    className="form-check-input"
-                    // id="cb1"
-                    // style={{ color: "red", marginTop: 6 }}
-                  ></input>
-
-                  <div
-                    style={{
-                      width: "100%",
-                      color: "#0F0E0E",
-                      fontSize: 16,
-                      fontFamily: "Inter",
-                      fontWeight: "300",
-                      wordWrap: "break-word",
-                      textAlign: "left",
-                    }}
-                  >
-                    By clicking on the EVALUATE button, I accept that Fortinet
-                    can send me by email extended information regarding the
-                    cybersecurity maturity level of my company's and industry's
-                    OT environment.
-                  </div>
-
-                  <button
-                    className="buttonEvaluate"
-                    onClick={(e) => openModal()}
-                    // data-bs-toggle="modal"
-                    // data-bs-target="#staticBackdrop"
-                  >
+                  <img src={report} width="159" height="348" />
+                  <div style={{ width: 508, height: 348, background: "white" }}>
                     <div
                       style={{
-                        justifyContent: "flex-start",
-                        alignItems: "center",
-                        gap: 8,
                         display: "flex",
+                        flexDirection: "row",
                       }}
                     >
                       <div
                         style={{
-                          background: "#da291c",
-                          color: "white",
+                          width: "100%",
+                          height: "8px",
+                          background:
+                            "linear-gradient(270deg, #DA291C 0%, rgba(218, 41, 28, 0) 100%)",
+                        }}
+                      />
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        height: "60%",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          flexDirection: "row",
+                        }}
+                      >
+                        <img src={reportImage} />
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        height: "50px",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div
+                        style={{
+                          color: "#DA291C",
+                          fontSize: 24,
+                          fontFamily: "Inter",
+                          fontWeight: "500",
+                          lineHeight: 2,
+                          wordWrap: "break-word",
+                        }}
+                      >
+                        Generating Report
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        height: 0,
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div
+                        style={{
+                          color: "#0F0E0E",
                           fontSize: 16,
                           fontFamily: "Inter",
-                          fontWeight: "600",
+                          fontWeight: "400",
                           lineHeight: 1,
                           wordWrap: "break-word",
                         }}
                       >
-                        Evaluate
+                        An expanded report will be sent to your e-mail address.
                       </div>
                     </div>
-                  </button>
+                  </div>
                 </div>
-              </div>
-            )} */}
-            {questionIndex == 0 && (
-              <div
+              )}
+              {questionIndex == 11 && isMobileView && (
+                <>
+                  <div
+                    style={{
+                      //width: "100%",
+                      height: 348,
+                      background: "white",
+                      // display: "flex",
+                      //justifyContent: "center",
+                      //alignItems: "center",
+                      // flexDirection: "row",
+                      marginTop: "50px",
+                      position: "relative",
+                    }}
+                  >
+                    {/* <div
                 style={{
-                  width: "100%",
-                  height: "100%",
-                  // paddingLeft: 180,
-                  paddingRight: "0%",
-                  flexDirection: "column-reverse",
+                  display: "flex",
                   justifyContent: "center",
-                  alignItems: "flex-end",
-                  marginBottom: 20,
-                  gap: 10,
-                  display: "inline-flex",
+                  alignItems: "center",
                 }}
-              >
+              > */}
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "8px",
+                        alignItems: "center",
+                        display: "flex",
+                        background:
+                          "linear-gradient(270deg, #DA291C 0%, rgba(218, 41, 28, 0) 100%)",
+                      }}
+                    />
+
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        height: "60%",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          flexDirection: "row",
+                        }}
+                      >
+                        <img src={reportImage} />
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        height: "50px",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div
+                        style={{
+                          color: "#DA291C",
+                          fontSize: 24,
+                          fontFamily: "Inter",
+                          fontWeight: "500",
+                          lineHeight: 2,
+                          wordWrap: "break-word",
+                        }}
+                      >
+                        Generating Report
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        height: 0,
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div
+                        style={{
+                          color: "#0F0E0E",
+                          fontSize: 16,
+                          fontFamily: "Inter",
+                          fontWeight: "400",
+                          lineHeight: 1,
+                          wordWrap: "break-word",
+                        }}
+                      >
+                        An expanded report will be sent to your e-mail address.
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      height: "120px",
+                      marginTop: "20px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "200px",
+                        height: "68px",
+                        opacity: 0.6,
+                        position: "absolute",
+                        right: 0,
+                        background: "#2CCCD3",
+                      }}
+                    />
+                    <div
+                      style={{
+                        height: 70,
+                        width: 14.8,
+                        right: "10%",
+                        bottom: 0,
+                        position: "absolute",
+                        background: "#DA291C",
+                      }}
+                    />
+
+                    <div
+                      style={{
+                        width: 14.8,
+                        height: 70,
+                        left: "30%",
+                        bottom: 0,
+                        position: "absolute",
+                        opacity: 0.4,
+                        background: "#307FE2",
+                      }}
+                    />
+                    <div
+                      style={{
+                        width: 150,
+                        height: 70,
+                        left: "30%",
+                        bottom: 0,
+                        position: "absolute",
+                        opacity: 0.1,
+                        background: "#307FE2",
+                      }}
+                    />
+                    <div
+                      style={{
+                        width: 110,
+                        height: 70,
+                        bottom: 0,
+                        position: "absolute",
+                        background: "#2CCCD3",
+                        borderTopRightRadius: 60,
+                      }}
+                    />
+                    {/* <img
+                  src={report}
+                  width="50"
+                  height="100"
+                  style={{ transform: "rotate(90deg)" }}
+                /> */}
+                  </div>
+                </>
+              )}
+              {/* {questionIndex == 11 && (
+            <div className="grid_items_button_form">
+              <div className="grid_item_button_form">
+                <input type="checkbox" className="form-check-input"></input>
                 <div
                   style={{
-                    justifyContent: "flex-start",
-                    alignItems: "flex-start",
-                    gap: 32,
-                    display: "inline-flex",
+                    width: "100%",
+                    color: "#0F0E0E",
+                    fontSize: 16,
+                    fontFamily: "Inter",
+                    fontWeight: "300",
+                    wordWrap: "break-word",
+                    paddingLeft: "5px",
+                    textAlign: "left",
                   }}
                 >
-                  {enableEvaulate && questionList[0] && (
+                  By clicking on the EVALUATE button, I accept that Fortinet can
+                  send me by email extended information regarding the
+                  cybersecurity maturity level of my company's and industry's OT
+                  environment.
+                </div>
+              </div>
+              <div className="grid_item_button_form">
+                <button className="buttonEvaluate" onClick={(e) => openModal()}>
+                  <div
+                    style={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: 8,
+                      display: "flex",
+                    }}
+                  >
+                    <div
+                      style={{
+                        background: "#da291c",
+                        color: "white",
+                        fontSize: 16,
+                        fontFamily: "Inter",
+                        fontWeight: "600",
+                        lineHeight: 1,
+                        wordWrap: "break-word",
+                      }}
+                    >
+                      Evaluate
+                    </div>
+                  </div>
+                </button>
+              </div>
+            </div>
+          )} */}
+
+              {questionIndex == 0 && (
+                <div className="questionButton">
+                  <div className="buttonWidth">
+                    {enableEvaulate && questionList[0] && (
+                      <button
+                        onClick={(e) => nextQuestion()}
+                        className="buttonEvaluate questionButtonText"
+                      >
+                        Evaluate
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+              {questionIndex != 0 && questionIndex != 11 && (
+                <div className="grid_items_button">
+                  <div className="grid_item_button">
                     <button
-                      className="buttonEvaluate"
+                      className={
+                        questionIndex == 0 ? "buttonDisable" : "buttonEnable"
+                      }
+                      onClick={(e) => previousQuestion()}
+                    >
+                      <div
+                        style={{
+                          justifyContent: "flex-start",
+                          alignItems: "center",
+                          gap: 8,
+                          display: "flex",
+                        }}
+                      >
+                        {/* <img src={buttonLeft} /> */}
+                        <BsArrowLeft />
+                        <div
+                          style={{
+                            //color: "#DA291C",
+                            fontSize: 16,
+                            fontFamily: "Inter",
+                            fontWeight: "600",
+                            lineHeight: 1,
+                            wordWrap: "break-word",
+                          }}
+                        >
+                          Previous
+                        </div>
+                      </div>
+                    </button>
+                  </div>
+                  <div className="grid_item_button">
+                    <button
+                      className={
+                        !questionList[questionIndex]
+                          ? "buttonDisable"
+                          : "buttonEnable"
+                      }
                       onClick={(e) => nextQuestion()}
+                      disabled={!questionList[questionIndex]}
                     >
                       <div
                         style={{
@@ -1517,8 +1352,7 @@ function App() {
                       >
                         <div
                           style={{
-                            background: "#da291c",
-                            color: "white",
+                            // color: "#DA291C",
                             fontSize: 16,
                             fontFamily: "Inter",
                             fontWeight: "600",
@@ -1526,633 +1360,664 @@ function App() {
                             wordWrap: "break-word",
                           }}
                         >
-                          Evaluate
+                          Next
                         </div>
+
+                        <BsArrowRight />
                       </div>
                     </button>
-                  )}
-                </div>
-              </div>
-            )}
-            {questionIndex != 0 && questionIndex != 11 && (
-              <div
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  // paddingLeft: 180,
-                  //paddingRight: 180,
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "flex-end",
-                  marginBottom: 20,
-                  gap: 10,
-                  display: "inline-flex",
-                }}
-              >
-                <div
-                  style={{
-                    justifyContent: "flex-start",
-                    alignItems: "flex-start",
-                    gap: 32,
-                    display: "inline-flex",
-                  }}
-                >
-                  <div
-                    className={
-                      questionIndex == 0 ? "buttonDisable" : "buttonEnable"
-                    }
-                    onClick={(e) => previousQuestion()}
-                  >
-                    <div
-                      style={{
-                        justifyContent: "flex-start",
-                        alignItems: "center",
-                        gap: 8,
-                        display: "flex",
-                      }}
-                    >
-                      {/* <img src={buttonLeft} /> */}
-                      <BsArrowLeft />
-                      <div
-                        style={{
-                          //color: "#DA291C",
-                          fontSize: 16,
-                          fontFamily: "Inter",
-                          fontWeight: "600",
-                          lineHeight: 1,
-                          wordWrap: "break-word",
-                        }}
-                      >
-                        Previous
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className={
-                      !questionList[questionIndex]
-                        ? "buttonDisable"
-                        : "buttonEnable"
-                    }
-                    // style={{
-                    //   background: !questionList[questionIndex] ? "grey" : "#DA291C",
-                    //   cursor: !questionList[questionIndex] ? "auto" : "pointer",
-                    //   borderColor: !questionList[questionIndex] ? "grey" : "#DA291C",
-                    // }}
-                    disabled={!questionList[questionIndex]}
-                    onClick={(e) => nextQuestion()}
-                  >
-                    <div
-                      style={{
-                        justifyContent: "flex-start",
-                        alignItems: "center",
-                        gap: 8,
-                        display: "flex",
-                      }}
-                    >
-                      <div
-                        style={{
-                          // color: "#DA291C",
-                          fontSize: 16,
-                          fontFamily: "Inter",
-                          fontWeight: "600",
-                          lineHeight: 1,
-                          wordWrap: "break-word",
-                        }}
-                      >
-                        Next
-                      </div>
-
-                      <BsArrowRight />
-                    </div>
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
-        </div>
+              )}
+            </div>
+          </>
+        )}
+      </div>
 
-        <div
-          className="modal fade"
-          id="staticBackdrop"
-          data-bs-backdrop="static"
-          data-bs-keyboard="false"
-          tabIndex="-1"
-          aria-labelledby="staticBackdropLabel"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog modal-dialog-centered modal-xl">
-            <div className="modal-content">
-              <div className="modal-body">
-                <div className="container-fluid">
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div
-                        style={{
-                          width: "100%",
-                          //height: 400,
-                          position: "relative",
-                        }}
-                      >
-                        <div
-                          style={{
-                            // alignSelf: "stretch",
-                            color: "#DA291C",
-                            fontSize: 20,
-                            fontFamily: "Inter",
-                            fontWeight: "700",
-                            textTransform: "uppercase",
-                            wordWrap: "break-word",
-                            marginTop: 20,
-                            textAlign: "left",
-                          }}
-                        >
-                          {submit ? (
-                            <>
-                              Congratulations! <br />
-                              Your report will be sent to your corporate email
-                              soon
-                            </>
-                          ) : (
-                            "Let yourself be advised by our specialists"
-                          )}
-                        </div>
+      <div
+        className="modal fade"
+        id="staticBackdrop"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabIndex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered modal-xl">
+          <div className="modal-content">
+            <div className="modal-body paddingImage">
+              <div className="container-fluid paddingImage">
+                <div className="row">
+                  {!isMobileView ? (
+                    <>
+                      <div className="col-md-6">
                         <div
                           style={{
                             width: "100%",
-                            marginTop: 30,
-                            textAlign: "left",
+                            //height: 400,
+                            position: "relative",
                           }}
-                        >
-                          <span
-                            style={{
-                              color: "#0F0E0E",
-                              fontSize: 36,
-                              fontFamily: "Inter",
-                              fontWeight: "500",
-                              textAlign: "left",
-                              lineHeight: 1,
-                              wordWrap: "break-word",
-                            }}
-                          >
-                            Remember that this report can also be personalized
-                            in a{" "}
-                          </span>
-                          <span
-                            style={{
-                              color: "#DA291C",
-                              fontSize: 36,
-                              fontFamily: "Inter",
-                              fontWeight: "500",
-                              textAlign: "left",
-                              wordWrap: "break-word",
-                              lineHeight: 1,
-                            }}
-                          >
-                            virtual session at no cost
-                          </span>
-                          <span
-                            style={{
-                              color: "#0F0E0E",
-                              fontSize: 36,
-                              fontFamily: "Inter",
-                              fontWeight: "500",
-                              textAlign: "left",
-                              lineHeight: 1,
-                              wordWrap: "break-word",
-                            }}
-                          >
-                            {" "}
-                            with a Fortinet expert
-                          </span>
-                        </div>
-                        {!submit && (
-                          <>
-                            <div
-                              style={{
-                                width: "100%",
-                                color: "#0F0E0E",
-                                fontSize: 20,
-                                fontFamily: "Inter",
-                                fontWeight: "400",
-                                textAlign: "left",
-                                wordWrap: "break-word",
-                                marginTop: 20,
-                              }}
-                            >
-                              Your report will be sent to your corporate email
-                            </div>
-
-                            <div
-                              style={{
-                                width: "100%",
-                                height: "13%",
-                                paddingLeft: 24,
-                                paddingRight: 24,
-                                paddingTop: 12,
-                                paddingBottom: 12,
-                                background: "#F3F3F3",
-                                flexDirection: "column",
-                                justifyContent: "flex-start",
-                                alignItems: "flex-start",
-                                gap: 12,
-                                display: "inline-flex",
-                                marginTop: 20,
-                              }}
-                            >
-                              <div
-                                style={{
-                                  justifyContent: "flex-start",
-                                  alignItems: "center",
-                                  gap: 8,
-                                  display: "inline-flex",
-                                }}
-                              >
-                                <input
-                                  style={{
-                                    color: "#0F0E0E",
-                                    fontSize: 16,
-                                    fontFamily: "Inter",
-                                    fontWeight: "400",
-                                    lineHeight: 1,
-                                    background: "#F3F3F3",
-                                    wordWrap: "break-word",
-                                    borderColor: "#F3F3F3",
-                                    paddingLeft: 5,
-                                    width: "100%",
-                                    height: "30px",
-                                    border: "none",
-                                    padding: 0,
-                                  }}
-                                  type="email"
-                                  placeholder="Company Email"
-                                  value={companyEmail}
-                                  onChange={(e) => onEmailChange(e)}
-                                />
-                              </div>
-                            </div>
-                          </>
-                        )}
-                        <button
-                          style={{
-                            paddingLeft: 24,
-                            paddingRight: 24,
-                            paddingTop: 12,
-                            paddingBottom: 12,
-
-                            marginTop: submit ? 100 : 20,
-                            width: 120,
-                            cursor: "pointer",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            gap: 12,
-                            display: "flex",
-                            background: !enableComfirm ? "grey" : "#DA291C",
-                            cursor: !enableComfirm ? "auto" : "pointer",
-                            borderColor: !enableComfirm ? "grey" : "#DA291C",
-                          }}
-                          disabled={!enableComfirm}
-                          onClick={() => closeModal(true)}
                         >
                           <div
                             style={{
-                              justifyContent: "flex-start",
-                              alignItems: "center",
-                              gap: 8,
-                              display: "inline-flex",
+                              // alignSelf: "stretch",
+                              color: "#DA291C",
+                              fontSize: 20,
+                              fontFamily: "Inter",
+                              fontWeight: "700",
+                              textTransform: "uppercase",
+                              wordWrap: "break-word",
+                              marginTop: 20,
+                              textAlign: "left",
                             }}
                           >
                             {submit ? (
-                              <div
-                                style={{
-                                  color: "white",
-                                  fontSize: 16,
-                                  fontFamily: "Inter",
-                                  fontWeight: "600",
-                                  lineHeight: 1,
-                                  wordWrap: "break-word",
-                                  flexDirection: "row",
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  alignItems: "center",
-                                }}
-                              >
-                                Call us <img src={call} />
-                              </div>
+                              <>
+                                Congratulations! <br />
+                                Your report will be sent to your corporate email
+                                soon
+                              </>
                             ) : (
-                              <div
-                                style={{
-                                  color: "white",
-                                  fontSize: 16,
-                                  fontFamily: "Inter",
-                                  fontWeight: "600",
-                                  lineHeight: 1,
-                                  wordWrap: "break-word",
-                                }}
-                              >
-                                Confirm
-                              </div>
+                              "Let yourself be advised by our specialists"
                             )}
                           </div>
-                        </button>
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div
-                        style={{
-                          width: "100%",
-                          height: 450,
-                          position: "relative",
-                        }}
-                      >
-                        <img
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            background:
-                              "linear-gradient(0deg, #D9D9D9 0%, #D9D9D9 100%)",
-                            borderTopRightRadius: 300,
-                          }}
-                          src={modalImage}
-                        />
-                        <div
-                          style={{
-                            width: 40,
-                            height: 40,
-                            padding: 2,
-                            right: 3,
-                            position: "absolute",
-                            background: "white",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            display: "inline-flex",
-                            cursor: "pointer",
-                          }}
-                          onClick={() => closeModal()}
-                        >
                           <div
                             style={{
-                              width: 36,
-                              height: 36,
-                              position: "relative",
-                              flexDirection: "column",
-                              justifyContent: "flex-start",
-                              alignItems: "flex-start",
-                              display: "flex",
+                              width: "100%",
+                              marginTop: 30,
+                              textAlign: "left",
                             }}
                           >
-                            <img
-                              src={close}
-                              style={{ width: 36, height: 36 }}
-                            />
+                            <span
+                              style={{
+                                color: "#0F0E0E",
+                                fontSize: 36,
+                                fontFamily: "Inter",
+                                fontWeight: "500",
+                                textAlign: "left",
+                                lineHeight: 1,
+                                wordWrap: "break-word",
+                              }}
+                            >
+                              Remember that this report can also be personalized
+                              in a{" "}
+                            </span>
+                            <span
+                              style={{
+                                color: "#DA291C",
+                                fontSize: 36,
+                                fontFamily: "Inter",
+                                fontWeight: "500",
+                                textAlign: "left",
+                                wordWrap: "break-word",
+                                lineHeight: 1,
+                              }}
+                            >
+                              virtual session at no cost
+                            </span>
+                            <span
+                              style={{
+                                color: "#0F0E0E",
+                                fontSize: 36,
+                                fontFamily: "Inter",
+                                fontWeight: "500",
+                                textAlign: "left",
+                                lineHeight: 1,
+                                wordWrap: "break-word",
+                              }}
+                            >
+                              {" "}
+                              with a Fortinet expert
+                            </span>
+                          </div>
+                          {!submit && (
+                            <>
+                              <div
+                                style={{
+                                  width: "100%",
+                                  color: "#0F0E0E",
+                                  fontSize: 20,
+                                  fontFamily: "Inter",
+                                  fontWeight: "400",
+                                  textAlign: "left",
+                                  wordWrap: "break-word",
+                                  marginTop: 20,
+                                }}
+                              >
+                                Your report will be sent to your corporate email
+                              </div>
+
+                              <div
+                                style={{
+                                  width: "100%",
+                                  height: "13%",
+                                  paddingLeft: 24,
+                                  paddingRight: 24,
+                                  paddingTop: 12,
+                                  paddingBottom: 12,
+                                  background: "#F3F3F3",
+                                  flexDirection: "column",
+                                  justifyContent: "flex-start",
+                                  alignItems: "flex-start",
+                                  gap: 12,
+                                  display: "inline-flex",
+                                  marginTop: 20,
+                                }}
+                              >
+                                <div
+                                  style={{
+                                    justifyContent: "flex-start",
+                                    alignItems: "center",
+                                    gap: 8,
+                                    display: "inline-flex",
+                                  }}
+                                >
+                                  <input
+                                    style={{
+                                      color: "#0F0E0E",
+                                      fontSize: 16,
+                                      fontFamily: "Inter",
+                                      fontWeight: "400",
+                                      lineHeight: 1,
+                                      background: "#F3F3F3",
+                                      wordWrap: "break-word",
+                                      borderColor: "#F3F3F3",
+                                      paddingLeft: 5,
+                                      width: "100%",
+                                      height: "30px",
+                                      border: "none",
+                                      padding: 0,
+                                    }}
+                                    type="email"
+                                    placeholder="Company Email"
+                                    value={companyEmail}
+                                    onChange={(e) => onEmailChange(e)}
+                                  />
+
+                                  {/* </div> */}
+                                </div>
+                              </div>
+                            </>
+                          )}
+                          <button
+                            style={{
+                              paddingLeft: 24,
+                              paddingRight: 24,
+                              paddingTop: 12,
+                              paddingBottom: 12,
+                              background: "#DA291C",
+
+                              marginTop: submit ? 100 : 20,
+                              width: 120,
+                              cursor: "pointer",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              gap: 12,
+                              display: "flex",
+                              background: !enableComfirm ? "grey" : "#DA291C",
+                              cursor: !enableComfirm ? "auto" : "pointer",
+                              borderColor: !enableComfirm ? "grey" : "#DA291C",
+                            }}
+                            disabled={!enableComfirm}
+                            onClick={() => closeModal(true)}
+                          >
+                            <div
+                              style={{
+                                justifyContent: "flex-start",
+                                alignItems: "center",
+                                gap: 8,
+                                display: "inline-flex",
+                              }}
+                            >
+                              {submit ? (
+                                <div
+                                  style={{
+                                    color: "white",
+                                    fontSize: 16,
+                                    fontFamily: "Inter",
+                                    fontWeight: "600",
+                                    lineHeight: 1,
+                                    wordWrap: "break-word",
+                                    flexDirection: "row",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  Call us <img src={call} />
+                                </div>
+                              ) : (
+                                <div
+                                  style={{
+                                    color: "white",
+                                    fontSize: 16,
+                                    fontFamily: "Inter",
+                                    fontWeight: "600",
+                                    lineHeight: 1,
+                                    wordWrap: "break-word",
+                                  }}
+                                >
+                                  Confirm
+                                </div>
+                              )}
+                            </div>
+                          </button>
+                        </div>
+                      </div>
+                      <div className="col-md-6">
+                        <div
+                          style={{
+                            width: "100%",
+                            height: 450,
+                            position: "relative",
+                          }}
+                        >
+                          <img
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                              background:
+                                "linear-gradient(0deg, #D9D9D9 0%, #D9D9D9 100%)",
+                              borderTopRightRadius: 300,
+                            }}
+                            src={modalImage}
+                          />
+                          <div
+                            style={{
+                              width: 40,
+                              height: 40,
+                              padding: 2,
+                              right: 3,
+                              position: "absolute",
+                              background: "white",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              display: "inline-flex",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => closeModal()}
+                          >
+                            <div
+                              style={{
+                                width: 36,
+                                height: 36,
+                                position: "relative",
+                                flexDirection: "column",
+                                justifyContent: "flex-start",
+                                alignItems: "flex-start",
+                                display: "flex",
+                              }}
+                            >
+                              <img
+                                src={close}
+                                style={{ width: 36, height: 36 }}
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
+                    </>
+                  ) : (
+                    <>
+                      {" "}
+                      <div className="col-md-6">
+                        <div
+                          style={{
+                            width: "100%",
+                            height: 450,
+                            position: "relative",
+                          }}
+                        >
+                          <img
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              background:
+                                "linear-gradient(0deg, #D9D9D9 0%, #D9D9D9 100%)",
+                              borderTopRightRadius: 300,
+                              objectFit: "cover",
+                            }}
+                            src={modalImage}
+                          />
+                          <div
+                            style={{
+                              width: 40,
+                              height: 40,
+                              padding: 2,
+                              right: 3,
+                              position: "absolute",
+                              background: "white",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              display: "inline-flex",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => closeModal()}
+                          >
+                            <div
+                              style={{
+                                width: 36,
+                                height: 36,
+                                position: "relative",
+                                flexDirection: "column",
+                                justifyContent: "flex-start",
+                                alignItems: "flex-start",
+                                display: "flex",
+                              }}
+                            >
+                              <img
+                                src={close}
+                                style={{ width: 36, height: 36 }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-md-6">
+                        <div
+                          style={{
+                            width: "100%",
+                            //height: 400,
+                            position: "relative",
+                          }}
+                        >
+                          <div
+                            style={{
+                              // alignSelf: "stretch",
+                              color: "#DA291C",
+                              fontSize: 20,
+                              fontFamily: "Inter",
+                              fontWeight: "700",
+                              textTransform: "uppercase",
+                              wordWrap: "break-word",
+                              marginTop: 20,
+                              textAlign: "left",
+                              paddingLeft: "5px",
+                            }}
+                          >
+                            {submit ? (
+                              <>
+                                Congratulations! <br />
+                                Your report will be sent to your corporate email
+                                soon
+                              </>
+                            ) : (
+                              "Let yourself be advised by our specialists"
+                            )}
+                          </div>
+                          <div
+                            style={{
+                              width: "100%",
+                              marginTop: 30,
+                              textAlign: "left",
+                              paddingLeft: "5px",
+                            }}
+                          >
+                            <span
+                              style={{
+                                color: "#0F0E0E",
+                                fontSize: 36,
+                                fontFamily: "Inter",
+                                fontWeight: "500",
+                                textAlign: "left",
+                                lineHeight: 1,
+                                wordWrap: "break-word",
+                              }}
+                            >
+                              Remember that this report can also be personalized
+                              in a{" "}
+                            </span>
+                            <span
+                              style={{
+                                color: "#DA291C",
+                                fontSize: 36,
+                                fontFamily: "Inter",
+                                fontWeight: "500",
+                                textAlign: "left",
+                                wordWrap: "break-word",
+                                lineHeight: 1,
+                              }}
+                            >
+                              virtual session at no cost
+                            </span>
+                            <span
+                              style={{
+                                color: "#0F0E0E",
+                                fontSize: 36,
+                                fontFamily: "Inter",
+                                fontWeight: "500",
+                                textAlign: "left",
+                                lineHeight: 1,
+                                wordWrap: "break-word",
+                              }}
+                            >
+                              {" "}
+                              with a Fortinet expert
+                            </span>
+                          </div>
+                          {!submit && (
+                            <>
+                              <div
+                                style={{
+                                  width: "100%",
+                                  color: "#0F0E0E",
+                                  fontSize: 20,
+                                  fontFamily: "Inter",
+                                  fontWeight: "400",
+                                  textAlign: "left",
+                                  wordWrap: "break-word",
+                                  marginTop: 20,
+                                  paddingLeft: "5px",
+                                }}
+                              >
+                                Your report will be sent to your corporate email
+                              </div>
+
+                              <div
+                                style={{
+                                  width: "95%",
+                                  height: "13%",
+                                  paddingLeft: 24,
+                                  paddingRight: 24,
+                                  paddingTop: 12,
+                                  paddingBottom: 12,
+                                  background: "#F3F3F3",
+                                  flexDirection: "column",
+                                  justifyContent: "flex-start",
+                                  alignItems: "flex-start",
+                                  gap: 12,
+                                  display: "inline-flex",
+                                  marginTop: 20,
+                                  marginLeft: 5,
+                                  marginRight: 5,
+                                }}
+                              >
+                                <div
+                                  style={{
+                                    justifyContent: "flex-start",
+                                    alignItems: "center",
+                                    gap: 8,
+                                    display: "inline-flex",
+                                  }}
+                                >
+                                  <input
+                                    style={{
+                                      color: "#0F0E0E",
+                                      fontSize: 16,
+                                      fontFamily: "Inter",
+                                      fontWeight: "400",
+                                      lineHeight: 1,
+                                      background: "#F3F3F3",
+                                      wordWrap: "break-word",
+                                      borderColor: "#F3F3F3",
+                                      paddingLeft: 5,
+                                      width: "100%",
+                                      height: "13%",
+                                      border: "none",
+                                    }}
+                                    type="email"
+                                    placeholder="Company Email"
+                                  />
+
+                                  {/* </div> */}
+                                </div>
+                              </div>
+                            </>
+                          )}
+                          <div
+                            className="confirmButton"
+                            style={{
+                              marginTop: submit ? 100 : 20,
+                              marginLeft: 5,
+                              marginRight: 5,
+                            }}
+                            onClick={() => closeModal(true)}
+                          >
+                            <div
+                              style={{
+                                justifyContent: "flex-start",
+                                alignItems: "center",
+                                gap: 8,
+                                display: "inline-flex",
+                              }}
+                            >
+                              {submit ? (
+                                <div
+                                  style={{
+                                    color: "white",
+                                    fontSize: 16,
+                                    fontFamily: "Inter",
+                                    fontWeight: "600",
+                                    lineHeight: 1,
+                                    wordWrap: "break-word",
+                                    flexDirection: "row",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  Call us <img src={call} />
+                                </div>
+                              ) : (
+                                <div
+                                  style={{
+                                    color: "white",
+                                    fontSize: 16,
+                                    fontFamily: "Inter",
+                                    fontWeight: "600",
+                                    lineHeight: 1,
+                                    wordWrap: "break-word",
+                                  }}
+                                >
+                                  Confirm
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div
-          className="modal-backdrop fade show"
-          id="backdrop"
-          style={{ display: "none" }}
-        ></div>
-        <div
-          style={{
-            width: "100%",
-            height: "100%",
-            paddingTop: 80,
-            paddingBottom: 80,
-            paddingLeft: "11%",
-            paddingRight: "11%",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "flex-start",
-            gap: 115,
-            display: "inline-flex",
-          }}
-        >
-          <div style={{ width: 709, textAlign: "left" }}>
-            <span
-              style={{
-                color: "#0F0E0E",
-                fontSize: 36,
-                fontFamily: "Inter",
-                fontWeight: "500",
-                lineHeight: 1,
-                wordWrap: "break-word",
-              }}
-            >
-              To{" "}
-            </span>
-            <span
-              style={{
-                color: "#DA291C",
-                fontSize: 36,
-                fontFamily: "Inter",
-                fontWeight: "500",
-                lineHeight: 1,
-                wordWrap: "break-word",
-              }}
-            >
-              discover how secure your operating
-            </span>
-            <span
-              style={{
-                color: "#0F0E0E",
-                fontSize: 36,
-                fontFamily: "Inter",
-                fontWeight: "500",
-                lineHeight: 1,
-                wordWrap: "break-word",
-              }}
-            >
-              {" "}
-              environment is, follow these 3 steps and find out how Fortinet can
-              help.
-            </span>
-          </div>
-          <div style={{ width: "100%", height: 777 }}>
-            <div className="box arrow-bottom">
-              <div
-                style={{
-                  color: "#DA291C",
-                  fontSize: 200,
-                  width: "20%",
-                  fontFamily: "Inter",
-                  fontWeight: "500",
-                  lineHeight: 1,
-                  wordWrap: "break-word",
-                }}
-              >
-                1
-              </div>
-              <div style={{ width: "70%", textAlign: "left" }}>
-                <div
-                  style={{
-                    color: "#DA291C",
-                    fontSize: 36,
-                    fontFamily: "Inter",
-                    fontWeight: "500",
-                    lineHeight: 1,
-                    wordWrap: "break-word",
-                  }}
-                >
-                  {t("question")}
-                </div>
-                <div
-                  style={{
-                    width: 555,
-                    color: "#0F0E0E",
-                    fontSize: 18,
-                    fontFamily: "Inter",
-                    fontWeight: "300",
-                    textAlign: "left",
-                    lineHeight: 1,
-                    wordWrap: "break-word",
-                  }}
-                >
-                  {t("questiontext")}
-                </div>
-              </div>
-              <div style={{ width: "15%" }}>
-                <img src={question} />
-              </div>
-            </div>
+      </div>
 
-            <div className="box arrow-bottom">
-              <div
-                style={{
-                  color: "#DA291C",
-                  fontSize: 200,
-                  width: "20%",
-                  fontFamily: "Inter",
-                  fontWeight: "500",
-                  lineHeight: 1,
-                  wordWrap: "break-word",
-                }}
-              >
-                2
-              </div>
-              <div style={{ width: "70%", textAlign: "left" }}>
-                <div
-                  style={{
-                    color: "#DA291C",
-                    fontSize: 36,
-                    fontFamily: "Inter",
-                    fontWeight: "500",
-                    lineHeight: 1,
-                    wordWrap: "break-word",
-                  }}
-                >
-                  {t("Evaluation")}
-                </div>
-                <div
-                  style={{
-                    width: 555,
-                    color: "#0F0E0E",
-                    fontSize: 18,
-                    fontFamily: "Inter",
-                    fontWeight: "300",
-                    textAlign: "left",
-                    lineHeight: 1,
-                    wordWrap: "break-word",
-                  }}
-                >
-                  {t("EvaluationText")}
-                </div>
-              </div>
-              <div style={{ width: "15%" }}>
-                <img src={evaluation} />
+      <div
+        className="modal-backdrop fade show"
+        id="backdrop"
+        style={{ display: "none" }}
+      ></div>
+
+      <div className="questionSection">
+        <div className="questionWord">
+          <span className="textQuestion">To </span>
+          <span className="textQuestionRed">
+            discover how secure your operating
+          </span>
+          <span className="textQuestion">
+            {" "}
+            environment is, follow these 3 steps and find out how Fortinet can
+            help.
+          </span>
+        </div>
+        <div style={{ width: "100%" }}>
+          <div className="box arrow-bottom">
+            <div className="textOne">1</div>
+            <div style={{ width: "70%", textAlign: "left" }}>
+              <div className="textMiddleSmall">
+                <div className="middleText">{t("question")}</div>
+                <div className="middleTextBelow">{t("questiontext")}</div>
               </div>
             </div>
-            <div
-              style={{
-                width: "100%",
-                height: 243,
-                backgroundColor: "white",
-                boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-                display: "flex",
-                //justifyContent: "center",
-                alignItems: "center",
-                //flexDirection: "column",
-              }}
-            >
-              <div
-                style={{
-                  color: "#DA291C",
-                  fontSize: 200,
-                  width: "20%",
-                  fontFamily: "Inter",
-                  fontWeight: "500",
-                  lineHeight: 1,
-                  wordWrap: "break-word",
-                }}
-              >
-                3
+            <div style={{ width: "15%" }}>
+              <img src={question} className="imageSize" />
+            </div>
+          </div>
+        </div>
+        <div style={{ width: "100%" }}>
+          <div className="box arrow-bottom">
+            <div className="textOne">2</div>
+            <div style={{ width: "70%", textAlign: "left" }}>
+              <div className="textMiddleSmall">
+                <div className="middleText"> {t("Evaluation")}</div>
+                <div className="middleTextBelow"> {t("EvaluationText")}</div>
               </div>
-              <div style={{ width: "70%", textAlign: "left" }}>
-                <div
-                  style={{
-                    color: "#DA291C",
-                    fontSize: 36,
-                    fontFamily: "Inter",
-                    fontWeight: "500",
-                    lineHeight: 1,
-                    wordWrap: "break-word",
-                  }}
-                >
-                  {t("Recommendation")}
-                </div>
-                <div
-                  style={{
-                    width: 555,
-                    color: "#0F0E0E",
-                    fontSize: 18,
-                    fontFamily: "Inter",
-                    fontWeight: "300",
-                    textAlign: "left",
-                    lineHeight: 1,
-                    wordWrap: "break-word",
-                  }}
-                >
+            </div>
+            <div style={{ width: "15%" }}>
+              <img src={evaluation} className="imageSize" />
+            </div>
+          </div>
+        </div>
+
+        <div style={{ width: "100%" }}>
+          <div className="box">
+            <div className="textOne">3</div>
+            <div style={{ width: "70%", textAlign: "left" }}>
+              <div className="textMiddleSmall">
+                <div className="middleText"> {t("Recommendation")}</div>
+                <div className="middleTextBelow">
+                  {" "}
                   {t("RecommendationText")}
                 </div>
               </div>
-              <div style={{ width: "15%" }}>
-                <img src={recommend} />
-              </div>
+            </div>
+            <div style={{ width: "15%" }}>
+              <img src={recommend} className="imageSize" />
             </div>
           </div>
         </div>
+      </div>
+      <div
+        style={{
+          width: "100%",
+          height: 88,
+          paddingLeft: "11%",
+          // marginTop: "100px",
+          // top: 50,
+          //paddingRight: 876,
+          background: "#0F0E0E",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          display: "inline-flex",
+        }}
+      >
         <div
           style={{
-            width: "100%",
-            height: 88,
-            paddingLeft: "11%",
-            //paddingRight: 876,
-            background: "#0F0E0E",
-            justifyContent: "flex-start",
-            alignItems: "center",
-            display: "inline-flex",
+            color: "white",
+            fontSize: 16,
+            fontFamily: "Inter",
+            fontWeight: "400",
+            lineHeight: 1,
+            wordWrap: "break-word",
           }}
         >
-          <div
-            style={{
-              color: "white",
-              fontSize: 16,
-              fontFamily: "Inter",
-              fontWeight: "400",
-              lineHeight: 1,
-              wordWrap: "break-word",
-            }}
-          >
-            Copyright © 2023 Fortinet, Inc. All Rights Reserved.
-          </div>
+          Copyright © 2023 Fortinet, Inc. All Rights Reserved.
         </div>
-      </section>
+      </div>
     </div>
   );
 }
