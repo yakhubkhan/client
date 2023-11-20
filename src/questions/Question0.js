@@ -23,8 +23,9 @@ export default function Question0(props) {
   //   setIndex(selectedIndustry);
   // }
 
-  const onClickSelect = (number) => {
+  const onClickSelect = (number, name) => {
     setIndex(number);
+    props.setIndustry(name);
     let tempQuestion = [...props.questionList];
     tempQuestion[0] = number;
     props.setQuestionList(tempQuestion);
@@ -36,7 +37,7 @@ export default function Question0(props) {
           className="industryBox"
           style={{ background: index === 1 ? "#DA291C" : "white" }}
           id="gas"
-          onClick={(e) => onClickSelect(1)}
+          onClick={(e) => onClickSelect(1, "Oil & Gas")}
         >
           <div
             style={{
@@ -60,7 +61,7 @@ export default function Question0(props) {
           className="industryBox"
           style={{ background: index === 2 ? "#DA291C" : "white" }}
           id="power"
-          onClick={(e) => onClickSelect(2)}
+          onClick={(e) => onClickSelect(2, "Power & Utilities")}
         >
           <div
             style={{
@@ -83,7 +84,7 @@ export default function Question0(props) {
           className="industryBox"
           style={{ background: index === 3 ? "#DA291C" : "white" }}
           id="mining"
-          onClick={(e) => onClickSelect(3)}
+          onClick={(e) => onClickSelect(3, "Mining")}
         >
           <div
             style={{
@@ -106,7 +107,7 @@ export default function Question0(props) {
           className="industryBox"
           style={{ background: index === 4 ? "#DA291C" : "white" }}
           id="transportation"
-          onClick={(e) => onClickSelect(4)}
+          onClick={(e) => onClickSelect(4, "Transportations & Logistic")}
         >
           <div
             style={{
@@ -129,7 +130,7 @@ export default function Question0(props) {
           className="industryBox"
           style={{ background: index === 5 ? "#DA291C" : "white" }}
           id="manufacturing"
-          onClick={(e) => onClickSelect(5)}
+          onClick={(e) => onClickSelect(5, "Manufacturing")}
         >
           <div
             style={{
@@ -152,7 +153,7 @@ export default function Question0(props) {
           className="industryBox"
           style={{ background: index === 6 ? "#DA291C" : "white" }}
           id="other"
-          onClick={(e) => onClickSelect(6)}
+          onClick={(e) => onClickSelect(6, "Other")}
         >
           <div
             style={{
