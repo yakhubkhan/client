@@ -197,7 +197,7 @@ input[type="text"] {
   border-color: #dc3545;
   padding-right: calc(1.5em + 0.75rem);
 }
-
+/* animation */
 input:focus {
   outline: none;
 }
