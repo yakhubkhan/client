@@ -20,16 +20,156 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>React App</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div
-      style="
+    <style>
+       .text-one{
         background: #FCFCFC;
         width: 600px;
         margin: auto;
         padding-left: 36px;
-        padding-right: 36px;"
+        padding-right: 36px;
+       }
+
+       .text-two{
+        flex: 1 1 0;
+              color: #363636;
+              font-size: 28px;
+              font-family: Inter;
+              font-weight: 500;
+              line-height: 1;
+              word-wrap: break-word;
+       }
+
+       .text-three{
+           width: 79px;
+            height: 79px;
+            padding-top: 8px;
+            padding-bottom: 7px;
+            padding-left: 8px;
+            padding-right: 7px;
+            background: white;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+       }
+
+       .text-four{
+            flex: 1;
+            color: white;
+            font-size: 16px;
+            font-family: Inter;
+            font-weight: 600;
+            line-height: 1;
+            word-wrap: break-word;
+            text-align: center;
+       }
+
+       .text-five{
+        width: 100%;
+      height: 100%;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 24px;
+      display: inline-flex;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      padding-top: 30px;
+       }
+
+       .text-six{
+        padding-left: 74px;
+             padding-right: 80px;
+              padding-top: 12px;
+              padding-bottom: 12px;
+              border: 1px #DA291C solid;
+              justify-content: center;
+              align-items: center;
+              gap: 12px;
+              display: flex;
+       }
+        .text-seven{
+            width: 100%;
+          height: 100%;
+          padding-left: 24px;
+          background: #DA291C;
+          border: 1.50px #DA291C solid;
+          justify-content: center;
+          align-items: center;
+          gap: 8px;
+          display: inline-flex;
+        }
+        @media screen and (max-width: 430px) {
+        .text-one{
+        background: #FCFCFC;
+        width: 600px;
+        padding-left: 5px;
+        padding-right: 5px;
+       }
+
+       .text-two{
+        flex: 1 1 0;
+              color: #363636;
+              font-size: 16px;
+              font-family: Inter;
+              font-weight: 500;
+              line-height: 1;
+              word-wrap: break-word;
+       }
+
+       .text-three{
+        visibility: hidden;
+       }
+
+       .text-four{
+           flex:1;
+            color: white;
+            font-size: 16px;
+            font-family: Inter;
+            font-weight: 600;
+            line-height: 1;
+            word-wrap: break-word;
+       }
+       
+       .text-five{
+        width: 100%;
+      height: 100%;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 24px;
+      display: block;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      padding-top: 30px;
+      margin-bottom: 20px;
+       }
+
+       .text-six{
+              padding-left: 160px;
+             padding-right: 150px;
+              padding-top: 12px;
+              padding-bottom: 12px;
+              border: 1px #DA291C solid;
+              justify-content: center;
+              align-items: center;
+              gap: 12px;
+              display: flex;
+       }
+
+       .text-seven{
+            width:95%;
+          height: 100%;
+          padding-left: 24px;
+          background: #DA291C;
+          border: 1.50px #DA291C solid;
+          justify-content: center;
+          align-items: center;
+          gap: 8px;
+          display: inline-flex;
+        }
+        }
+        </style>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div
+     class="text-one"
       
     >
       <div
@@ -40,8 +180,8 @@
           height: 208px;"
         
       >
-        <div style="width: 350px;">
-          <img src="http://localhost:3000/Fortinet logo.svg" alt="" width="158px" style="margin-top: 50px;" /> 
+        <div style="width: 410px;">
+          <img src="http://localhost:3000/Fortinet logo.svg" alt="" width="158px" style="margin-top: 5px;" /> 
           <div style="width: 300px; margin-top: 40px">
             <span
               style="
@@ -68,7 +208,7 @@
             </span>
           </div>
         </div>
-        <div style="width: 208px;height: 208px;">
+        <div style="width: 218px;height: 208px;">
           <img
             style="
               width: 100%;
@@ -112,15 +252,7 @@
           "
         >
           <div
-            style="
-              flex: 1 1 0;
-              color: #363636;
-              font-size: 28px;
-              font-family: Inter;
-              font-weight: 500;
-              line-height: 1;
-              word-wrap: break-word;
-            "
+           class="text-two"
           >
             Dear First Name Last Name,
           </div>
@@ -151,58 +283,22 @@
         </div>
       </div>
       <div
-        style="
-          width: 100%;
-          height: 100%;
-          padding-left: 24px;
-          background: #DA291C;
-          border: 1.50px #DA291C solid;
-          justify-content: center;
-          align-items: center;
-          gap: 8px;
-          display: inline-flex;
-          "
+       class="text-seven"
       >
         <div
-          style="
-            flex: 1 1 0;
-            color: white;
-            font-size: 16px;
-            font-family: Inter;
-            font-weight: 600;
-            line-height: 1;
-            word-wrap: break-word;
-          "
+          class="text-four"
         >
           Download your cybersecurity maturity report here
         </div>
         <div
-          style="
-            width: 79px;
-            height: 79px;
-            padding-top: 8px;
-            padding-bottom: 7px;
-            padding-left: 8px;
-            padding-right: 7px;
-            background: white;
-            justify-content: center;
-            align-items: center;
-            display: flex;
-          "
+         class="text-three"
         >
           <img src="http://localhost:3000/download.svg" />
         </div>
       </div>
     </div>
     <div
-      style="width: 100%;
-      height: 100%;
-      justify-content: flex-start;
-      align-items: center;
-      gap: 24px;
-      display: inline-flex;
-      border-top: 1px solid rgba(0, 0, 0, 0.05);
-      padding-top: 30px;"
+   class="text-five"
      >
       <img
         style="width: 140px;
@@ -245,17 +341,7 @@
           "
         >
           <div
-            style="
-              padding-left: 24px;
-              padding-right: 24px;
-              padding-top: 12px;
-              padding-bottom: 12px;
-              border: 1px #DA291C solid;
-              justify-content: center;
-              align-items: center;
-              gap: 12px;
-              display: flex;
-            "
+           class="text-six"
           >
             <div
               style="
