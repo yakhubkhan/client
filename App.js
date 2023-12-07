@@ -165,6 +165,15 @@ function App() {
       email: companyEmail,
     };
 
+    console.log(document.elqform);
+
+    axios.post("https://s3049749.t.eloqua.com/e/f2", obj).then(
+      (response) => {},
+      (error) => {
+        // setQuestionIndex((previous) => previous + 1);
+      }
+    );
+
     axios.post("/savedinfo", obj).then(
       (response) => {
         setQuestionIndex((previous) => previous + 1);
@@ -530,7 +539,7 @@ function App() {
                 </div>
                 <form
                   method="post"
-                  name="UntitledForm-1700078784437"
+                  name="elqform"
                   action="https://s3049749.t.eloqua.com/e/f2"
                   onsubmit="return handleFormSubmit(this)"
                   id="form8357"
