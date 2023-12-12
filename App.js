@@ -236,6 +236,7 @@ function App() {
   };
 
   const handleScroll = (e) => {
+    debugger;
     const inputFielidValue = { ...formInput };
     let errorFlag = false;
     if (!inputFielidValue.firstName) {
@@ -538,10 +539,11 @@ function App() {
                   </span>
                 </div>
                 <form
-                  method="post"
+                  // method="post"
                   name="elqform"
-                  action="https://s3049749.t.eloqua.com/e/f2"
-                  onsubmit="return handleFormSubmit(this)"
+                  // action="https://s3049749.t.eloqua.com/e/f2"
+                  //onsubmit="return handleScroll(this)"
+                  onSubmit={handleScroll}
                   id="form8357"
                   class="elq-form"
                 >
@@ -1257,7 +1259,21 @@ function App() {
                     </div>
                     <div className="grid_items_button_form_floating">
                       <div className="grid_item_button_form">
+                        {/* <div class="single-checkbox-row row"> */}
                         <input
+                          type="checkbox"
+                          name="explicitConsent1"
+                          id="fe176977"
+                        />
+                        <label
+                          class="checkbox-aligned elq-item-label"
+                          for="fe176977"
+                        >
+                          {t("accept")}
+                        </label>
+                        {/* </div> */}
+
+                        {/* <input
                           type="checkbox"
                           className="form-check-input"
                           onChange={() => setAccept(!accept)}
@@ -1278,10 +1294,16 @@ function App() {
                           }}
                         >
                           {t("accept")}
-                        </div>
+                        </div> */}
                       </div>
                       <div className="grid_item_button_form">
-                        <button
+                        <input
+                          type="Submit"
+                          class="submit-button-style "
+                          value="Evaluate"
+                          id="fe176992"
+                        />
+                        {/* <button
                           className="floatingFormButton"
                           style={{
                             background: !accept ? "grey" : "#DA291C",
@@ -1312,7 +1334,7 @@ function App() {
                               {t("buttonName")}
                             </div>
                           </div>
-                        </button>
+                        </button> */}
                       </div>
                     </div>
                   </div>
