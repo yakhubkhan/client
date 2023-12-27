@@ -4,11 +4,24 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./i18n/config";
+import PageNotFound from "./PageNotFound";
 import EmailTemplate from "./emailtemplate/EmailTemplate";
+import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+function StartPage() {
+  return (
+    <Router>
+      <Routes>
+        <Route exact path="/" element={<App />} />
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
+    </Router>
+  );
+}
 root.render(
   <React.StrictMode>
-    <App />
+    <StartPage />
   </React.StrictMode>
 );
 
