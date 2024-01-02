@@ -7,21 +7,26 @@ import question from "./question.svg";
 import recommendation from "./recommendation.svg";
 import arrowLeft from "./assets/images/teenyicons_arrow-left-solid.svg";
 import arrowRight from "./assets/images/teenyicons_arrow-right-solid.svg";
-import image1 from "./assets/images/image1.png";
-import image2 from "./assets/images/image2.png";
+import image1 from "./assets/images/Other_banner.jpg";
+import image2 from "./assets/images/manufacturing_banner.jpg";
+import image3 from "./assets/images/Transportation&Logistics_banner.jpeg";
+import image4 from "./assets/images/mining_banner.jpg";
+import image5 from "./assets/images/Power_Utilities_banner.jpg";
+import image6 from "./assets/images/oil-and-gas_banner.jpg";
+
 import buttonLeft from "./assets/images/arrow-left.svg";
 import buttonRight from "./assets/images/arrow-right.svg";
 import recommend from "./assets/images/recommend.svg";
 import evaluation from "./assets/images/evaluation.svg";
 import triangle from "./assets/images/triangle.svg";
-import Question1 from "./questions/Question1";
-import Question2 from "./questions/Question2";
 import modalImage from "./assets/images/modal.jpg";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 //import image1 from "./image1.png";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
+import Question1 from "./questions/Question1";
+import Question2 from "./questions/Question2";
 import Question3 from "./questions/Question3";
 import Question4 from "./questions/Question4";
 import Question5 from "./questions/Question5";
@@ -39,9 +44,10 @@ import { useTranslation } from "react-i18next";
 import useDeviceDetect from "./useDeviceDetect";
 import dot from "./assets/images/dot.png";
 import report from "./assets/images/report.png";
-import reportImage from "./assets/images/reportImage.svg";
+import reportImage from "./assets/images/Generating_Report.gif";
 import useScreenSize from "./useScreenSize";
 import { Country } from "./country";
+
 function App() {
   //function useDeviceDetect() {
 
@@ -50,8 +56,18 @@ function App() {
   const { t, i18n } = useTranslation();
   const screenSize = useScreenSize();
 
+  const imageBanner = [image1, image2, image3, image4, image5, image6];
+  const textBanner = [
+    "75% of OT organizations reported at least one intrusion in the last year",
+    "32% of OT organizations reported being victims of a ransomware attack",
+    "In the last year Intrusions from malware and phishing increased 12% and 9%, respectively",
+    "OT Cybersecurity Responsibility Is Moving from OT Personnel to Cybersecurity Experts",
+    "Protecting OT systems is now more critical than ever as more organizations connect their OT environments to the internet",
+    "Cybersecurity solutions continue to aid in the success of most OT professionals (76%)  by improving efficiency and flexibility",
+  ];
+
   useEffect(() => {
-    if (screenSize.width < 1030) {
+    if (screenSize.width < 780) {
       setIsMobileView(true);
     } else {
       setIsMobileView(false);
@@ -90,7 +106,6 @@ function App() {
     phone: "",
     country: "",
   });
-
   const [isEmptyFirstName, setIsEmptyFirstName] = useState(false);
   const [isEmptyLastName, setIsEmptyLastName] = useState(false);
   const [isEmptyCompany, setIsEmptyCompany] = useState(false);
@@ -114,6 +129,51 @@ function App() {
     "",
     "",
   ]);
+
+  const hmtmFunction = () => {
+    const htmlString = `<script type='text/javascript'>
+
+  var timerId = null, timeout = 5;
+  
+
+  
+  <script type='text/javascript'>
+  
+  function WaitUntilCustomerGUIDIsRetrieved() {
+  
+  if (!!(timerId)) {
+  
+  if (timeout == 0) {
+  
+  return;
+  
+  }
+  
+  if (typeof this.GetElqCustomerGUID === 'function') {
+  
+  document.forms["UntitledForm-1700078784437"].elements["elqCustomerGUID"].value = GetElqCustomerGUID();
+  
+  return;
+  
+  }
+  
+  timeout -= 1;
+  
+  }
+  
+  timerId = setTimeout("WaitUntilCustomerGUIDIsRetrieved()", 500);
+  
+  return;
+  
+  }
+  
+  window.onload = WaitUntilCustomerGUIDIsRetrieved;
+  
+  _elqQ.push(['elqGetCustomerGUID']);
+  
+</script>`;
+    return <div dangerouslySetInnerHTML={{ __html: htmlString }} />;
+  };
 
   const nextQuestion = () => {
     setQuestionIndex((previous) => (previous == 10 ? previous : previous + 1));
@@ -163,37 +223,76 @@ function App() {
       maturity_level: avg,
       vertical: i18n.language,
       email: companyEmail,
+      avg: avg,
     };
+    // let eqlobj = {
+    //   elqFormName: "",
+    //   elqSiteId: "",
+    //   elqCampaignId: "",
+    //   firstName: formInput.firstName,
+    //   lastName: formInput.lastName,
+    //   // emailAddress: a@gmail.com
+    //   company: formInput.company,
+    //   // jobFunction: Cloud Architect
+    //   title: formInput.jobTitle,
+    //   // jobLevel: Director
+    //   Phone: formInput.phone,
+    //   country: formInput.country,
+    //   // explicitConsent1: on
+    //   lsmr: "",
+    //   utm_source: "",
+    //   utm_medium: "",
+    //   utm_campaign: "",
+    //   utm_content: "",
+    //   utm_term: "",
+    //   lsci: "",
+    //   lscs: "",
+    //   hiddenField: "",
+    //   emid: "",
+    //   tpid: "",
+    //   slid: "",
+    //   gclid: "",
+    //   optinlang: "",
+    // };
 
-    console.log(document.elqform);
+    // axios.post("https://s3049749.t.eloqua.com/e/f2", obj).then(
+    //   (response) => {},
+    //   (error) => {
+    //     // setQuestionIndex((previous) => previous + 1);
+    //   }
+    // );
 
-    axios.post("https://s3049749.t.eloqua.com/e/f2", obj).then(
-      (response) => {},
-      (error) => {
-        // setQuestionIndex((previous) => previous + 1);
-      }
-    );
+    axios
+      .post("https://api.stage-dium.com/savedInfo", obj, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST",
+          "Content-Type": "application/json",
+        },
+      })
+      .then(
+        (response) => {
+          console.log(response, "object");
+          setQuestionIndex((previous) => previous + 1);
 
-    axios.post("/savedinfo", obj).then(
-      (response) => {
-        setQuestionIndex((previous) => previous + 1);
-        let tempInput = { ...formInput };
-        //setFormInput({
-        //  let tempInput={...formInput};
-        tempInput.firstName = "";
-        tempInput.lastName = "";
-        tempInput.company = "";
-        tempInput.jobTitle = "";
-        tempInput.phone = "";
-        tempInput.country = "";
-        setFormInput(tempInput);
-      },
-      (error) => {
-        setQuestionIndex((previous) => previous + 1);
-      }
-    );
+          let tempInput = { ...formInput };
+          //setFormInput({
+          //  let tempInput={...formInput};
+          tempInput.firstName = "";
+          tempInput.lastName = "";
+          tempInput.company = "";
+          tempInput.jobTitle = "";
+          tempInput.phone = "";
+          tempInput.country = "";
+          setFormInput(tempInput);
+        },
+
+        (error) => {
+          console.log(error, "error");
+          setQuestionIndex((previous) => previous + 1);
+        }
+      );
   };
-
   const openModal = () => {
     document.getElementById("backdrop").style.display = "block";
     document.getElementById("staticBackdrop").style.display = "block";
@@ -234,9 +333,102 @@ function App() {
       setIsEmptyCountry(false);
     }
   };
+  function resetSubmitButton(e) {
+    var submitButtons = e.target.form.getElementsByClassName("submit-button");
+    for (var i = 0; i < submitButtons.length; i++) {
+      submitButtons[i].disabled = false;
+    }
+  }
+  const addChangeHandler = (elements) => {
+    for (var i = 0; i < elements.length; i++) {
+      elements[i].addEventListener("change", resetSubmitButton);
+    }
+  };
+  useEffect(() => {
+    var form = document.getElementById("form8357");
+    addChangeHandler(form.getElementsByTagName("input"));
+    addChangeHandler(form.getElementsByTagName("select"));
+    addChangeHandler(form.getElementsByTagName("textarea"));
+    var nodes = document.querySelectorAll("#form8357 input[data-subscription]");
+    if (nodes) {
+      for (var i = 0, len = nodes.length; i < len; i++) {
+        var status = nodes[i].dataset
+          ? nodes[i].dataset.subscription
+          : nodes[i].getAttribute("data-subscription");
+        if (status === "true") {
+          nodes[i].checked = true;
+        }
+      }
+    }
+    var nodes = document.querySelectorAll("#form8357 select[data-value]");
+    if (nodes) {
+      for (var i = 0; i < nodes.length; i++) {
+        var node = nodes[i];
+        var selectedValue = node.dataset
+          ? node.dataset.value
+          : node.getAttribute("data-value");
+        if (selectedValue) {
+          for (var j = 0; j < node.options.length; j++) {
+            if (node.options[j].value === selectedValue) {
+              node.options[j].selected = "selected";
+              break;
+            }
+          }
+        }
+      }
+    }
+    window.getParentElement = function (list) {
+      return list[list.length - 1].parentElement;
+    };
+    var dom0 = document.querySelector("#form8357 #fe176969");
+    var fe176969 = new window.LiveValidation(dom0, {
+      validMessage: "",
+      onlyOnBlur: false,
+      wait: 300,
+      isPhoneField: false,
+    });
+    fe176969.add(window.Validate.Presence, {
+      failureMessage: "This field is required",
+    });
+    var dom1 = document.querySelector("#form8357 #fe176970");
+    var fe176970 = new window.LiveValidation(dom1, {
+      validMessage: "",
+      onlyOnBlur: false,
+      wait: 300,
+      isPhoneField: false,
+    });
 
+    var dom3 = document.querySelector("#form8357 #fe176972");
+    var fe176972 = new window.LiveValidation(dom3, {
+      validMessage: "",
+      onlyOnBlur: false,
+      wait: 300,
+      isPhoneField: false,
+    });
+
+    var dom7 = document.querySelector("#form8357 #fe176976");
+    var fe176976 = new window.LiveValidation(dom7, {
+      validMessage: "",
+      onlyOnBlur: false,
+      wait: 300,
+      isPhoneField: false,
+    });
+    fe176976.add(window.Validate.Custom, {
+      against: function (value) {
+        return !value.match(
+          /(telnet|ftp|https?):\/\/(?:[a-z0-9][a-z0-9-]{0,61}[a-z0-9]\.|[a-z0-9]\.)+[a-z]{2,63}/i
+        );
+      },
+      failureMessage: "Value must not contain any URL's",
+    });
+    fe176976.add(window.Validate.Custom, {
+      against: function (value) {
+        return !value.match(/(<([^>]+)>)/gi);
+      },
+      failureMessage: "Value must not contain any HTML",
+    });
+  }, []);
   const handleScroll = (e) => {
-    debugger;
     const inputFielidValue = { ...formInput };
     let errorFlag = false;
     if (!inputFielidValue.firstName) {
@@ -265,7 +457,58 @@ function App() {
 
     if (errorFlag) return;
 
+    let eqlobj = {
+      elqFormName: "",
+      elqSiteId: "",
+      elqCampaignId: "",
+      firstName: formInput.firstName,
+      lastName: formInput.lastName,
+      emailAddress: "bindu.kr.blr@gmail.com",
+      company: formInput.company,
+      // jobFunction: Cloud Architect
+      title: formInput.jobTitle,
+      // jobLevel: Director
+      Phone: formInput.phone,
+      country: formInput.country,
+      // explicitConsent1: on
+      lsmr: "",
+      utm_source: "",
+      utm_medium: "",
+      utm_campaign: "",
+      utm_content: "",
+      utm_term: "",
+      lsci: "",
+      lscs: "",
+      hiddenField: "",
+      emid: "",
+      tpid: "",
+      slid: "",
+      gclid: "",
+      optinlang: "",
+    };
+
+    var form = document.getElementsByTagName("form");
+    var inputs = form[0].getElementsByTagName("input");
+
+    var formData = {};
+    for (var i = 0; i < inputs.length; i++) {
+      formData[inputs[i].name] = inputs[i].value;
+    }
+    formData["country"] = formInput.country;
+    var formdata = JSON.stringify(formData);
+    axios.post("https://s3049749.t.eloqua.com/e/f2", formdata).then(
+      (response) => {},
+      (error) => {
+        // setQuestionIndex((previous) => previous + 1);
+      }
+    );
+
     e.preventDefault();
+    // const form1 = document.getElementById("form8357");
+    // //form1.submit();
+    // form1.action = "register.html";
+    // form1.submit();
+    // return false;
     setEnableEvaulate(true);
     window.scrollTo({
       top: aboutSection.current.offsetTop - 50,
@@ -276,6 +519,7 @@ function App() {
 
   const onEmailChange = (e) => {
     setCompanyEmail(e.target.value);
+    console.log("email test");
     if (
       e.target.value.match(
         /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -286,8 +530,8 @@ function App() {
       setEnableConfirm(false);
     }
   };
-
   function handleFormSubmit(ele) {
+    ele.preventDefault();
     var submitButton = ele.querySelector("input[type=submit]");
     var spinner = document.createElement("span");
     spinner.setAttribute("class", "loader");
@@ -296,7 +540,6 @@ function App() {
     submitButton.parentNode.appendChild(spinner);
     return true;
   }
-
   return (
     <div className="App">
       <div className="social_header_menu fixed-top bg-light overflow-visible">
@@ -305,7 +548,7 @@ function App() {
           <div className="grid_items_header">
             <div className="grid_item_header divide">
               {/* <a className="navbar-brand" href="#page-top"> */}
-              <img src={logo} alt="" width="190" />
+              <img src={logo} alt="" width="196" />
               {/* </a> */}
               <span className="navbar-text">
                 {" "}
@@ -315,14 +558,14 @@ function App() {
             <div className="grid_item_header paddingLeftCountry">
               <div className="dropdown">
                 <button
-                  className="btn dropdown-toggle"
+                  className="btn dropdown-toggle no-border"
                   type="button"
                   id="dropdownMenuButton1"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
                   <span className="w-100">
-                    <img src={world} width="20" className="img-fluid" alt="" />
+                    <img src={world} width="24" className="img-fluid" alt="" />
                   </span>
                   <span
                     style={{
@@ -331,7 +574,7 @@ function App() {
                       fontFamily: "Inter",
                       fontWeight: "400",
                       wordWrap: "break-word",
-                      width: "75px",
+                      width: "80px",
                       display: "inline-block",
                       paddingLeft: "7px",
                     }}
@@ -413,7 +656,7 @@ function App() {
             }}
           >
             <img
-              src={imageIndex == 1 ? image1 : imageIndex == 2 ? image2 : image1}
+              src={imageBanner[imageIndex - 1]}
               className="bg"
               width="100%"
               height="667"
@@ -428,8 +671,8 @@ function App() {
             {!isMobileView && imageIndex != 1 && (
               <div
                 style={{
-                  width: 56,
-                  height: 56,
+                  width: 64,
+                  height: 64,
                   left: "2%",
                   top: "40%",
                   position: "absolute",
@@ -449,15 +692,15 @@ function App() {
                     justifyContent: "center",
                   }}
                 >
-                  <img src={arrowLeft} />
+                  <img width={38.5} src={arrowLeft} />
                 </div>
               </div>
             )}
             {!isMobileView && imageIndex != 6 && (
               <div
                 style={{
-                  width: 56,
-                  height: 56,
+                  width: 64,
+                  height: 64,
                   right: "2%",
                   top: "40%",
                   position: "absolute",
@@ -478,7 +721,7 @@ function App() {
                     justifyContent: "center",
                   }}
                 >
-                  <img src={arrowRight} />
+                  <img width={38.5} src={arrowRight} />
                 </div>
               </div>
             )}
@@ -496,38 +739,42 @@ function App() {
                   }}
                 >
                   <div className="hometextthirdwidth">
-                    <span className="homeTextThirdText">61% </span>
-                    <span className="homeTextThirdTextWhite">
+                    <span className="homeTextThirdText">
+                      {textBanner[imageIndex - 1]}{" "}
+                    </span>
+                    {/* <span className="homeTextThirdTextWhite">
                       of intrusions
                     </span>
                     <span className="homeTextThirdText">
                       {" "}
                       affected OT systems.
-                    </span>
+                    </span> */}
                   </div>
                 </div>
               </div>
             </div>
-            <div className="homeImage">
-              <div
-                className={imageIndex == 1 ? "selectedImg" : "unSelectedImg"}
-              />
-              <div
-                className={imageIndex == 2 ? "selectedImg" : "unSelectedImg"}
-              />
-              <div
-                className={imageIndex == 3 ? "selectedImg" : "unSelectedImg"}
-              />
-              <div
-                className={imageIndex == 4 ? "selectedImg" : "unSelectedImg"}
-              />
-              <div
-                className={imageIndex == 5 ? "selectedImg" : "unSelectedImg"}
-              />
-              <div
-                className={imageIndex == 6 ? "selectedImg" : "unSelectedImg"}
-              />
-            </div>
+            {!isMobileView && (
+              <div className="homeImage">
+                <div
+                  className={imageIndex == 1 ? "selectedImg" : "unSelectedImg"}
+                />
+                <div
+                  className={imageIndex == 2 ? "selectedImg" : "unSelectedImg"}
+                />
+                <div
+                  className={imageIndex == 3 ? "selectedImg" : "unSelectedImg"}
+                />
+                <div
+                  className={imageIndex == 4 ? "selectedImg" : "unSelectedImg"}
+                />
+                <div
+                  className={imageIndex == 5 ? "selectedImg" : "unSelectedImg"}
+                />
+                <div
+                  className={imageIndex == 6 ? "selectedImg" : "unSelectedImg"}
+                />
+              </div>
+            )}
             <div className="floatingForm">
               <div className="floatingFromOne">
                 <div className="paddingTextOne">
@@ -538,17 +785,17 @@ function App() {
                     continue evaluating
                   </span>
                 </div>
+                {/* form */}
                 <form
-                  // method="post"
-                  name="elqform"
+                  method="post"
+                  name="UntitledForm-1700078784437"
+                  // name="elqform"
                   // action="https://s3049749.t.eloqua.com/e/f2"
-                  //onsubmit="return handleScroll(this)"
+                  // onSubmit={(e) => e.preventDefault()}
                   onSubmit={handleScroll}
                   id="form8357"
-                  class="elq-form"
+                  className="elq-form"
                 >
-                  <input value="" type="hidden" name="elqFormName" />
-                  <input value="" type="hidden" name="elqSiteId" />
                   <input name="elqCampaignId" type="hidden" />
                   <div className="layout container-fluid">
                     <div className="grid_items_form_one">
@@ -562,9 +809,7 @@ function App() {
                               style={{ textAlign: "left" }}
                               className="col-sm-12 col-xs-12"
                             >
-                              <label className="elq-label " for="fe176969">
-                                First Name
-                              </label>
+                              <label className="elq-label ">First Name</label>
                             </div>
                             <div className="col-sm-12 col-xs-12">
                               <div className="row">
@@ -599,7 +844,7 @@ function App() {
                               style={{ textAlign: "left" }}
                               className="col-sm-12 col-xs-12"
                             >
-                              <label className="elq-label " for="fe176970">
+                              <label className="elq-label ">
                                 {t("jobTitle")}
                               </label>
                             </div>
@@ -635,7 +880,7 @@ function App() {
                               style={{ textAlign: "left" }}
                               className="col-sm-12 col-xs-12"
                             >
-                              <label className="elq-label " for="fe176970">
+                              <label className="elq-label ">
                                 {t("lastName")}
                               </label>
                             </div>
@@ -669,9 +914,7 @@ function App() {
                               style={{ textAlign: "left" }}
                               className="col-sm-12 col-xs-12"
                             >
-                              <label className="elq-label " for="fe176976">
-                                {t("phone")}
-                              </label>
+                              <label className="elq-label ">{t("phone")}</label>
                             </div>
                             <div className="col-sm-12 col-xs-12">
                               <div className="row">
@@ -694,6 +937,7 @@ function App() {
                         </div>
                       </div>
                     </div>
+
                     <div className="grid_items_form_one">
                       <div className="grid_item_form_one">
                         <div className="form-floating">
@@ -705,7 +949,7 @@ function App() {
                               style={{ textAlign: "left" }}
                               className="col-sm-12 col-xs-12"
                             >
-                              <label className="elq-label " for="fe176972">
+                              <label className="elq-label ">
                                 {t("company")}
                               </label>
                             </div>
@@ -739,7 +983,7 @@ function App() {
                               style={{ textAlign: "left" }}
                               className="col-sm-12 col-xs-12"
                             >
-                              <label className="elq-label " for="fe176975">
+                              <label className="elq-label ">
                                 {t("country")}
                               </label>
                             </div>
@@ -762,9 +1006,7 @@ function App() {
                                       {/* <option value="">
                                         {t("selectCountry")}
                                       </option> */}
-                                      <option selected>
-                                        {t("selectCountry")}
-                                      </option>
+                                      <option>{t("selectCountry")}</option>
                                       {/* {Country.map((item) => (
                                         <option value={item.name}>
                                           {item.name}
@@ -1259,27 +1501,38 @@ function App() {
                     </div>
                     <div className="grid_items_button_form_floating">
                       <div className="grid_item_button_form">
-                        {/* <div class="single-checkbox-row row"> */}
                         <input
                           type="checkbox"
                           name="explicitConsent1"
                           id="fe176977"
+                          className="form-check-input"
+                          onChange={() => setAccept(!accept)}
                         />
                         <label
-                          class="checkbox-aligned elq-item-label"
-                          for="fe176977"
+                          className="checkbox-aligned elq-item-label"
+                          style={{
+                            flex: "1 1 0",
+                            color: "#0F0E0E",
+                            fontSize: 16,
+                            fontFamily: "Inter",
+                            paddingLeft: "10px",
+                            fontWeight: "300",
+                            lineHeight: 1,
+                            wordWrap: "break-word",
+                            textAlign: "left",
+                          }}
                         >
                           {t("accept")}
                         </label>
-                        {/* </div> */}
-
                         {/* <input
                           type="checkbox"
+                         
                           className="form-check-input"
                           onChange={() => setAccept(!accept)}
                           // id="cb1"
                           // style={{ color: "red", marginTop: 6 }}
                         ></input>
+
                         <div
                           style={{
                             flex: "1 1 0",
@@ -1299,9 +1552,15 @@ function App() {
                       <div className="grid_item_button_form">
                         <input
                           type="Submit"
-                          class="submit-button-style "
+                          className="submit-button-style "
                           value="Evaluate"
                           id="fe176992"
+                          style={{
+                            background: !accept ? "grey" : "#DA291C",
+                            cursor: !accept ? "auto" : "pointer",
+                            borderColor: !accept ? "grey" : "#DA291C",
+                            color: "white",
+                          }}
                         />
                         {/* <button
                           className="floatingFormButton"
@@ -1338,7 +1597,77 @@ function App() {
                       </div>
                     </div>
                   </div>
+                  <input
+                    type="hidden"
+                    name="lsmr"
+                    id="fe176978"
+                    value="Website"
+                  />
+                  <input
+                    type="hidden"
+                    name="utm_source"
+                    id="fe176979"
+                    value=""
+                  />
+                  <input
+                    type="hidden"
+                    name="utm_medium"
+                    id="fe176980"
+                    value=""
+                  />
+                  <input
+                    type="hidden"
+                    name="utm_campaign"
+                    id="fe176981"
+                    value=""
+                  />
+                  <input
+                    type="hidden"
+                    name="utm_content"
+                    id="fe176982"
+                    value=""
+                  />
+                  <input type="hidden" name="utm_term" id="fe176983" value="" />
+                  <input
+                    type="hidden"
+                    name="lsci"
+                    id="fe176984"
+                    value="701Hr000001lcNwIAI"
+                  />
+                  <input
+                    type="hidden"
+                    name="lscs"
+                    id="fe176985"
+                    value="Responded"
+                  />
+                  <input
+                    type="hidden"
+                    name="hiddenField"
+                    id="fe176986"
+                    value="AMER_INTL_LA_2023_OT_WS_Maturity Level"
+                  />
+                  <input type="hidden" name="emid" id="fe176987" value="" />
+                  <input type="hidden" name="tpid" id="fe176988" value="" />
+                  <input type="hidden" name="slid" id="fe176989" value="" />
+                  <input type="hidden" name="gclid" id="fe176990" value="" />
+                  <input
+                    type="hidden"
+                    name="optinlang"
+                    id="fe176991"
+                    value="en"
+                  />
+                  <input
+                    type="hidden"
+                    name="elqFormName"
+                    value="UntitledForm-1700078784437"
+                  />
+                  <input type="hidden" name="elqSiteID" value="3049749" />
+                  <input type="hidden" name="elqCustomerGUID" value="" />
+                  <input type="hidden" name="elqCookieWrite" value="0" />
+                  {hmtmFunction()}
+                  {/* <div dangerouslySetInnerHTML={{ __html: htmlString }} /> */}
                 </form>
+                {/* form */}
               </div>
             </div>
           </div>
@@ -1560,6 +1889,7 @@ function App() {
                   questionList={questionList}
                   setQuestionList={setQuestionList}
                   setIndustry={setIndustry}
+                  nextQuestion={nextQuestion}
                 />
               )}
               {questionIndex == 1 && (
@@ -1664,7 +1994,10 @@ function App() {
                           flexDirection: "row",
                         }}
                       >
-                        <img src={reportImage} />
+                        <img
+                          style={{ height: "200px", marginTop: "8px" }}
+                          src={reportImage}
+                        />
                       </div>
                     </div>
                     <div
@@ -1684,6 +2017,7 @@ function App() {
                           fontWeight: "500",
                           lineHeight: 2,
                           wordWrap: "break-word",
+                          fontStyle: "normal",
                         }}
                       >
                         Generating Report
@@ -1706,6 +2040,7 @@ function App() {
                           fontWeight: "400",
                           lineHeight: 1,
                           wordWrap: "break-word",
+                          fontStyle: "normal",
                         }}
                       >
                         An expanded report will be sent to your e-mail address.
@@ -1764,7 +2099,10 @@ function App() {
                           flexDirection: "row",
                         }}
                       >
-                        <img src={reportImage} />
+                        <img
+                          style={{ height: "200px", marginTop: "8px" }}
+                          src={reportImage}
+                        />
                       </div>
                     </div>
                     <div
@@ -1784,6 +2122,7 @@ function App() {
                           fontWeight: "500",
                           lineHeight: 2,
                           wordWrap: "break-word",
+                          fontStyle: "normal",
                         }}
                       >
                         Generating Report
@@ -2058,6 +2397,7 @@ function App() {
                               wordWrap: "break-word",
                               marginTop: 20,
                               textAlign: "left",
+                              fontStyle: "normal",
                             }}
                           >
                             {submit ? (
@@ -2086,6 +2426,7 @@ function App() {
                                 textAlign: "left",
                                 lineHeight: 1,
                                 wordWrap: "break-word",
+                                fontStyle: "normal",
                               }}
                             >
                               Remember that this report can also be personalized
@@ -2131,6 +2472,7 @@ function App() {
                                   textAlign: "left",
                                   wordWrap: "break-word",
                                   marginTop: 20,
+                                  fontStyle: "normal",
                                 }}
                               >
                                 Your report will be sent to your corporate email
@@ -2166,7 +2508,7 @@ function App() {
                                       color: "#0F0E0E",
                                       fontSize: 16,
                                       fontFamily: "Inter",
-                                      fontWeight: "400",
+                                      fontWeight: "300",
                                       lineHeight: 1,
                                       background: "#F3F3F3",
                                       wordWrap: "break-word",
@@ -2176,6 +2518,7 @@ function App() {
                                       height: "30px",
                                       border: "none",
                                       padding: 0,
+                                      fontStyle: "normal",
                                     }}
                                     type="email"
                                     placeholder="Company Email"
@@ -2244,6 +2587,7 @@ function App() {
                                     fontWeight: "600",
                                     lineHeight: 1,
                                     wordWrap: "break-word",
+                                    fontStyle: "normal",
                                   }}
                                 >
                                   Confirm
@@ -2383,6 +2727,7 @@ function App() {
                               marginTop: 20,
                               textAlign: "left",
                               paddingLeft: "5px",
+                              fontStyle: "normal",
                             }}
                           >
                             {submit ? (
@@ -2412,6 +2757,7 @@ function App() {
                                 textAlign: "left",
                                 lineHeight: 1,
                                 wordWrap: "break-word",
+                                fontStyle: "normal",
                               }}
                             >
                               Remember that this report can also be personalized
@@ -2458,6 +2804,7 @@ function App() {
                                   wordWrap: "break-word",
                                   marginTop: 20,
                                   paddingLeft: "5px",
+                                  fontStyle: "normal",
                                 }}
                               >
                                 Your report will be sent to your corporate email
@@ -2557,6 +2904,7 @@ function App() {
                                     fontWeight: "600",
                                     lineHeight: 1,
                                     wordWrap: "break-word",
+                                    fontStyle: "normal",
                                   }}
                                 >
                                   Confirm
@@ -2596,13 +2944,13 @@ function App() {
         <div style={{ width: "100%" }}>
           <div className="box arrow-bottom">
             <div className="textOne">1</div>
-            <div style={{ width: "65%", textAlign: "left" }}>
+            <div style={{ width: "70%", textAlign: "left" }}>
               <div className="textMiddleSmall">
                 <div className="middleText">{t("question")}</div>
                 <div className="middleTextBelow">{t("questiontext")}</div>
               </div>
             </div>
-            <div style={{ width: "20%" }}>
+            <div style={{ width: "15%" }}>
               <img src={question} className="imageSize" />
             </div>
           </div>
@@ -2610,13 +2958,13 @@ function App() {
         <div style={{ width: "100%" }}>
           <div className="box arrow-bottom">
             <div className="textOne">2</div>
-            <div style={{ width: "65%", textAlign: "left" }}>
+            <div style={{ width: "70%", textAlign: "left" }}>
               <div className="textMiddleSmall">
                 <div className="middleText"> {t("Evaluation")}</div>
                 <div className="middleTextBelow"> {t("EvaluationText")}</div>
               </div>
             </div>
-            <div style={{ width: "20%" }}>
+            <div style={{ width: "15%" }}>
               <img src={evaluation} className="imageSize" />
             </div>
           </div>
@@ -2625,7 +2973,7 @@ function App() {
         <div style={{ width: "100%" }}>
           <div className="box">
             <div className="textOne">3</div>
-            <div style={{ width: "65%", textAlign: "left" }}>
+            <div style={{ width: "70%", textAlign: "left" }}>
               <div className="textMiddleSmall">
                 <div className="middleText"> {t("Recommendation")}</div>
                 <div className="middleTextBelow">
@@ -2634,7 +2982,7 @@ function App() {
                 </div>
               </div>
             </div>
-            <div style={{ width: "20%" }}>
+            <div style={{ width: "15%" }}>
               <img src={recommend} className="imageSize" />
             </div>
           </div>
