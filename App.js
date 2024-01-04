@@ -39,7 +39,6 @@ import Question11 from "./questions/Question11";
 import Question0 from "./questions/Question0";
 import close from "./assets/images/x.svg";
 import call from "./assets/images/call.svg";
-//import TextField from "@mui/material/TextField";
 import { useTranslation } from "react-i18next";
 import useDeviceDetect from "./useDeviceDetect";
 import dot from "./assets/images/dot.png";
@@ -58,12 +57,42 @@ function App() {
 
   const imageBanner = [image1, image2, image3, image4, image5, image6];
   const textBanner = [
-    "75% of OT organizations reported at least one intrusion in the last year",
-    "32% of OT organizations reported being victims of a ransomware attack",
-    "In the last year Intrusions from malware and phishing increased 12% and 9%, respectively",
-    "OT Cybersecurity Responsibility Is Moving from OT Personnel to Cybersecurity Experts",
-    "Protecting OT systems is now more critical than ever as more organizations connect their OT environments to the internet",
-    "Cybersecurity solutions continue to aid in the success of most OT professionals (76%)  by improving efficiency and flexibility",
+    {
+      en: '<span class="homeTextThirdText">75%</span><span class="homeTextThirdTextWhite"> of OT organizations reported at least one intrusion in the last year</span>',
+      es: '<span class="homeTextThirdTextWhite">El </span><span class="homeTextThirdText">75%</span><span class="homeTextThirdTextWhite"> de las organizaciones de OT informaron al menos una intrusión en el último año</span>',
+      pt: "75% das organizações de TO relataram pelo menos uma intrusão no último ano",
+      fr: "75 % des organisations OT ont signalé au moins une intrusion au cours de la dernière année",
+    },
+    {
+      en: "32% of OT organizations reported being victims of a ransomware attack",
+      es: "",
+      pt: "",
+      fr: "",
+    },
+    {
+      en: "In the last year Intrusions from malware and phishing increased 12% and 9%, respectively",
+      es: "",
+      pt: "",
+      fr: "",
+    },
+    {
+      en: "OT Cybersecurity Responsibility Is Moving from OT Personnel to Cybersecurity Experts",
+      es: "",
+      pt: "",
+      fr: "",
+    },
+    {
+      en: "Protecting OT systems is now more critical than ever as more organizations connect their OT environments to the internet",
+      es: "",
+      pt: "",
+      fr: "",
+    },
+    {
+      en: "Cybersecurity solutions continue to aid in the success of most OT professionals (76%)  by improving efficiency and flexibility",
+      es: "",
+      pt: "",
+      fr: "",
+    },
   ];
 
   useEffect(() => {
@@ -540,6 +569,13 @@ function App() {
     submitButton.parentNode.appendChild(spinner);
     return true;
   }
+  const getBanner = () => {
+    let obj = textBanner[imageIndex - 1];
+    const theObj = { __html: obj[i18n.language] };
+    return (
+      <div className="hometextthirdwidth" dangerouslySetInnerHTML={theObj} />
+    );
+  };
   return (
     <div className="App">
       <div className="social_header_menu fixed-top bg-light overflow-visible">
@@ -738,18 +774,7 @@ function App() {
                     display: "inline-flex",
                   }}
                 >
-                  <div className="hometextthirdwidth">
-                    <span className="homeTextThirdText">
-                      {textBanner[imageIndex - 1]}{" "}
-                    </span>
-                    {/* <span className="homeTextThirdTextWhite">
-                      of intrusions
-                    </span>
-                    <span className="homeTextThirdText">
-                      {" "}
-                      affected OT systems.
-                    </span> */}
-                  </div>
+                  {getBanner()}
                 </div>
               </div>
             </div>
