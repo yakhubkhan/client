@@ -60,8 +60,8 @@ function App() {
     {
       en: '<span class="homeTextThirdText">75%</span><span class="homeTextThirdTextWhite"> of OT organizations reported at least one intrusion in the last year</span>',
       es: '<span class="homeTextThirdTextWhite">El </span><span class="homeTextThirdText">75%</span><span class="homeTextThirdTextWhite"> de las organizaciones de OT informaron al menos una intrusión en el último año</span>',
-      pt: "75% das organizações de TO relataram pelo menos uma intrusão no último ano",
-      fr: "75 % des organisations OT ont signalé au moins une intrusion au cours de la dernière année",
+      pt: '<span class="homeTextThirdText">75%</span><span class="homeTextThirdTextWhite">das organizações de TO relataram pelo menos uma intrusão no último ano</span>',
+      fr: '<span class="homeTextThirdText">75%</span><span class="homeTextThirdTextWhite">des organisations OT ont signalé au moins une intrusion au cours de la dernière année</span>',
     },
     {
       en: "32% of OT organizations reported being victims of a ransomware attack",
