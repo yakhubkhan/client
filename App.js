@@ -39,6 +39,7 @@ import Question11 from "./questions/Question11";
 import Question0 from "./questions/Question0";
 import close from "./assets/images/x.svg";
 import call from "./assets/images/call.svg";
+//import TextField from "@mui/material/TextField";
 import { useTranslation } from "react-i18next";
 import useDeviceDetect from "./useDeviceDetect";
 import dot from "./assets/images/dot.png";
@@ -46,10 +47,11 @@ import report from "./assets/images/report.png";
 import reportImage from "./assets/images/Generating_Report.gif";
 import useScreenSize from "./useScreenSize";
 import { Country } from "./country";
+import { useNavigate } from "react-router-dom";
 
 function App() {
   //function useDeviceDetect() {
-
+  const navigate = useNavigate();
   const [isMobileView, setIsMobileView] = useState(false);
 
   const { t, i18n } = useTranslation();
@@ -58,40 +60,40 @@ function App() {
   const imageBanner = [image1, image2, image3, image4, image5, image6];
   const textBanner = [
     {
-      en: '<span class="homeTextThirdText">75%</span><span class="homeTextThirdTextWhite"> of OT organizations reported at least one intrusion in the last year</span>',
-      es: '<span class="homeTextThirdTextWhite">El </span><span class="homeTextThirdText">75%</span><span class="homeTextThirdTextWhite"> de las organizaciones de OT informaron al menos una intrusión en el último año</span>',
-      pt: '<span class="homeTextThirdText">75%</span><span class="homeTextThirdTextWhite">das organizações de TO relataram pelo menos uma intrusão no último ano</span>',
-      fr: '<span class="homeTextThirdText">75%</span><span class="homeTextThirdTextWhite">des organisations OT ont signalé au moins une intrusion au cours de la dernière année</span>',
+      en: '<span class="homeTextThirdText">75%of OT organizations reported <span class="homeTextThirdTextWhite">at least one intrusion</span> in the last year</span>',
+      es: '<span class="homeTextThirdText">El 75% de las organizaciones OT ha tenido <span class="homeTextThirdTextWhite">al menos un ciberataque</span> en los últimos 12 meses.</span>',
+      pt: '<span class="homeTextThirdText">75% das organizações OT sofreram <span class="homeTextThirdTextWhite">pelo menos um ciberataque</span> nos últimos 12 meses.</span>',
+      fr: '<span class="homeTextThirdText">75 % des organisations OT ont <span class="homeTextThirdTextWhite">subi au moins une cyberattaque au cours</span> des 12 derniers mois.</span>',
     },
     {
-      en: "32% of OT organizations reported being victims of a ransomware attack",
-      es: "",
-      pt: "",
-      fr: "",
+      en: '<span class="homeTextThirdText">32% of OT organizations reported <span class="homeTextThirdTextWhite">being victims of a ransomware attack </span></span>',
+      es: '<span class="homeTextThirdText">32% de las organizaciones de OT informaron <span class="homeTextThirdTextWhite">ser víctimas de un ataque de ransomware. </span></span>',
+      pt: '<span class="homeTextThirdText">32% das organizações de OT relataram <span class="homeTextThirdTextWhite">ser vítimas de um ataque de ransomware. </span></span>',
+      fr: '<span class="homeTextThirdText">32% des organisations OT ont <span class="homeTextThirdTextWhite">signalé être victimes dune attaque de ransomware. </span></span>',
     },
     {
-      en: "In the last year Intrusions from malware and phishing increased 12% and 9%, respectively",
-      es: "",
-      pt: "",
-      fr: "",
+      en: '<span class="homeTextThirdText">In the last year Intrusions from <span class="homeTextThirdTextWhite">malware and phishing increased 12% and 9%</span>, respectively</span>',
+      es: '<span class="homeTextThirdText">En el último año, las intrusiones de <span class="homeTextThirdTextWhite">malware y phishing aumentaron un 12% y un 9%,</span>,respectivamente.</span>',
+      pt: '<span class="homeTextThirdText">No último ano <span class="homeTextThirdTextWhite">as intrusões de malware e phishing aumentaram 12% e 9%</span>, respectivamente.</span>',
+      fr: '<span class="homeTextThirdText">Au cours de la dernière année, <span class="homeTextThirdTextWhite">les intrusions par malware et phishing ont augmenté de 12% et 9%,</span>, respectivement.</span>',
     },
     {
-      en: "OT Cybersecurity Responsibility Is Moving from OT Personnel to Cybersecurity Experts",
-      es: "",
-      pt: "",
-      fr: "",
+      en: '<span class="homeTextThirdText">OT Cybersecurity Responsibility Is Moving from <span class="homeTextThirdTextWhite">OT Personnel to Cybersecurity Experts</span></span>',
+      es: '<span class="homeTextThirdText">La responsabilidad de la ciberseguridad de OT se está trasladando <span class="homeTextThirdTextWhite">del personal de OT a los expertos en ciberseguridad.</span></span>',
+      pt: '<span class="homeTextThirdText">A responsabilidade pela cibersegurança de OT está <span class="homeTextThirdTextWhite">passando do pessoal de OT para especialistas em cibersegurança.</span></span>',
+      fr: '<span class="homeTextThirdText">La responsabilité de la cybersécurité OT passe du <span class="homeTextThirdTextWhite">personnel OT aux experts en cybersécurité.</span></span>',
     },
     {
-      en: "Protecting OT systems is now more critical than ever as more organizations connect their OT environments to the internet",
-      es: "",
-      pt: "",
-      fr: "",
+      en: '<span class="homeTextThirdTextWhite">Protecting OT systems is now more critical than ever <span class="homeTextThirdText">as more organizations connect their OT environments to the internet</span></span>',
+      es: '<span class="homeTextThirdTextWhite">Proteger los sistemas de OT es ahora más crítico que nunca, <span class="homeTextThirdText">ya que más organizaciones conectan sus entornos de OT a internet.</span></span>',
+      pt: '<span class="homeTextThirdTextWhite">Proteger os sistemas de OT é agora mais crítico do que nunca <span class="homeTextThirdText">, à medida que mais organizações conectam seus ambientes de OT à internet.</span></span>',
+      fr: '<span class="homeTextThirdTextWhite">Protéger les systèmes OT est désormais plus critique que jamais,<span class="homeTextThirdText">car de plus en plus dorganisations connectent leurs environnements OT à internet.</span></span>',
     },
     {
-      en: "Cybersecurity solutions continue to aid in the success of most OT professionals (76%)  by improving efficiency and flexibility",
-      es: "",
-      pt: "",
-      fr: "",
+      en: '<span class="homeTextThirdText">Cybersecurity solutions <span class="homeTextThirdTextWhite">continue to aid in the success of most OT professionals (76%)</span>  by improving efficiency and flexibility</span>',
+      es: '<span class="homeTextThirdText">Las soluciones de ciberseguridad <span class="homeTextThirdTextWhite">continúan contribuyendo al éxito de la mayoría de los profesionales de OT (76%)</span>  al mejorar la eficiencia y la flexibilidad.</span>',
+      pt: '<span class="homeTextThirdText">As soluções de cibersegurança <span class="homeTextThirdTextWhite">continuam a contribuir para o sucesso da maioria dos profissionais de OT (76%)</span>  ao melhorar a eficiência e a flexibilidade.</span>',
+      fr: '<span class="homeTextThirdText">Les solutions de cybersécurité <span class="homeTextThirdTextWhite">continuent daider la majorité des professionnels OT (76%)</span>  en améliorant lefficacité et la flexibilité.</span>',
     },
   ];
 
@@ -127,6 +129,12 @@ function App() {
   const [submit, setSubmit] = useState(false);
   const [submitButton, setSubmitButton] = useState(false);
   const [industry, setIndustry] = useState("");
+  const [otherIndustry, setOtherIndustry] = useState("");
+  const [showReport, setShowReport] = useState(true);
+  const [reportText, setReportText] = useState("Generating Report");
+  const [reportTextTwo, setReportTextTwo] = useState(
+    "An expanded report will be sent to your e-mail address."
+  );
   const [formInput, setFormInput] = useState({
     firstName: "",
     lastName: "",
@@ -134,6 +142,7 @@ function App() {
     jobTitle: "",
     phone: "",
     country: "",
+    explicitConsent1: false,
   });
   const [isEmptyFirstName, setIsEmptyFirstName] = useState(false);
   const [isEmptyLastName, setIsEmptyLastName] = useState(false);
@@ -230,16 +239,21 @@ function App() {
     setSubmit(true);
   };
 
-  const closeModal = () => {
-    document.getElementById("backdrop").style.display = "none";
-    document.getElementById("staticBackdrop").style.display = "none";
-    document.getElementById("staticBackdrop").classList.remove("show");
-
+  const getScore = () => {
     let total = 0;
     for (let i = 1; i < questionList.length; i++) {
       total = total + parseInt(questionList[i]);
     }
     let avg = total / 10;
+    return avg;
+  };
+
+  const closeModal = () => {
+    document.getElementById("backdrop").style.display = "none";
+    document.getElementById("staticBackdrop").style.display = "none";
+    document.getElementById("staticBackdrop").classList.remove("show");
+
+    let avg = getScore();
 
     let obj = {
       first_name: formInput.firstName,
@@ -248,49 +262,65 @@ function App() {
       job_title: formInput.jobTitle,
       phone: formInput.phone,
       country: formInput.country,
-      industry: industry,
+      industry: industry || otherIndustry,
       maturity_level: avg,
       vertical: i18n.language,
       email: companyEmail,
       avg: avg,
     };
-    // let eqlobj = {
-    //   elqFormName: "",
-    //   elqSiteId: "",
-    //   elqCampaignId: "",
-    //   firstName: formInput.firstName,
-    //   lastName: formInput.lastName,
-    //   // emailAddress: a@gmail.com
-    //   company: formInput.company,
-    //   // jobFunction: Cloud Architect
-    //   title: formInput.jobTitle,
-    //   // jobLevel: Director
-    //   Phone: formInput.phone,
-    //   country: formInput.country,
-    //   // explicitConsent1: on
-    //   lsmr: "",
-    //   utm_source: "",
-    //   utm_medium: "",
-    //   utm_campaign: "",
-    //   utm_content: "",
-    //   utm_term: "",
-    //   lsci: "",
-    //   lscs: "",
-    //   hiddenField: "",
-    //   emid: "",
-    //   tpid: "",
-    //   slid: "",
-    //   gclid: "",
-    //   optinlang: "",
-    // };
 
-    // axios.post("https://s3049749.t.eloqua.com/e/f2", obj).then(
-    //   (response) => {},
-    //   (error) => {
-    //     // setQuestionIndex((previous) => previous + 1);
-    //   }
-    // );
+    let eqlobj = {
+      elqFormName: "",
+      elqSiteId: "",
+      elqCampaignId: "",
+      firstName: formInput.firstName,
+      lastName: formInput.lastName,
+      emailAddress: companyEmail,
+      company: formInput.company,
+      // jobFunction: Cloud Architect
+      title: formInput.jobTitle,
+      // jobLevel: Director
+      Phone: formInput.phone,
+      country: formInput.country,
+      // explicitConsent1: on
+      lsmr: "",
+      utm_source: "",
+      utm_medium: "",
+      utm_campaign: "",
+      utm_content: "",
+      utm_term: "",
+      lsci: "",
+      lscs: "",
+      hiddenField: "",
+      emid: "",
+      tpid: "",
+      slid: "",
+      gclid: "",
+      optinlang: "",
+    };
 
+    var form = document.getElementsByTagName("form");
+    var inputs = form[0].getElementsByTagName("input");
+
+    var formData = new FormData();
+    // for (var i = 0; i < inputs.length; i++) {
+    //   formData[inputs[i].name] = inputs[i].value;
+    //   formData.append(inputs[i].name);
+    // }
+    formData["country"] = formInput.country;
+    formData.append("elqFormName", "2023Q1_WS_OTCyberSecurityMaturityLevel");
+    formData.append("elqSiteId", "3049749");
+    formData.append("elqCampaignId", "");
+    formData.append("BusPhone", "6145416464");
+    formData.append("emailAddress", companyEmail);
+
+    //var formdata = JSON.stringify(formData);
+    axios.post("https://s3049749.t.eloqua.com/e/f2", formData).then(
+      (response) => {},
+      (error) => {
+        // setQuestionIndex((previous) => previous + 1);
+      }
+    );
     axios
       .post("https://api.stage-dium.com/savedInfo", obj, {
         headers: {
@@ -329,7 +359,9 @@ function App() {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, checked } = e.target;
+    let formvalues = { ...formInput, [name]: value };
+
     if (name === "phone") {
       if (/^[0-9]{0,17}$/.test(value)) {
         setFormInput((prevState) => ({
@@ -338,10 +370,18 @@ function App() {
         }));
       }
     } else {
-      setFormInput((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
+      if (name == "explicitConsent1") {
+        formvalues = { ...formInput, [name]: checked };
+        setFormInput((prevState) => ({
+          ...prevState,
+          [name]: checked,
+        }));
+      } else {
+        setFormInput((prevState) => ({
+          ...prevState,
+          [name]: value,
+        }));
+      }
     }
     if (name === "firstName" && value) {
       setIsEmptyFirstName(false);
@@ -360,6 +400,19 @@ function App() {
     }
     if (name === "country" && value) {
       setIsEmptyCountry(false);
+    }
+    if (
+      formvalues.firstName != "" &&
+      formvalues.lastName != "" &&
+      formvalues.company != "" &&
+      formvalues.jobTitle != "" &&
+      formvalues.phone != "" &&
+      formvalues.country != "" &&
+      formvalues.explicitConsent1 === true
+    ) {
+      setAccept(true);
+    } else {
+      setAccept(false);
     }
   };
   function resetSubmitButton(e) {
@@ -419,6 +472,7 @@ function App() {
     fe176969.add(window.Validate.Presence, {
       failureMessage: "This field is required",
     });
+
     var dom1 = document.querySelector("#form8357 #fe176970");
     var fe176970 = new window.LiveValidation(dom1, {
       validMessage: "",
@@ -442,6 +496,15 @@ function App() {
       wait: 300,
       isPhoneField: false,
     });
+
+    var dom8 = document.querySelector("#form8357 #fe176977");
+    var fe176977 = new window.LiveValidation(dom8, {
+      validMessage: "",
+      onlyOnBlur: false,
+      wait: 300,
+      isPhoneField: false,
+    });
+
     fe176976.add(window.Validate.Custom, {
       against: function (value) {
         return !value.match(
@@ -474,6 +537,7 @@ function App() {
     }
     if (!inputFielidValue.jobTitle) {
       setIsEmptyJobTitle(true);
+      errorFlag = true;
     }
     if (!inputFielidValue.phone) {
       setIsEmptyPhone(true);
@@ -483,62 +547,20 @@ function App() {
       setIsEmptyCountry(true);
       errorFlag = true;
     }
-
+    if (inputFielidValue.explicitConsent1 === false) {
+      setIsEmptyCountry(true);
+      errorFlag = true;
+    }
+    e.preventDefault();
+    setEnableEvaulate(!errorFlag);
     if (errorFlag) return;
 
-    let eqlobj = {
-      elqFormName: "",
-      elqSiteId: "",
-      elqCampaignId: "",
-      firstName: formInput.firstName,
-      lastName: formInput.lastName,
-      emailAddress: "bindu.kr.blr@gmail.com",
-      company: formInput.company,
-      // jobFunction: Cloud Architect
-      title: formInput.jobTitle,
-      // jobLevel: Director
-      Phone: formInput.phone,
-      country: formInput.country,
-      // explicitConsent1: on
-      lsmr: "",
-      utm_source: "",
-      utm_medium: "",
-      utm_campaign: "",
-      utm_content: "",
-      utm_term: "",
-      lsci: "",
-      lscs: "",
-      hiddenField: "",
-      emid: "",
-      tpid: "",
-      slid: "",
-      gclid: "",
-      optinlang: "",
-    };
-
-    var form = document.getElementsByTagName("form");
-    var inputs = form[0].getElementsByTagName("input");
-
-    var formData = {};
-    for (var i = 0; i < inputs.length; i++) {
-      formData[inputs[i].name] = inputs[i].value;
-    }
-    formData["country"] = formInput.country;
-    var formdata = JSON.stringify(formData);
-    axios.post("https://s3049749.t.eloqua.com/e/f2", formdata).then(
-      (response) => {},
-      (error) => {
-        // setQuestionIndex((previous) => previous + 1);
-      }
-    );
-
-    e.preventDefault();
     // const form1 = document.getElementById("form8357");
     // //form1.submit();
     // form1.action = "register.html";
     // form1.submit();
     // return false;
-    setEnableEvaulate(true);
+
     window.scrollTo({
       top: aboutSection.current.offsetTop - 50,
       left: 0,
@@ -576,6 +598,28 @@ function App() {
       <div className="hometextthirdwidth" dangerouslySetInnerHTML={theObj} />
     );
   };
+
+  useEffect(() => {
+    if (questionIndex == 11) {
+      setTimeout(function () {
+        //navigate("/thank");
+        setShowReport(false);
+        setReportText("Report Sent");
+        setReportTextTwo("An expanded report is sent to your e-mail address.");
+        setTimeout(function () {
+          navigate("/thank");
+        }, 2000);
+      }, 2000);
+    }
+  }, [questionIndex]);
+
+  const continueNext = () => {
+    let tempQuestion = [...questionList];
+    tempQuestion[0] = 6;
+    setQuestionList(tempQuestion);
+    nextQuestion();
+    //setIndustry(otherIndustry);
+  };
   return (
     <div className="App">
       <div className="social_header_menu fixed-top bg-light overflow-visible">
@@ -610,7 +654,7 @@ function App() {
                       fontFamily: "Inter",
                       fontWeight: "400",
                       wordWrap: "break-word",
-                      width: "80px",
+                      width: "92px",
                       display: "inline-block",
                       paddingLeft: "7px",
                     }}
@@ -775,6 +819,18 @@ function App() {
                   }}
                 >
                   {getBanner()}
+                  {/* <div className="hometextthirdwidth">
+                    <span className="homeTextThirdText">
+                      {textBanner[imageIndex - 1]}{" "}
+                    </span>
+                    <span className="homeTextThirdTextWhite">
+                      of intrusions
+                    </span>
+                    <span className="homeTextThirdText">
+                      {" "}
+                      affected OT systems.
+                    </span>
+                  </div> */}
                 </div>
               </div>
             </div>
@@ -803,12 +859,8 @@ function App() {
             <div className="floatingForm">
               <div className="floatingFromOne">
                 <div className="paddingTextOne">
-                  <span className="floatingFromOneText">
-                    Fill in the form to{" "}
-                  </span>
-                  <span className="floatingFromOneTextRed">
-                    continue evaluating
-                  </span>
+                  <p className="floatingFromOneText">{t("form_content1")} </p>
+                  <p className="floatingFromOneTextRed">{t("form_content2")}</p>
                 </div>
                 {/* form */}
                 <form
@@ -834,7 +886,10 @@ function App() {
                               style={{ textAlign: "left" }}
                               className="col-sm-12 col-xs-12"
                             >
-                              <label className="elq-label ">First Name</label>
+                              <label className="elq-label ">
+                                {" "}
+                                {t("firstName")}
+                              </label>
                             </div>
                             <div className="col-sm-12 col-xs-12">
                               <div className="row">
@@ -1526,13 +1581,17 @@ function App() {
                     </div>
                     <div className="grid_items_button_form_floating">
                       <div className="grid_item_button_form">
-                        <input
-                          type="checkbox"
-                          name="explicitConsent1"
-                          id="fe176977"
-                          className="form-check-input"
-                          onChange={() => setAccept(!accept)}
-                        />
+                        <div className="field-control-wrapper">
+                          <input
+                            type="checkbox"
+                            name="explicitConsent1"
+                            id="fe176977"
+                            className="form-check-input"
+                            value={formInput.explicitConsent1}
+                            // onChange={() => setAccept(!accept)}
+                            onChange={handleChange}
+                          />
+                        </div>
                         <label
                           className="checkbox-aligned elq-item-label"
                           style={{
@@ -1542,7 +1601,7 @@ function App() {
                             fontFamily: "Inter",
                             paddingLeft: "10px",
                             fontWeight: "300",
-                            lineHeight: 1,
+                            lineHeight: "24px",
                             wordWrap: "break-word",
                             textAlign: "left",
                           }}
@@ -1577,7 +1636,7 @@ function App() {
                       <div className="grid_item_button_form">
                         <input
                           type="Submit"
-                          className="submit-button-style "
+                          className="submit-button-style"
                           value="Evaluate"
                           id="fe176992"
                           style={{
@@ -1700,24 +1759,23 @@ function App() {
         <div className="belowFloatingForm">
           <div className="grid_items_button_form_floating_below">
             <div className="textGrid">
-              <span className="formBelowTextRed">
-                Protecting and guaranteeing{" "}
-              </span>
-              <span className="formBelowText">your operation's security </span>
-              <span className="formBelowTextRed">is becoming&nbsp;</span>
-              <span className="formBelowText">increasingly&nbsp;</span>
-              <span className="formBelowTextRed">urgent&nbsp;</span>
+              <span className="formBelowTextRed">{t("content1")}</span>{" "}
+              <span className="formBelowText">{t("content2")} </span>
+              <span className="formBelowTextRed">{t("content3")}&nbsp;</span>
+              <span className="formBelowText">{t("content4")}&nbsp;</span>
+              <span className="formBelowTextRed">{t("content5")}&nbsp;</span>
               <span className="formBelowText">.</span>
             </div>
 
             <div className="grid_item_button_form_floating_below">
               <div className="textGridTwo">
-                By completing a brief survey of the state of maturity of your OT
+                {/* By completing a brief survey of the state of maturity of your OT
                 network, we will give you a personalized report of the level at
                 which you are. Besides, we will tell you how you can protect
                 yourself from the growing cyber threats and you will be able to
                 request a free reading of the results in a virtual session with
-                a Fortinet expert.
+                a Fortinet expert. */}
+                {t("content6")}
                 <div
                   style={{
                     width: "100%",
@@ -1730,9 +1788,10 @@ function App() {
                     wordWrap: "break-word",
                   }}
                 >
-                  You will receive your evaluation, risks and recommendations
+                  {/* You will receive your evaluation, risks and recommendations
                   according to the level you are at and you will be able to see
-                  examples of critical cases of companies of your same industry.
+                  examples of critical cases of companies of your same industry. */}
+                  {t("content7")}
                 </div>
               </div>
             </div>
@@ -1806,20 +1865,24 @@ function App() {
                   {questionIndex == 0 && (
                     <div className="questionWidth">
                       <span className="questionSectionOne">
-                        Select the industry to{" "}
+                        {/* Select the industry to{" "} */}
+                        {t("industry_content1")}{" "}
                       </span>
                       <span className="questionSectionOneRed">
-                        continue evaluating
+                        {/* continue evaluating */}
+                        {t("industry_content2")}
                       </span>
                     </div>
                   )}
                   {questionIndex != 0 && questionIndex != 11 && (
                     <div className="questionLeftNextPage">
                       <span className="questionSectionOne">
-                        Please answer all questions to get a{" "}
+                        {/* Please answer all questions to get a{" "} */}
+                        {t("Qn_content1")}{" "}
                       </span>
                       <span className="questionSectionOneRed">
-                        personalized report
+                        {/* personalized report */}
+                        {t("Qn_content2")}
                       </span>
                     </div>
                   )}
@@ -1835,7 +1898,10 @@ function App() {
               )} */}
                   {questionIndex == 11 && (
                     <div className="questionLeftNextPage">
-                      <span className="questionSectionOne">Finishing</span>
+                      <span className="questionSectionOne">
+                        {" "}
+                        {t("generating_report1")}
+                      </span>
                       {/* <span className="questionSectionOneRed">
                     finish evaluating
                   </span> */}
@@ -1916,6 +1982,65 @@ function App() {
                   setIndustry={setIndustry}
                   nextQuestion={nextQuestion}
                 />
+              )}
+              {industry === "Other" && questionIndex == 0 && (
+                <div style={{ marginTop: "10px" }}>
+                  <div
+                    style={{ textAlign: "left", backgroundColor: "white" }}
+                    className="col-sm-1 col-xs-1"
+                  >
+                    <label className="other">Industry Name</label>
+                  </div>
+                  <div style={{ flexDirection: "row", display: "flex" }}>
+                    {/* <div className="row"> */}
+                    <div style={{ width: "30%" }}>
+                      <div className="field-control-wrapper">
+                        <input
+                          type="text"
+                          className="elq-item-input"
+                          name="otherIndustry"
+                          value={otherIndustry}
+                          onChange={(e) => setOtherIndustry(e.target.value)}
+                          style={{ width: "100%" }}
+                        ></input>
+                      </div>
+                    </div>
+                    <div style={{ width: "20%", marginLeft: "20px" }}>
+                      <button
+                        style={{
+                          background: "#DA291C",
+                          cursor: "pointer",
+                          borderColor: "#DA291C",
+                        }}
+                        onClick={(e) => continueNext(e)}
+                      >
+                        <div
+                          style={{
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                            gap: 8,
+                            display: "inline-flex",
+                          }}
+                        >
+                          <div
+                            style={{
+                              color: "white",
+                              fontSize: 16,
+                              fontFamily: "Inter",
+                              fontWeight: "600",
+                              lineHeight: 1,
+                              wordWrap: "break-word",
+                            }}
+                          >
+                            {t("buttonName")}
+                          </div>
+                          <BsArrowRight color="white" />
+                        </div>
+                      </button>
+                    </div>
+                    {/* </div> */}
+                  </div>
+                </div>
               )}
               {questionIndex == 1 && (
                 <Question1
@@ -2002,29 +2127,31 @@ function App() {
                         }}
                       />
                     </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        height: "60%",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
+                    {showReport && (
                       <div
                         style={{
                           display: "flex",
+                          flexDirection: "row",
+                          height: "60%",
                           justifyContent: "center",
                           alignItems: "center",
-                          flexDirection: "row",
                         }}
                       >
-                        <img
-                          style={{ height: "200px", marginTop: "8px" }}
-                          src={reportImage}
-                        />
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            flexDirection: "row",
+                          }}
+                        >
+                          <img
+                            style={{ height: "200px", marginTop: "8px" }}
+                            src={reportImage}
+                          />
+                        </div>
                       </div>
-                    </div>
+                    )}
                     <div
                       style={{
                         display: "flex",
@@ -2045,7 +2172,7 @@ function App() {
                           fontStyle: "normal",
                         }}
                       >
-                        Generating Report
+                        {reportText}
                       </div>
                     </div>
                     <div
@@ -2068,7 +2195,7 @@ function App() {
                           fontStyle: "normal",
                         }}
                       >
-                        An expanded report will be sent to your e-mail address.
+                        {reportTextTwo}
                       </div>
                     </div>
                   </div>
@@ -2449,7 +2576,7 @@ function App() {
                                 fontFamily: "Inter",
                                 fontWeight: "500",
                                 textAlign: "left",
-                                lineHeight: 1,
+                                lineHeight: "44px",
                                 wordWrap: "break-word",
                                 fontStyle: "normal",
                               }}
@@ -2465,7 +2592,7 @@ function App() {
                                 fontWeight: "500",
                                 textAlign: "left",
                                 wordWrap: "break-word",
-                                lineHeight: 1,
+                                lineHeight: "44px",
                               }}
                             >
                               virtual session at no cost
@@ -2477,7 +2604,7 @@ function App() {
                                 fontFamily: "Inter",
                                 fontWeight: "500",
                                 textAlign: "left",
-                                lineHeight: 1,
+                                lineHeight: "44px",
                                 wordWrap: "break-word",
                               }}
                             >
@@ -2498,11 +2625,27 @@ function App() {
                                   wordWrap: "break-word",
                                   marginTop: 20,
                                   fontStyle: "normal",
+                                  lineHeight: "32px",
                                 }}
                               >
                                 Your report will be sent to your corporate email
                               </div>
-
+                              <div
+                                style={{
+                                  width: "100%",
+                                  color: "#0F0E0E",
+                                  fontSize: 20,
+                                  fontFamily: "Inter",
+                                  fontWeight: "400",
+                                  textAlign: "left",
+                                  wordWrap: "break-word",
+                                  marginTop: 20,
+                                  fontStyle: "normal",
+                                }}
+                              >
+                                {formInput.firstName} {formInput.lastName}{" "}
+                                {getScore()}
+                              </div>
                               <div
                                 style={{
                                   width: "100%",
@@ -2834,7 +2977,6 @@ function App() {
                               >
                                 Your report will be sent to your corporate email
                               </div>
-
                               <div
                                 style={{
                                   width: "95%",
@@ -2956,15 +3098,9 @@ function App() {
 
       <div className="questionSection">
         <div className="questionWord">
-          <span className="textQuestion">To </span>
-          <span className="textQuestionRed">
-            discover how secure your operating
-          </span>
-          <span className="textQuestion">
-            {" "}
-            environment is, follow these 3 steps and find out how Fortinet can
-            help.
-          </span>
+          <span className="textQuestion">{t("content10")} </span>
+          <span className="textQuestionRed">{t("content11")}</span>
+          <span className="textQuestion"> {t("content12")}</span>
         </div>
         <div style={{ width: "100%" }}>
           <div className="box arrow-bottom">
