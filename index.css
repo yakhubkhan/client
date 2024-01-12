@@ -1503,7 +1503,7 @@ body {
   width: 80%;
   height: 306px;
   left: 11%;
-  top: 25%;
+  top: 20%;
   right: 13%;
   position: absolute;
   flex-direction: column;
@@ -1529,7 +1529,7 @@ body {
   justify-content: flex-start;
   align-items: flex-end;
   text-align: left;
-  gap: 32px;
+  gap: 10px;
   display: inline-flex;
 }
 .hometextthirdwidth {
@@ -1586,31 +1586,32 @@ body {
     flex-direction: row;
     display: flex;
   }
-  /* .homeTextThirdText {
+  .homeTextThirdText {
     color: #2cccd3;
     font-size: 24px;
     font-family: Plus Jakarta Sans;
     font-weight: 700;
     line-height: 1;
     word-wrap: break-word;
-  } */
+  }
 
-  /* .homeTextThirdTextWhite {
+  .homeTextThirdTextWhite {
     color: white;
     font-size: 24px;
     font-family: Plus Jakarta Sans;
     font-weight: 700;
     line-height: 1;
     word-wrap: break-word;
-  } */
+  }
   .hometextthirdwidth {
     width: 90%;
+    line-height: 10px;
   }
   .homeText {
     width: 100%;
     height: 306px;
     left: 5%;
-    top: 25%;
+    top: 20%;
     right: 13%;
     position: absolute;
     flex-direction: column;
@@ -1619,7 +1620,7 @@ body {
     gap: 32px;
     display: inline-flex;
   }
-  /* .homeTextTwo {
+  .homeTextTwo {
     width: 90%;
     color: white;
     font-size: 32px;
@@ -1628,7 +1629,7 @@ body {
     line-height: 1;
     text-align: left;
     word-wrap: break-word;
-  } */
+  }
   .homeTextThird {
     width: 100%;
     justify-content: flex-start;
@@ -1957,7 +1958,7 @@ body {
   }
   .floatingForm {
     position: absolute;
-    top: 70%;
+    top: 85%;
     left: 5%;
     width: 90%;
     height: 75%;
@@ -2022,7 +2023,7 @@ body {
     padding-right: 10px;
     gap: 32;
     display: inline-flex;
-    margin-top: 80px;
+    margin-top: 200px;
   }
   .formBelowText {
     color: #0f0e0e;

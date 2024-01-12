@@ -262,7 +262,7 @@ function App() {
       job_title: formInput.jobTitle,
       phone: formInput.phone,
       country: formInput.country,
-      industry: industry || otherIndustry,
+      industry: industry != "Other" ? industry : otherIndustry,
       maturity_level: avg,
       vertical: i18n.language,
       email: companyEmail,
@@ -515,9 +515,9 @@ function App() {
     });
     fe176976.add(window.Validate.Custom, {
       against: function (value) {
-        return !value.match(/(<([^>]+)>)/gi);
+        return value.match(/(^[0-9]{10,}$)/);
       },
-      failureMessage: "Value must not contain any HTML",
+      failureMessage: "Minimum 10 digit",
     });
   }, []);
   const handleScroll = (e) => {
@@ -608,7 +608,7 @@ function App() {
         setReportTextTwo("An expanded report is sent to your e-mail address.");
         setTimeout(function () {
           navigate("/thank");
-        }, 2000);
+        }, 4000);
       }, 2000);
     }
   }, [questionIndex]);
@@ -859,8 +859,12 @@ function App() {
             <div className="floatingForm">
               <div className="floatingFromOne">
                 <div className="paddingTextOne">
-                  <p className="floatingFromOneText">{t("form_content1")} </p>
-                  <p className="floatingFromOneTextRed">{t("form_content2")}</p>
+                  <span className="floatingFromOneText">
+                    {t("form_content1")}{" "}
+                  </span>
+                  <span className="floatingFromOneTextRed">
+                    {t("form_content2")}
+                  </span>
                 </div>
                 {/* form */}
                 <form
@@ -1784,7 +1788,7 @@ function App() {
                     paddingTop: 20,
                     fontFamily: "Inter",
                     fontWeight: "300",
-                    lineHeight: 1,
+                    lineHeight: "24px",
                     wordWrap: "break-word",
                   }}
                 >
